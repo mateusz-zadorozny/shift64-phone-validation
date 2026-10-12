@@ -61,7 +61,7 @@ class DependencyCheckerTest extends TestCase {
 	 */
 	public function test_minimum_matches_the_plugin_header_and_the_readme(): void {
 		$root        = dirname( __DIR__, 2 );
-		$main_file   = (string) file_get_contents( $root . '/verify-phone-number-shift64.php' );
+		$main_file   = (string) file_get_contents( $root . '/shift64-phone-validation.php' );
 		$readme_file = (string) file_get_contents( $root . '/readme.txt' );
 
 		$this->assertSame( 1, preg_match( "/define\\( 'SHIFT64_PHONE_VALIDATION_MIN_WP', '([^']+)' \\);/", $main_file, $constant ) );
@@ -101,7 +101,7 @@ class DependencyCheckerTest extends TestCase {
 
 		$this->assertStringContainsString( 'class="notice notice-error"', $html );
 		$this->assertStringContainsString(
-			'Verify Phone Number Shift64 requires WordPress 7.1 or later, and this site runs WordPress 7.0.9. Until WordPress is updated, phone numbers are not checked at checkout.',
+			'SHIFT64 Phone Validation for WooCommerce requires WordPress 7.1 or later, and this site runs WordPress 7.0.9. Until WordPress is updated, phone numbers are not checked at checkout.',
 			$html
 		);
 	}
@@ -121,7 +121,7 @@ class DependencyCheckerTest extends TestCase {
 	public function test_unsupported_wordpress_notice_is_translated(): void {
 		$GLOBALS['shift64_test_wp_version']   = '7.0.9';
 		$GLOBALS['shift64_test_translations'] = array(
-			'Verify Phone Number Shift64 requires WordPress %1$s or later, and this site runs WordPress %2$s. Until WordPress is updated, phone numbers are not checked at checkout.' => 'Wymaga %1$s, jest %2$s.',
+			'SHIFT64 Phone Validation for WooCommerce requires WordPress %1$s or later, and this site runs WordPress %2$s. Until WordPress is updated, phone numbers are not checked at checkout.' => 'Wymaga %1$s, jest %2$s.',
 		);
 
 		ob_start();

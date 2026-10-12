@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 
 class ReadmeChangelogSyncTest extends PHPUnitTestCase {
 
-	const OLDER_RELEASES = 'Older releases: [full changelog on GitHub](https://github.com/mateusz-zadorozny/verify-phone-number-shift64/blob/master/CHANGELOG.md).';
+	const OLDER_RELEASES = 'Older releases: [full changelog on GitHub](https://github.com/mateusz-zadorozny/shift64-phone-validation/blob/master/CHANGELOG.md).';
 
 	/** @var string */
 	private $dir;

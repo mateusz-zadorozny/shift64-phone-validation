@@ -104,7 +104,7 @@ jobs:
       - name: Upload package
         uses: actions/upload-artifact@v4
         with:
-          name: verify-phone-number-shift64
+          name: shift64-phone-validation
           path: ${{ steps.build.outputs.zip }}
           retention-days: 14
 

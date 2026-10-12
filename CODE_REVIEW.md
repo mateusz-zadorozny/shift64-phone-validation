@@ -35,7 +35,7 @@ New option added but not deleted in `uninstall.php` → Blocker. It leaks after 
 
 - Orders are touched only through `WC_Order` CRUD methods. Direct post-meta access breaks HPOS → Blocker.
 - Hook callbacks keep the signature WooCommerce passes, even when a parameter is unused.
-- Every user-facing string is translated with the `verify-phone-number-shift64` text domain, and strings changed in a PR are reflected by `composer makepot` plus updated `languages/*.po`/`*.mo`.
+- Every user-facing string is translated with the `shift64-phone-validation` text domain, and strings changed in a PR are reflected by `composer makepot` plus updated `languages/*.po`/`*.mo`.
 - Block checkout error messages resolve language through Polylang/WPML, not the site locale.
 - Globals, functions, and constants carry the `shift64`/`Shift64`/`SHIFT64` prefix (PHPCS enforces it).
 

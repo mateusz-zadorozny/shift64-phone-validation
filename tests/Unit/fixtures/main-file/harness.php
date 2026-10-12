@@ -61,7 +61,7 @@ if ( '1' === ( $argv[2] ?? '0' ) ) {
 	eval( 'class WooCommerce {}' ); // phpcs:ignore Squiz.PHP.Eval.Discouraged -- test harness only.
 }
 
-require dirname( __DIR__, 4 ) . '/verify-phone-number-shift64.php';
+require dirname( __DIR__, 4 ) . '/shift64-phone-validation.php';
 
 $shift64_loaded = array_values(
 	array_filter(

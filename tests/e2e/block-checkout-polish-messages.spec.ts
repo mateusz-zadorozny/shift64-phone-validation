@@ -6,7 +6,7 @@ import {
 	INVALID_PL_PHONE,
 } from './helpers/checkout';
 
-// From languages/verify-phone-number-shift64-pl_PL.po: "%s is not a valid phone
+// From languages/shift64-phone-validation-pl_PL.po: "%s is not a valid phone
 // number." with "Billing phone" as the field label.
 const POLISH_INVALID_BILLING_PHONE =
 	'Telefon do płatności nie jest prawidłowym numerem telefonu.';

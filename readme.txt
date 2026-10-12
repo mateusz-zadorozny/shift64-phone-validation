@@ -1,4 +1,4 @@
-=== Verify Phone Number Shift64 ===
+=== SHIFT64 Phone Validation for WooCommerce ===
 Contributors: mateuszz
 Tags: phone validation, phone number, woocommerce, checkout, validation
 Requires at least: 7.1
@@ -12,7 +12,7 @@ Validates and formats billing and shipping phone numbers at WooCommerce checkout
 
 == Description ==
 
-Verify Phone Number Shift64 checks the phone numbers customers type at WooCommerce checkout. It rejects numbers that cannot exist in the customer's country and can rewrite valid numbers into one consistent format before they are saved on the order. All checks run on your own server with the rules of Google's open-source libphonenumber.
+SHIFT64 Phone Validation for WooCommerce checks the phone numbers customers type at WooCommerce checkout. It rejects numbers that cannot exist in the customer's country and can rewrite valid numbers into one consistent format before they are saved on the order. All checks run on your own server with the rules of Google's open-source libphonenumber.
 
 **It checks that a number is valid. It does not send SMS messages or one-time codes, and it does not confirm that the customer owns the number.**
 
@@ -43,7 +43,7 @@ Requires WordPress 7.1 or later and WooCommerce 7.2 or later.
 
 In each case the customer still gets an error and the order is not placed until the number is corrected; only the extra help is missing.
 
-* A classic checkout page next to a Checkout block page set as the WooCommerce checkout page: the classic page does not highlight the field ([#34](https://github.com/mateusz-zadorozny/verify-phone-number-shift64/issues/34)).
+* A classic checkout page next to a Checkout block page set as the WooCommerce checkout page: the classic page does not highlight the field ([#34](https://github.com/mateusz-zadorozny/shift64-phone-validation/issues/34)).
 
 = Privacy =
 
@@ -53,7 +53,7 @@ While validation is on, non-breaking and other Unicode spaces in a typed number 
 
 = For developers =
 
-Filters: `shift64_phone_validation_should_validate` (skip a field or an order), `shift64_phone_validation_formatted_phone` (change the stored value), `shift64_phone_validation_error_message` (reword messages) and `shift64_phone_validation_enqueue_assets` (turn off the highlighting scripts). The helper `Shift64\SmartPhoneValidation\format_phone()` formats a number for your own code and returns `null` when it is not valid. Signatures and examples: [developer documentation](https://github.com/mateusz-zadorozny/verify-phone-number-shift64#developers).
+Filters: `shift64_phone_validation_should_validate` (skip a field or an order), `shift64_phone_validation_formatted_phone` (change the stored value), `shift64_phone_validation_error_message` (reword messages) and `shift64_phone_validation_enqueue_assets` (turn off the highlighting scripts). The helper `Shift64\SmartPhoneValidation\format_phone()` formats a number for your own code and returns `null` when it is not valid. Signatures and examples: [developer documentation](https://github.com/mateusz-zadorozny/shift64-phone-validation#developers).
 
 Formatting on save is on by default. Before going live, check every system that reads the order phone (exports, courier labels, SMS gateways): with E.164, `600 100 200` is stored as `+48600100200`.
 
@@ -70,7 +70,7 @@ Sponsored by [SHIFT64](https://shift64.com/services/custom-woocommerce-coding).
 == Installation ==
 
 1. Install and activate WooCommerce 7.2 or later.
-2. In your WordPress admin go to Plugins > Add New Plugin, search for "Verify Phone Number Shift64", then click Install Now and Activate. Or download the ZIP file from this page and upload it under Plugins > Add New Plugin > Upload Plugin.
+2. In your WordPress admin go to Plugins > Add New Plugin, search for "SHIFT64 Phone Validation for WooCommerce", then click Install Now and Activate. Or download the ZIP file from this page and upload it under Plugins > Add New Plugin > Upload Plugin.
 3. Go to WooCommerce > Settings > Phone Validation. Validation and Formatting on Save are on by default, the fallback Default Country is Poland and the Output Format is E.164; adjust them to your store.
 4. Try to place a test order with an invalid phone number to see the error.
 
@@ -102,7 +102,7 @@ No. Only numbers submitted at checkout are checked and formatted. Deactivating o
 
 = Can I change the error messages? =
 
-Yes, with the `shift64_phone_validation_error_message` filter or by translating the `verify-phone-number-shift64` text domain.
+Yes, with the `shift64_phone_validation_error_message` filter or by translating the `shift64-phone-validation` text domain.
 
 = The plugin says its vendor folder is missing =
 
@@ -148,7 +148,7 @@ It was installed from a copy of the source code (such as a ZIP of the GitHub rep
 = 1.3.0 =
 * New: Declare compatibility with High-Performance Order Storage (HPOS) and the Cart and Checkout blocks.
 
-Older releases: [full changelog on GitHub](https://github.com/mateusz-zadorozny/verify-phone-number-shift64/blob/master/CHANGELOG.md).
+Older releases: [full changelog on GitHub](https://github.com/mateusz-zadorozny/shift64-phone-validation/blob/master/CHANGELOG.md).
 
 == Upgrade Notice ==
 

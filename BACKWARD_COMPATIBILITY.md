@@ -71,9 +71,11 @@ PHP 8.3+, declared in the plugin header (`Requires PHP`), `readme.txt` and `comp
 
 ### 6. Translation text domain
 
-`verify-phone-number-shift64`, enforced by PHPCS. Changing it invalidates every existing translation, including third-party ones.
+`shift64-phone-validation`, enforced by PHPCS. Changing it invalidates every existing translation, including third-party ones.
 
 **Breaking:** changing the text domain. **Required path:** don't.
+
+One exception is recorded: 2.0.1 changed the domain from `verify-phone-number-shift64` to `shift64-phone-validation` as a patch release, because the WordPress.org review required a new name and slug and the text domain must equal the slug. No directory install and no third-party translation existed yet (decision D08 in `.ai/specs/product-brief.md`). Once the plugin is in the directory the slug is fixed, so this cannot recur.
 
 ## What is not protected
 

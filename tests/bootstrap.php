@@ -2,7 +2,7 @@
 /**
  * PHPUnit bootstrap file.
  *
- * @package Verify_Phone_Number_Shift64
+ * @package Shift64_Phone_Validation
  */
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
@@ -29,7 +29,7 @@ require_once "{$_tests_dir}/includes/functions.php";
  * Manually load the plugin being tested.
  */
 function _manually_load_plugin() {
-	require dirname( dirname( __FILE__ ) ) . '/verify-phone-number-shift64.php';
+	require dirname( dirname( __FILE__ ) ) . '/shift64-phone-validation.php';
 }
 
 tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );

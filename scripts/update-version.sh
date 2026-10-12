@@ -12,7 +12,7 @@
 # to attach the ZIP. If the missed file is readme.txt or the plugin file, the tag carries the
 # old version and wporg-deploy.yml refuses it; the next release (a fix: commit) replaces it.
 #
-# Files changed: verify-phone-number-shift64.php (header Version + constant),
+# Files changed: shift64-phone-validation.php (header Version + constant),
 #                readme.txt (Stable tag + "= X.Y.Z =" changelog entry).
 # Usage: ./scripts/update-version.sh <version>
 # Works with GNU sed (ubuntu-latest) and BSD sed (macOS): -i always gets an attached suffix.
@@ -28,7 +28,7 @@ fi
 
 cd "$(dirname "$0")/.."
 
-PLUGIN_FILE="verify-phone-number-shift64.php"
+PLUGIN_FILE="shift64-phone-validation.php"
 
 # In-place sed that behaves the same on GNU and BSD sed.
 replace() {

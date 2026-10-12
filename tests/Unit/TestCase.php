@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 abstract class TestCase extends PHPUnitTestCase {
 
 	/**
-	 * Subset of languages/verify-phone-number-shift64-pl_PL.po used to prove
+	 * Subset of languages/shift64-phone-validation-pl_PL.po used to prove
 	 * that logic does not depend on the active language.
 	 */
 	const POLISH = array(

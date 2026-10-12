@@ -1,13 +1,13 @@
 <?php
 /**
- * Plugin Name:     Verify Phone Number Shift64
- * Plugin URI:      https://github.com/mateusz-zadorozny/verify-phone-number-shift64
+ * Plugin Name:     SHIFT64 Phone Validation for WooCommerce
+ * Plugin URI:      https://github.com/mateusz-zadorozny/shift64-phone-validation
  * Description:     Validates and formats WooCommerce checkout phone numbers with Google's libphonenumber library.
  * Author:          Mateusz Zadorożny (SHIFT64)
  * Author URI:      https://shift64.com
  * License:         GPLv2 or later
  * License URI:     https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:     verify-phone-number-shift64
+ * Text Domain:     shift64-phone-validation
  * Domain Path:     /languages
  * Version:         2.0.0
  * Requires PHP:    8.3
@@ -70,8 +70,8 @@ if ( file_exists( $shift64_autoloader ) ) {
 
 			echo '<div class="notice notice-error"><p>';
 			echo esc_html__(
-				'Verify Phone Number Shift64 cannot run because its bundled vendor folder is missing. Reinstall the plugin from WordPress.org or from the release ZIP on GitHub.',
-				'verify-phone-number-shift64'
+				'SHIFT64 Phone Validation for WooCommerce cannot run because its bundled vendor folder is missing. Reinstall the plugin from WordPress.org or from the release ZIP on GitHub.',
+				'shift64-phone-validation'
 			);
 			echo '</p></div>';
 		}
@@ -89,7 +89,7 @@ if ( file_exists( $shift64_autoloader ) ) {
 add_action(
 	'plugins_loaded',
 	function () {
-		load_plugin_textdomain( 'verify-phone-number-shift64', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+		load_plugin_textdomain( 'shift64-phone-validation', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 	},
 	5
 );

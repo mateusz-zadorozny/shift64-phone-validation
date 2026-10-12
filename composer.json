@@ -1,5 +1,5 @@
 {
-    "name": "shift64/verify-phone-number",
+    "name": "shift64/shift64-phone-validation",
     "description": "WordPress plugin for phone number validation using libphonenumber",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
@@ -25,8 +25,8 @@
         "phpcs": "phpcs",
         "phpcbf": "phpcbf",
         "test": "phpunit",
-        "makepot": "wp i18n make-pot . languages/verify-phone-number-shift64.pot --slug=verify-phone-number-shift64",
-        "makepo": "wp i18n update-po languages/verify-phone-number-shift64.pot languages/",
+        "makepot": "wp i18n make-pot . languages/shift64-phone-validation.pot --slug=shift64-phone-validation",
+        "makepo": "wp i18n update-po languages/shift64-phone-validation.pot languages/",
         "makemo": "wp i18n make-mo languages/"
     },
     "config": {

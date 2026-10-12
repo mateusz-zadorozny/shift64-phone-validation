@@ -75,7 +75,7 @@ class DependencyChecker {
 				echo esc_html(
 					sprintf(
 						/* translators: 1: minimum WordPress version, e.g. 7.1, 2: WordPress version this site runs */
-						__( 'Verify Phone Number Shift64 requires WordPress %1$s or later, and this site runs WordPress %2$s. Until WordPress is updated, phone numbers are not checked at checkout.', 'verify-phone-number-shift64' ),
+						__( 'SHIFT64 Phone Validation for WooCommerce requires WordPress %1$s or later, and this site runs WordPress %2$s. Until WordPress is updated, phone numbers are not checked at checkout.', 'shift64-phone-validation' ),
 						SHIFT64_PHONE_VALIDATION_MIN_WP,
 						self::get_running_wordpress_version()
 					)
@@ -120,8 +120,8 @@ class DependencyChecker {
 			<p>
 				<?php
 				echo esc_html__(
-					'Verify Phone Number Shift64 requires WooCommerce to be installed and activated.',
-					'verify-phone-number-shift64'
+					'SHIFT64 Phone Validation for WooCommerce requires WooCommerce to be installed and activated.',
+					'shift64-phone-validation'
 				);
 				?>
 			</p>

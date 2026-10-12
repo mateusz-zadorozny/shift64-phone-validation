@@ -1,51 +1,55 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Verify Phone Number Shift64 0.1.0\n"
-"Report-Msgid-Bugs-To: https://github.com/mateusz-zadorozny/verify-phone-number-shift64/issues\n"
+"Project-Id-Version: SHIFT64 Phone Validation for WooCommerce 0.1.0\n"
+"Report-Msgid-Bugs-To: https://github.com/mateusz-zadorozny/shift64-phone-validation/issues\n"
 "Last-Translator: Shift64 <info@shift64.com>\n"
 "Language-Team: English (US) <en@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-01-28 00:00:00+00:00\n"
-"PO-Revision-Date: 2026-10-06T22:07:48+00:00\n"
+"PO-Revision-Date: 2026-10-12T16:19:05+00:00\n"
 "Language: en_US\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. Plugin Name of the plugin
-#: verify-phone-number-shift64.php:3
-msgid "Verify Phone Number Shift64"
-msgstr "Verify Phone Number Shift64"
+#: shift64-phone-validation.php:3
+msgid "SHIFT64 Phone Validation for WooCommerce"
+msgstr "SHIFT64 Phone Validation for WooCommerce"
 
 #. Plugin URI of the plugin
-#: verify-phone-number-shift64.php:4
-msgid "https://github.com/mateusz-zadorozny/verify-phone-number-shift64"
-msgstr "https://github.com/mateusz-zadorozny/verify-phone-number-shift64"
+#: shift64-phone-validation.php:4
+msgid "https://github.com/mateusz-zadorozny/shift64-phone-validation"
+msgstr "https://github.com/mateusz-zadorozny/shift64-phone-validation"
 
 #. Description of the plugin
-#: verify-phone-number-shift64.php:5
+#: shift64-phone-validation.php:5
 msgid "Validates and formats WooCommerce checkout phone numbers with Google's libphonenumber library."
 msgstr "Validates and formats WooCommerce checkout phone numbers with Google's libphonenumber library."
 
 #. Author of the plugin
-#: verify-phone-number-shift64.php:6
+#: shift64-phone-validation.php:6
 msgid "Mateusz Zadorożny (SHIFT64)"
 msgstr ""
 
 #. Author URI of the plugin
-#: verify-phone-number-shift64.php:7
+#: shift64-phone-validation.php:7
 msgid "https://shift64.com"
 msgstr ""
+
+#: shift64-phone-validation.php:72
+msgid "SHIFT64 Phone Validation for WooCommerce cannot run because its bundled vendor folder is missing. Reinstall the plugin from WordPress.org or from the release ZIP on GitHub."
+msgstr "SHIFT64 Phone Validation for WooCommerce cannot run because its bundled vendor folder is missing. Reinstall the plugin from WordPress.org or from the release ZIP on GitHub."
 
 #. translators: 1: minimum WordPress version, e.g. 7.1, 2: WordPress version this site runs
 #: src/Admin/DependencyChecker.php:78
 #, php-format
-msgid "Verify Phone Number Shift64 requires WordPress %1$s or later, and this site runs WordPress %2$s. Until WordPress is updated, phone numbers are not checked at checkout."
-msgstr "Verify Phone Number Shift64 requires WordPress %1$s or later, and this site runs WordPress %2$s. Until WordPress is updated, phone numbers are not checked at checkout."
+msgid "SHIFT64 Phone Validation for WooCommerce requires WordPress %1$s or later, and this site runs WordPress %2$s. Until WordPress is updated, phone numbers are not checked at checkout."
+msgstr "SHIFT64 Phone Validation for WooCommerce requires WordPress %1$s or later, and this site runs WordPress %2$s. Until WordPress is updated, phone numbers are not checked at checkout."
 
 #: src/Admin/DependencyChecker.php:122
-msgid "Verify Phone Number Shift64 requires WooCommerce to be installed and activated."
-msgstr "Verify Phone Number Shift64 requires WooCommerce to be installed and activated."
+msgid "SHIFT64 Phone Validation for WooCommerce requires WooCommerce to be installed and activated."
+msgstr "SHIFT64 Phone Validation for WooCommerce requires WooCommerce to be installed and activated."
 
 #: src/Admin/Settings.php:54
 msgid "Phone Validation"
@@ -1014,7 +1018,3 @@ msgstr "Phone number is too long."
 #: src/Validation/PhoneValidator.php:133
 msgid "Unable to parse phone number."
 msgstr "Unable to parse phone number."
-
-#: verify-phone-number-shift64.php:72
-msgid "Verify Phone Number Shift64 cannot run because its bundled vendor folder is missing. Reinstall the plugin from WordPress.org or from the release ZIP on GitHub."
-msgstr "Verify Phone Number Shift64 cannot run because its bundled vendor folder is missing. Reinstall the plugin from WordPress.org or from the release ZIP on GitHub."

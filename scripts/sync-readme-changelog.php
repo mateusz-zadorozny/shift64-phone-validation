@@ -46,7 +46,7 @@ use RuntimeException;
 const MAX_VERSIONS = 10;
 
 /** Target of the "Older releases" line when the script has to add it. */
-const FULL_CHANGELOG_URL = 'https://github.com/mateusz-zadorozny/verify-phone-number-shift64/blob/master/CHANGELOG.md';
+const FULL_CHANGELOG_URL = 'https://github.com/mateusz-zadorozny/shift64-phone-validation/blob/master/CHANGELOG.md';
 
 /** CHANGELOG.md section title => readme label. Every other section is not user-facing. */
 const LABELS = array(

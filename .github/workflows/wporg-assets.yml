@@ -83,7 +83,7 @@ jobs:
           set -euo pipefail
           stable="$(sed -n 's/^Stable tag:[[:space:]]*\([^[:space:]]*\).*/\1/p' readme.txt | head -n 1)"
           if [ -n "${stable}" ] && curl -fsS --retry 3 -o /dev/null \
-            "https://plugins.svn.wordpress.org/verify-phone-number-shift64/tags/${stable}/readme.txt"; then
+            "https://plugins.svn.wordpress.org/shift64-phone-validation/tags/${stable}/readme.txt"; then
             echo "ready=true" >> "$GITHUB_OUTPUT"
           else
             echo "ready=false" >> "$GITHUB_OUTPUT"
@@ -99,7 +99,7 @@ jobs:
         env:
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
-          SLUG: verify-phone-number-shift64
+          SLUG: shift64-phone-validation
           README_NAME: readme.txt
           IGNORE_OTHER_FILES: true
           ASSETS_DIR: .wordpress-org

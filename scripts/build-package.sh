@@ -9,13 +9,13 @@
 #   composer install --no-dev --optimize-autoloader --prefer-dist
 #
 # Usage: ./scripts/build-package.sh <output-dir>
-#   <output-dir>/verify-phone-number-shift64/       plugin folder
-#   <output-dir>/verify-phone-number-shift64.zip    installable ZIP
+#   <output-dir>/shift64-phone-validation/       plugin folder
+#   <output-dir>/shift64-phone-validation.zip    installable ZIP
 # In GitHub Actions the two paths are also written to $GITHUB_OUTPUT as "dir" and "zip".
 
 set -euo pipefail
 
-SLUG="verify-phone-number-shift64"
+SLUG="shift64-phone-validation"
 MAX_ZIP_BYTES=$((10 * 1024 * 1024)) # WordPress.org submission limit: "under 10Mb".
 
 OUT="${1:-}"

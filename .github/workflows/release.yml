@@ -23,7 +23,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  PLUGIN_SLUG: verify-phone-number-shift64
+  PLUGIN_SLUG: shift64-phone-validation
 
 jobs:
   release:

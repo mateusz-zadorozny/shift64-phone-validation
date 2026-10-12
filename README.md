@@ -1,4 +1,4 @@
-# Verify Phone Number Shift64
+# SHIFT64 Phone Validation for WooCommerce
 
 Phone number validation and formatting for WooCommerce checkout, powered by Google's [libphonenumber](https://github.com/giggsey/libphonenumber-for-php-lite) (v9).
 
@@ -14,7 +14,7 @@ This README is the developer documentation. The WordPress.org listing text lives
 - Input normalization: spaces (including non-breaking ones pasted from documents), hyphens, dots, slashes and parentheses are stripped, a leading `00` is treated as `+` (typographic dashes such as `–` are rejected by WooCommerce's own `WC_Validation::is_phone()` before the plugin runs)
 - Two validation modes: *default country + international* or *international only* (every number must carry its country prefix, typed with `+` or `00`)
 - Output formats: E.164 (`+48600123456`), international (`+48 600 123 456`), national (`600 123 456`)
-- Highlights the offending phone field on checkout (small JS helpers, no build step; can be switched off for themes with their own error UX). Open gap: no highlight on a classic checkout page when the configured checkout page is a block one ([#34](https://github.com/mateusz-zadorozny/verify-phone-number-shift64/issues/34))
+- Highlights the offending phone field on checkout (small JS helpers, no build step; can be switched off for themes with their own error UX). Open gap: no highlight on a classic checkout page when the configured checkout page is a block one ([#34](https://github.com/mateusz-zadorozny/shift64-phone-validation/issues/34))
 - Translations: English and Polish; on multilingual stores (Polylang, WPML) block-checkout messages follow the shopper's language
 - No external requests: validation runs on the server with the rules bundled in `vendor/`
 
@@ -26,15 +26,15 @@ This README is the developer documentation. The WordPress.org listing text lives
 
 ## Installation
 
-**From WordPress.org** (once the plugin is listed): *Plugins → Add New Plugin*, search for "Verify Phone Number Shift64", install and activate. Updates then arrive through *Dashboard → Updates* like any other directory plugin.
+**From WordPress.org** (once the plugin is listed): *Plugins → Add New Plugin*, search for "SHIFT64 Phone Validation for WooCommerce", install and activate. Updates then arrive through *Dashboard → Updates* like any other directory plugin.
 
 **From a release ZIP:**
 
-1. Download `verify-phone-number-shift64.zip` from the [latest release](https://github.com/mateusz-zadorozny/verify-phone-number-shift64/releases/latest).
+1. Download `shift64-phone-validation.zip` from the [latest release](https://github.com/mateusz-zadorozny/shift64-phone-validation/releases/latest).
 2. In WP Admin go to *Plugins → Add New Plugin → Upload Plugin* and upload the file.
 3. Activate the plugin.
 
-**Never use GitHub's *Code → Download ZIP* button.** That is a source archive: it has no `vendor/` directory (libphonenumber and the autoloader), and it unpacks into a folder named `verify-phone-number-shift64-master`. The plugin then only shows an admin notice that its bundled vendor folder is missing and does nothing. The release ZIP contains a production `vendor/` and unpacks into `verify-phone-number-shift64/`.
+**Never use GitHub's *Code → Download ZIP* button.** That is a source archive: it has no `vendor/` directory (libphonenumber and the autoloader), and it unpacks into a folder named `shift64-phone-validation-master`. The plugin then only shows an admin notice that its bundled vendor folder is missing and does nothing. The release ZIP contains a production `vendor/` and unpacks into `shift64-phone-validation/`.
 
 If you do run the plugin from a git checkout, install the dependencies inside the plugin directory:
 
@@ -42,19 +42,21 @@ If you do run the plugin from a git checkout, install the dependencies inside th
 composer install --no-dev --optimize-autoloader   # runtime only; use plain `composer install` for development
 ```
 
-### Moving an existing GitHub install to WordPress.org updates
+### Moving an existing install to WordPress.org updates
 
-Up to 1.4.2 the plugin updated itself from GitHub releases. That updater is removed in 1.5.0 (WordPress.org does not allow plugins to install updates from other servers); from 1.5.0 on, updates come from WordPress.org only. On WordPress below 7.1, take a 1.4.x site to 1.5.0 while 1.5.0 is the latest GitHub release (it is released well before 2.0.0 for this reason), or later by uploading the 1.5.0 release ZIP: the 1.4.x updater offers the latest GitHub release whatever the WordPress version, so it would install 2.0.0, which checks no phone numbers until WordPress is updated.
+Up to 2.0.0 the plugin was called *Verify Phone Number Shift64* and lived in the folder `verify-phone-number-shift64`. WordPress.org asked for a name that starts with its distinctive part, so from 2.0.1 it is *SHIFT64 Phone Validation for WooCommerce*, and the folder, the main file (`shift64-phone-validation.php`) and the text domain are `shift64-phone-validation`. The settings (the five `shift64_phone_validation_*` options) and the phone numbers saved on orders keep their names, so nothing is lost, but WordPress sees the renamed plugin as a different one: an install from before 2.0.1 is not updated in place and has to be replaced once.
 
-WordPress.org only updates a plugin installed in the folder **`verify-phone-number-shift64`** (verified on 2026-10-06: the live update API, `api.wordpress.org/plugins/update-check/1.1/`, offered an update for `query-monitor/query-monitor.php` but not for the same plugin in `query-monitor-master/` or other renamed folders, and likewise for several other plugins). A site that installed the release ZIP is already in that folder and needs nothing. A copy in any other folder – for example `verify-phone-number-shift64-master` from a source archive – gets no directory updates (the old updater kept whatever folder name it found, so such a copy is still in its old folder after updating to 1.5.0).
+Up to 1.4.2 the plugin updated itself from GitHub releases. That updater is removed in 1.5.0 (WordPress.org does not allow plugins to install updates from other servers); from 1.5.0 on, updates come from WordPress.org only. The 1.4.x updater looks for a release asset named `verify-phone-number-shift64.zip`, which releases from 2.0.1 on no longer carry, so it offers nothing newer. On WordPress below 7.1, stay on 1.5.1 (upload its release ZIP): 2.0.0 and later check no phone numbers until WordPress is updated.
 
-To move such a copy, replace it with WP-CLI, which keeps the settings:
+WordPress.org only updates a plugin installed in the folder **`shift64-phone-validation`** (verified on 2026-10-06: the live update API, `api.wordpress.org/plugins/update-check/1.1/`, offered an update for `query-monitor/query-monitor.php` but not for the same plugin in `query-monitor-master/` or other renamed folders, and likewise for several other plugins). A copy in any other folder – `verify-phone-number-shift64` or `verify-phone-number-shift64-master` from before the rename, or `shift64-phone-validation-master` from a source archive – gets no directory updates.
+
+To move such a copy, replace it with WP-CLI, which keeps the settings. Deactivate the old copy first: the old and the new copy cannot be active at the same time.
 
 ```bash
 wp plugin list --fields=name,status,version     # find the folder name
 wp plugin deactivate verify-phone-number-shift64-master
 wp plugin delete verify-phone-number-shift64-master    # removes the files only, does NOT run uninstall.php
-wp plugin install verify-phone-number-shift64 --activate    # from WordPress.org, or pass the path/URL of the release ZIP
+wp plugin install shift64-phone-validation --activate    # from WordPress.org, or pass the path/URL of the release ZIP
 ```
 
 Do **not** remove the old copy with *Delete* on the WP Admin *Plugins* screen: that runs `uninstall.php`, which deletes the plugin's settings (the five `shift64_phone_validation_*` options). Phone numbers already saved on orders are not affected either way.
@@ -107,7 +109,7 @@ Before either hook runs, WooCommerce itself checks phone fields with `WC_Validat
 Code layout:
 
 ```
-verify-phone-number-shift64.php   bootstrap, constants, hook registration
+shift64-phone-validation.php   bootstrap, constants, hook registration
 uninstall.php                     deletes the plugin's options when it is deleted from WP Admin
 src/functions.php                 public helpers (format_phone())
 src/Admin/Settings.php            WooCommerce settings tab + option getters
@@ -178,16 +180,16 @@ composer phpcbf       # auto-fix what can be fixed
 
 ### Translations
 
-Every user-facing string uses the `verify-phone-number-shift64` text domain. After changing strings:
+Every user-facing string uses the `shift64-phone-validation` text domain. After changing strings:
 
 ```bash
-composer makepot      # regenerate languages/verify-phone-number-shift64.pot (slug pinned, so the folder name does not matter)
+composer makepot      # regenerate languages/shift64-phone-validation.pot (slug pinned, so the folder name does not matter)
 composer makepo       # merge the new .pot into the en_US and pl_PL .po files (wp i18n update-po)
 # translate the new entries in languages/*.po, then:
 composer makemo       # compile the .mo files (wp i18n make-mo)
 ```
 
-The bundled files are loaded just in time from the folder named by the `Domain Path: /languages` header; a language pack from translate.wordpress.org takes precedence for its locale. WordPress registers that folder itself only for a plugin activated per site, so the main plugin file also registers it with `load_plugin_textdomain()` for network-activated installs (since WordPress 6.7 that call loads no file; Plugin Check reports it as a warning, which is accepted). The block checkout switches to the shopper's locale with `switch_to_locale()` and never unloads the text domain (that left messages in English on WordPress 6.7+, [#32](https://github.com/mateusz-zadorozny/verify-phone-number-shift64/issues/32)). Once the plugin is listed, translations can also be contributed on translate.wordpress.org.
+The bundled files are loaded just in time from the folder named by the `Domain Path: /languages` header; a language pack from translate.wordpress.org takes precedence for its locale. WordPress registers that folder itself only for a plugin activated per site, so the main plugin file also registers it with `load_plugin_textdomain()` for network-activated installs (since WordPress 6.7 that call loads no file; Plugin Check reports it as a warning, which is accepted). The block checkout switches to the shopper's locale with `switch_to_locale()` and never unloads the text domain (that left messages in English on WordPress 6.7+, [#32](https://github.com/mateusz-zadorozny/shift64-phone-validation/issues/32)). Once the plugin is listed, translations can also be contributed on translate.wordpress.org.
 
 ### Tests
 
@@ -211,7 +213,7 @@ npm run env:stop
 
 `.wp-env.json` describes the environment (latest WordPress, PHP 8.3, latest WooCommerce, this checkout as the plugin). `tests/e2e/bin/seed.sh` runs after every `wp-env start` and is idempotent: Polish store, guest checkout, cash on delivery, flat-rate shipping, one simple product (`/product/e2e-test-product/`), the block checkout at `/checkout/` (set as the WooCommerce checkout page on every run) and a classic one at `/classic-checkout/`, and the WordPress and WooCommerce `pl_PL` language packs, installed but not activated: the site stays English, and `block-checkout-polish-messages.spec.ts` switches it to Polish and back. Admin login is wp-env's default (`admin` / `password`).
 
-Each git worktree gets its own containers; set `WP_ENV_PORT` to run several side by side (Playwright reads the same variable, `WP_BASE_URL` overrides it entirely). Tests live in `tests/e2e/*.spec.ts` with shared helpers in `tests/e2e/helpers/`; timeouts and retries belong in `playwright.config.ts`, never in a test. Some specs log in to change global settings and restore them afterwards: the `admin-*` specs change plugin settings, `classic-checkout-block-theme-highlight.spec.ts` makes `/classic-checkout/` the WooCommerce checkout page (`woocommerce_checkout_page_id`) for each of its tests ([#34](https://github.com/mateusz-zadorozny/verify-phone-number-shift64/issues/34)), and `block-checkout-polish-messages.spec.ts` switches the site language. That is why the suite runs with one worker. These specs read `TEST_ADMIN_USER` / `TEST_ADMIN_PASSWORD` from the environment or from `.ai/qa/test-env.env`, which `sh .ai/scripts/test-env-up.sh` writes (the agent-pipeline entrypoint that wraps `wp-env start` and records the running instance in `.ai/qa/test-env.json`). If a run is killed before it can restore its settings, `npm run env:seed` (or the next `wp-env start`) sets the checkout page back to `/checkout/` and the site language back to English.
+Each git worktree gets its own containers; set `WP_ENV_PORT` to run several side by side (Playwright reads the same variable, `WP_BASE_URL` overrides it entirely). Tests live in `tests/e2e/*.spec.ts` with shared helpers in `tests/e2e/helpers/`; timeouts and retries belong in `playwright.config.ts`, never in a test. Some specs log in to change global settings and restore them afterwards: the `admin-*` specs change plugin settings, `classic-checkout-block-theme-highlight.spec.ts` makes `/classic-checkout/` the WooCommerce checkout page (`woocommerce_checkout_page_id`) for each of its tests ([#34](https://github.com/mateusz-zadorozny/shift64-phone-validation/issues/34)), and `block-checkout-polish-messages.spec.ts` switches the site language. That is why the suite runs with one worker. These specs read `TEST_ADMIN_USER` / `TEST_ADMIN_PASSWORD` from the environment or from `.ai/qa/test-env.env`, which `sh .ai/scripts/test-env-up.sh` writes (the agent-pipeline entrypoint that wraps `wp-env start` and records the running instance in `.ai/qa/test-env.json`). If a run is killed before it can restore its settings, `npm run env:seed` (or the next `wp-env start`) sets the checkout page back to `/checkout/` and the site language back to English.
 
 ### Continuous integration
 
@@ -233,7 +235,7 @@ Build the package locally (the build script refuses a `vendor/` that still conta
 composer install --no-dev -o && ./scripts/build-package.sh /tmp/vpn-build && composer install
 ```
 
-The result is `/tmp/vpn-build/verify-phone-number-shift64.zip`; the trailing `composer install` restores the dev tooling.
+The result is `/tmp/vpn-build/shift64-phone-validation.zip`; the trailing `composer install` restores the dev tooling.
 
 ### Releases
 
@@ -241,7 +243,7 @@ Releases are fully automated with [semantic-release](https://semantic-release.gi
 
 - Pull requests are squash-merged, so the PR title becomes the commit message and decides the version ([Conventional Commits](https://www.conventionalcommits.org/)): `feat:` → minor, `fix:` / `perf:` → patch, `BREAKING CHANGE` → major, anything else → no release. PR titles are linted.
 - semantic-release writes `CHANGELOG.md`, and `scripts/update-version.sh` bumps the plugin header, the `SHIFT64_PHONE_VALIDATION_VERSION` constant and `Stable tag` in `readme.txt`. It also runs `scripts/sync-readme-changelog.php`, which prepends the new version to the `== Changelog ==` section of `readme.txt` from `CHANGELOG.md` and keeps the 10 most recent versions (older ones are linked to `CHANGELOG.md` on GitHub). Never bump versions by hand.
-- `scripts/build-package.sh` builds **one** package from the tagged commit. The same folder is used twice: zipped as `verify-phone-number-shift64.zip` and attached to the GitHub release, and deployed to the WordPress.org SVN repository (trunk + tag).
+- `scripts/build-package.sh` builds **one** package from the tagged commit. The same folder is used twice: zipped as `shift64-phone-validation.zip` and attached to the GitHub release, and deployed to the WordPress.org SVN repository (trunk + tag).
 - The WordPress.org deploy runs automatically once the repository secrets `SVN_USERNAME` and `SVN_PASSWORD` exist; until then the release workflow skips it with a notice.
 - `.github/workflows/wporg-deploy.yml` (manual, takes a tag) deploys an existing release to WordPress.org – for the first deploy after the plugin is approved and for retries.
 - `.github/workflows/wporg-assets.yml` syncs `readme.txt` and `.wordpress-org/` (icons, banners, screenshots) to WordPress.org without a new version – after each release and on demand, for listing-only changes.

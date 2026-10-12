@@ -1,1022 +1,1020 @@
-# Copyright (C) 2026 Mateusz Zadorożny (SHIFT64)
-# This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Verify Phone Number Shift64 1.4.2\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/verify-phone-number-shift64\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Project-Id-Version: SHIFT64 Phone Validation for WooCommerce 0.1.0\n"
+"Report-Msgid-Bugs-To: https://github.com/mateusz-zadorozny/shift64-phone-validation/issues\n"
+"Last-Translator: Shift64 <info@shift64.com>\n"
+"Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-06T21:43:34+00:00\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.12.0\n"
-"X-Domain: verify-phone-number-shift64\n"
+"POT-Creation-Date: 2024-01-28 00:00:00+00:00\n"
+"PO-Revision-Date: 2026-10-12T16:19:05+00:00\n"
+"Language: pl_PL\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #. Plugin Name of the plugin
-#: verify-phone-number-shift64.php:3
-msgid "Verify Phone Number Shift64"
-msgstr ""
+#: shift64-phone-validation.php:3
+msgid "SHIFT64 Phone Validation for WooCommerce"
+msgstr "SHIFT64 Walidacja Telefonu dla WooCommerce"
 
 #. Plugin URI of the plugin
-#: verify-phone-number-shift64.php:4
-msgid "https://github.com/mateusz-zadorozny/verify-phone-number-shift64"
-msgstr ""
+#: shift64-phone-validation.php:4
+msgid "https://github.com/mateusz-zadorozny/shift64-phone-validation"
+msgstr "https://github.com/mateusz-zadorozny/shift64-phone-validation"
 
 #. Description of the plugin
-#: verify-phone-number-shift64.php:5
+#: shift64-phone-validation.php:5
 msgid "Validates and formats WooCommerce checkout phone numbers with Google's libphonenumber library."
-msgstr ""
+msgstr "Waliduje i formatuje numery telefonów podawane podczas składania zamówienia w WooCommerce, korzystając z biblioteki libphonenumber od Google."
 
 #. Author of the plugin
-#: verify-phone-number-shift64.php:6
+#: shift64-phone-validation.php:6
 msgid "Mateusz Zadorożny (SHIFT64)"
-msgstr ""
+msgstr "Mateusz Zadorożny (SHIFT64)"
 
 #. Author URI of the plugin
-#: verify-phone-number-shift64.php:7
+#: shift64-phone-validation.php:7
 msgid "https://shift64.com"
-msgstr ""
+msgstr "https://shift64.com"
+
+#: shift64-phone-validation.php:72
+msgid "SHIFT64 Phone Validation for WooCommerce cannot run because its bundled vendor folder is missing. Reinstall the plugin from WordPress.org or from the release ZIP on GitHub."
+msgstr "Wtyczka SHIFT64 Walidacja Telefonu dla WooCommerce nie może działać, ponieważ brakuje dołączonego do niej katalogu vendor. Zainstaluj wtyczkę ponownie z WordPress.org lub z pliku ZIP wydania na GitHubie."
 
 #. translators: 1: minimum WordPress version, e.g. 7.1, 2: WordPress version this site runs
 #: src/Admin/DependencyChecker.php:78
 #, php-format
-msgid "Verify Phone Number Shift64 requires WordPress %1$s or later, and this site runs WordPress %2$s. Until WordPress is updated, phone numbers are not checked at checkout."
-msgstr ""
+msgid "SHIFT64 Phone Validation for WooCommerce requires WordPress %1$s or later, and this site runs WordPress %2$s. Until WordPress is updated, phone numbers are not checked at checkout."
+msgstr "Wtyczka SHIFT64 Walidacja Telefonu dla WooCommerce wymaga WordPressa w wersji %1$s lub nowszej, a ta witryna działa na WordPressie %2$s. Dopóki WordPress nie zostanie zaktualizowany, numery telefonów nie są sprawdzane przy składaniu zamówień."
 
 #: src/Admin/DependencyChecker.php:122
-msgid "Verify Phone Number Shift64 requires WooCommerce to be installed and activated."
-msgstr ""
+msgid "SHIFT64 Phone Validation for WooCommerce requires WooCommerce to be installed and activated."
+msgstr "Wtyczka SHIFT64 Walidacja Telefonu dla WooCommerce wymaga zainstalowania i aktywacji WooCommerce."
 
 #: src/Admin/Settings.php:54
 msgid "Phone Validation"
-msgstr ""
+msgstr "Walidacja Telefonu"
 
 #: src/Admin/Settings.php:84
 msgid "Phone Validation Settings"
-msgstr ""
+msgstr "Ustawienia Walidacji Telefonu"
 
 #: src/Admin/Settings.php:86
 msgid "Configure phone number validation and formatting behavior."
-msgstr ""
+msgstr "Skonfiguruj zachowanie walidacji i formatowania numerów telefonów."
 
 #: src/Admin/Settings.php:90
 msgid "Enable Validation"
-msgstr ""
+msgstr "Włącz Walidację"
 
 #: src/Admin/Settings.php:91
 msgid "Enable phone number validation globally"
-msgstr ""
+msgstr "Włącz walidację numerów telefonów globalnie"
 
 #: src/Admin/Settings.php:95
 msgid "When enabled, phone numbers will be validated during checkout."
-msgstr ""
+msgstr "Po włączeniu numery telefonów będą walidowane podczas składania zamówienia."
 
 #: src/Admin/Settings.php:98
 msgid "Default Country"
-msgstr ""
+msgstr "Domyślny Kraj"
 
 #: src/Admin/Settings.php:99
 msgid "Used for numbers entered without \"+\" only when the address has no country. Otherwise the number is read in the country of the billing / shipping address."
-msgstr ""
+msgstr "Używany dla numerów wpisanych bez „+” tylko wtedy, gdy adres nie ma kraju. W pozostałych przypadkach numer jest odczytywany w kraju z adresu rozliczeniowego / wysyłki."
 
 #: src/Admin/Settings.php:108
 msgid "Validation Mode"
-msgstr ""
+msgstr "Tryb Walidacji"
 
 #: src/Admin/Settings.php:109
 msgid "Choose how phone numbers should be validated."
-msgstr ""
+msgstr "Wybierz sposób walidacji numerów telefonów."
 
 #: src/Admin/Settings.php:115
 msgid "Default country + international"
-msgstr ""
+msgstr "Domyślny kraj + międzynarodowe"
 
 #: src/Admin/Settings.php:116
 msgid "International only"
-msgstr ""
+msgstr "Tylko międzynarodowe"
 
 #: src/Admin/Settings.php:121
 msgid "Output Format"
-msgstr ""
+msgstr "Format Wyjściowy"
 
 #: src/Admin/Settings.php:122
 msgid "Select the format for storing phone numbers."
-msgstr ""
+msgstr "Wybierz format zapisu numerów telefonów."
 
 #: src/Admin/Settings.php:128
 msgid "E.164 (e.g., +48123456789)"
-msgstr ""
+msgstr "E.164 (np. +48123456789)"
 
 #: src/Admin/Settings.php:129
 msgid "International (e.g., +48 123 456 789)"
-msgstr ""
+msgstr "Międzynarodowy (np. +48 123 456 789)"
 
 #: src/Admin/Settings.php:130
 msgid "National (e.g., 123 456 789)"
-msgstr ""
+msgstr "Krajowy (np. 123 456 789)"
 
 #: src/Admin/Settings.php:135
 msgid "Enable Formatting on Save"
-msgstr ""
+msgstr "Włącz Formatowanie przy Zapisie"
 
 #: src/Admin/Settings.php:136
 msgid "Automatically format phone numbers when saving"
-msgstr ""
+msgstr "Automatycznie formatuj numery telefonów podczas zapisywania"
 
 #: src/Admin/Settings.php:140
 msgid "When enabled, phone numbers will be reformatted to the selected output format before saving."
-msgstr ""
+msgstr "Po włączeniu numery telefonów będą przeformatowane do wybranego formatu przed zapisaniem."
 
 #: src/Admin/Settings.php:158
 msgid "Afghanistan"
-msgstr ""
+msgstr "Afganistan"
 
 #: src/Admin/Settings.php:159
 msgid "Albania"
-msgstr ""
+msgstr "Albania"
 
 #: src/Admin/Settings.php:160
 msgid "Algeria"
-msgstr ""
+msgstr "Algieria"
 
 #: src/Admin/Settings.php:161
 msgid "American Samoa"
-msgstr ""
+msgstr "Samoa Amerykańskie"
 
 #: src/Admin/Settings.php:162
 msgid "Andorra"
-msgstr ""
+msgstr "Andora"
 
 #: src/Admin/Settings.php:163
 msgid "Angola"
-msgstr ""
+msgstr "Angola"
 
 #: src/Admin/Settings.php:164
 msgid "Anguilla"
-msgstr ""
+msgstr "Anguilla"
 
 #: src/Admin/Settings.php:165
 msgid "Antarctica"
-msgstr ""
+msgstr "Antarktyda"
 
 #: src/Admin/Settings.php:166
 msgid "Antigua and Barbuda"
-msgstr ""
+msgstr "Antigua i Barbuda"
 
 #: src/Admin/Settings.php:167
 msgid "Argentina"
-msgstr ""
+msgstr "Argentyna"
 
 #: src/Admin/Settings.php:168
 msgid "Armenia"
-msgstr ""
+msgstr "Armenia"
 
 #: src/Admin/Settings.php:169
 msgid "Aruba"
-msgstr ""
+msgstr "Aruba"
 
 #: src/Admin/Settings.php:170
 msgid "Australia"
-msgstr ""
+msgstr "Australia"
 
 #: src/Admin/Settings.php:171
 msgid "Austria"
-msgstr ""
+msgstr "Austria"
 
 #: src/Admin/Settings.php:172
 msgid "Azerbaijan"
-msgstr ""
+msgstr "Azerbejdżan"
 
 #: src/Admin/Settings.php:173
 msgid "Bahamas"
-msgstr ""
+msgstr "Bahamy"
 
 #: src/Admin/Settings.php:174
 msgid "Bahrain"
-msgstr ""
+msgstr "Bahrajn"
 
 #: src/Admin/Settings.php:175
 msgid "Bangladesh"
-msgstr ""
+msgstr "Bangladesz"
 
 #: src/Admin/Settings.php:176
 msgid "Barbados"
-msgstr ""
+msgstr "Barbados"
 
 #: src/Admin/Settings.php:177
 msgid "Belarus"
-msgstr ""
+msgstr "Białoruś"
 
 #: src/Admin/Settings.php:178
 msgid "Belgium"
-msgstr ""
+msgstr "Belgia"
 
 #: src/Admin/Settings.php:179
 msgid "Belize"
-msgstr ""
+msgstr "Belize"
 
 #: src/Admin/Settings.php:180
 msgid "Benin"
-msgstr ""
+msgstr "Benin"
 
 #: src/Admin/Settings.php:181
 msgid "Bermuda"
-msgstr ""
+msgstr "Bermudy"
 
 #: src/Admin/Settings.php:182
 msgid "Bhutan"
-msgstr ""
+msgstr "Bhutan"
 
 #: src/Admin/Settings.php:183
 msgid "Bolivia"
-msgstr ""
+msgstr "Boliwia"
 
 #: src/Admin/Settings.php:184
 msgid "Bosnia and Herzegovina"
-msgstr ""
+msgstr "Bośnia i Hercegowina"
 
 #: src/Admin/Settings.php:185
 msgid "Botswana"
-msgstr ""
+msgstr "Botswana"
 
 #: src/Admin/Settings.php:186
 msgid "Brazil"
-msgstr ""
+msgstr "Brazylia"
 
 #: src/Admin/Settings.php:187
 msgid "Brunei"
-msgstr ""
+msgstr "Brunei"
 
 #: src/Admin/Settings.php:188
 msgid "Bulgaria"
-msgstr ""
+msgstr "Bułgaria"
 
 #: src/Admin/Settings.php:189
 msgid "Burkina Faso"
-msgstr ""
+msgstr "Burkina Faso"
 
 #: src/Admin/Settings.php:190
 msgid "Burundi"
-msgstr ""
+msgstr "Burundi"
 
 #: src/Admin/Settings.php:191
 msgid "Cambodia"
-msgstr ""
+msgstr "Kambodża"
 
 #: src/Admin/Settings.php:192
 msgid "Cameroon"
-msgstr ""
+msgstr "Kamerun"
 
 #: src/Admin/Settings.php:193
 msgid "Canada"
-msgstr ""
+msgstr "Kanada"
 
 #: src/Admin/Settings.php:194
 msgid "Cape Verde"
-msgstr ""
+msgstr "Republika Zielonego Przylądka"
 
 #: src/Admin/Settings.php:195
 msgid "Cayman Islands"
-msgstr ""
+msgstr "Kajmany"
 
 #: src/Admin/Settings.php:196
 msgid "Central African Republic"
-msgstr ""
+msgstr "Republika Środkowoafrykańska"
 
 #: src/Admin/Settings.php:197
 msgid "Chad"
-msgstr ""
+msgstr "Czad"
 
 #: src/Admin/Settings.php:198
 msgid "Chile"
-msgstr ""
+msgstr "Chile"
 
 #: src/Admin/Settings.php:199
 msgid "China"
-msgstr ""
+msgstr "Chiny"
 
 #: src/Admin/Settings.php:200
 msgid "Colombia"
-msgstr ""
+msgstr "Kolumbia"
 
 #: src/Admin/Settings.php:201
 msgid "Comoros"
-msgstr ""
+msgstr "Komory"
 
 #: src/Admin/Settings.php:202
 msgid "Congo"
-msgstr ""
+msgstr "Kongo"
 
 #: src/Admin/Settings.php:203
 msgid "Congo, Democratic Republic"
-msgstr ""
+msgstr "Demokratyczna Republika Konga"
 
 #: src/Admin/Settings.php:204
 msgid "Costa Rica"
-msgstr ""
+msgstr "Kostaryka"
 
 #: src/Admin/Settings.php:205
 msgid "Croatia"
-msgstr ""
+msgstr "Chorwacja"
 
 #: src/Admin/Settings.php:206
 msgid "Cuba"
-msgstr ""
+msgstr "Kuba"
 
 #: src/Admin/Settings.php:207
 msgid "Cyprus"
-msgstr ""
+msgstr "Cypr"
 
 #: src/Admin/Settings.php:208
 msgid "Czech Republic"
-msgstr ""
+msgstr "Czechy"
 
 #: src/Admin/Settings.php:209
 msgid "Denmark"
-msgstr ""
+msgstr "Dania"
 
 #: src/Admin/Settings.php:210
 msgid "Djibouti"
-msgstr ""
+msgstr "Dżibuti"
 
 #: src/Admin/Settings.php:211
 msgid "Dominica"
-msgstr ""
+msgstr "Dominika"
 
 #: src/Admin/Settings.php:212
 msgid "Dominican Republic"
-msgstr ""
+msgstr "Dominikana"
 
 #: src/Admin/Settings.php:213
 msgid "Ecuador"
-msgstr ""
+msgstr "Ekwador"
 
 #: src/Admin/Settings.php:214
 msgid "Egypt"
-msgstr ""
+msgstr "Egipt"
 
 #: src/Admin/Settings.php:215
 msgid "El Salvador"
-msgstr ""
+msgstr "Salwador"
 
 #: src/Admin/Settings.php:216
 msgid "Equatorial Guinea"
-msgstr ""
+msgstr "Gwinea Równikowa"
 
 #: src/Admin/Settings.php:217
 msgid "Eritrea"
-msgstr ""
+msgstr "Erytrea"
 
 #: src/Admin/Settings.php:218
 msgid "Estonia"
-msgstr ""
+msgstr "Estonia"
 
 #: src/Admin/Settings.php:219
 msgid "Ethiopia"
-msgstr ""
+msgstr "Etiopia"
 
 #: src/Admin/Settings.php:220
 msgid "Fiji"
-msgstr ""
+msgstr "Fidżi"
 
 #: src/Admin/Settings.php:221
 msgid "Finland"
-msgstr ""
+msgstr "Finlandia"
 
 #: src/Admin/Settings.php:222
 msgid "France"
-msgstr ""
+msgstr "Francja"
 
 #: src/Admin/Settings.php:223
 msgid "Gabon"
-msgstr ""
+msgstr "Gabon"
 
 #: src/Admin/Settings.php:224
 msgid "Gambia"
-msgstr ""
+msgstr "Gambia"
 
 #: src/Admin/Settings.php:225
 msgid "Georgia"
-msgstr ""
+msgstr "Gruzja"
 
 #: src/Admin/Settings.php:226
 msgid "Germany"
-msgstr ""
+msgstr "Niemcy"
 
 #: src/Admin/Settings.php:227
 msgid "Ghana"
-msgstr ""
+msgstr "Ghana"
 
 #: src/Admin/Settings.php:228
 msgid "Greece"
-msgstr ""
+msgstr "Grecja"
 
 #: src/Admin/Settings.php:229
 msgid "Greenland"
-msgstr ""
+msgstr "Grenlandia"
 
 #: src/Admin/Settings.php:230
 msgid "Grenada"
-msgstr ""
+msgstr "Grenada"
 
 #: src/Admin/Settings.php:231
 msgid "Guam"
-msgstr ""
+msgstr "Guam"
 
 #: src/Admin/Settings.php:232
 msgid "Guatemala"
-msgstr ""
+msgstr "Gwatemala"
 
 #: src/Admin/Settings.php:233
 msgid "Guinea"
-msgstr ""
+msgstr "Gwinea"
 
 #: src/Admin/Settings.php:234
 msgid "Guinea-Bissau"
-msgstr ""
+msgstr "Gwinea Bissau"
 
 #: src/Admin/Settings.php:235
 msgid "Guyana"
-msgstr ""
+msgstr "Gujana"
 
 #: src/Admin/Settings.php:236
 msgid "Haiti"
-msgstr ""
+msgstr "Haiti"
 
 #: src/Admin/Settings.php:237
 msgid "Honduras"
-msgstr ""
+msgstr "Honduras"
 
 #: src/Admin/Settings.php:238
 msgid "Hong Kong"
-msgstr ""
+msgstr "Hongkong"
 
 #: src/Admin/Settings.php:239
 msgid "Hungary"
-msgstr ""
+msgstr "Węgry"
 
 #: src/Admin/Settings.php:240
 msgid "Iceland"
-msgstr ""
+msgstr "Islandia"
 
 #: src/Admin/Settings.php:241
 msgid "India"
-msgstr ""
+msgstr "Indie"
 
 #: src/Admin/Settings.php:242
 msgid "Indonesia"
-msgstr ""
+msgstr "Indonezja"
 
 #: src/Admin/Settings.php:243
 msgid "Iran"
-msgstr ""
+msgstr "Iran"
 
 #: src/Admin/Settings.php:244
 msgid "Iraq"
-msgstr ""
+msgstr "Irak"
 
 #: src/Admin/Settings.php:245
 msgid "Ireland"
-msgstr ""
+msgstr "Irlandia"
 
 #: src/Admin/Settings.php:246
 msgid "Israel"
-msgstr ""
+msgstr "Izrael"
 
 #: src/Admin/Settings.php:247
 msgid "Italy"
-msgstr ""
+msgstr "Włochy"
 
 #: src/Admin/Settings.php:248
 msgid "Ivory Coast"
-msgstr ""
+msgstr "Wybrzeże Kości Słoniowej"
 
 #: src/Admin/Settings.php:249
 msgid "Jamaica"
-msgstr ""
+msgstr "Jamajka"
 
 #: src/Admin/Settings.php:250
 msgid "Japan"
-msgstr ""
+msgstr "Japonia"
 
 #: src/Admin/Settings.php:251
 msgid "Jordan"
-msgstr ""
+msgstr "Jordania"
 
 #: src/Admin/Settings.php:252
 msgid "Kazakhstan"
-msgstr ""
+msgstr "Kazachstan"
 
 #: src/Admin/Settings.php:253
 msgid "Kenya"
-msgstr ""
+msgstr "Kenia"
 
 #: src/Admin/Settings.php:254
 msgid "Kiribati"
-msgstr ""
+msgstr "Kiribati"
 
 #: src/Admin/Settings.php:255
 msgid "Korea, North"
-msgstr ""
+msgstr "Korea Północna"
 
 #: src/Admin/Settings.php:256
 msgid "Korea, South"
-msgstr ""
+msgstr "Korea Południowa"
 
 #: src/Admin/Settings.php:257
 msgid "Kuwait"
-msgstr ""
+msgstr "Kuwejt"
 
 #: src/Admin/Settings.php:258
 msgid "Kyrgyzstan"
-msgstr ""
+msgstr "Kirgistan"
 
 #: src/Admin/Settings.php:259
 msgid "Laos"
-msgstr ""
+msgstr "Laos"
 
 #: src/Admin/Settings.php:260
 msgid "Latvia"
-msgstr ""
+msgstr "Łotwa"
 
 #: src/Admin/Settings.php:261
 msgid "Lebanon"
-msgstr ""
+msgstr "Liban"
 
 #: src/Admin/Settings.php:262
 msgid "Lesotho"
-msgstr ""
+msgstr "Lesotho"
 
 #: src/Admin/Settings.php:263
 msgid "Liberia"
-msgstr ""
+msgstr "Liberia"
 
 #: src/Admin/Settings.php:264
 msgid "Libya"
-msgstr ""
+msgstr "Libia"
 
 #: src/Admin/Settings.php:265
 msgid "Liechtenstein"
-msgstr ""
+msgstr "Liechtenstein"
 
 #: src/Admin/Settings.php:266
 msgid "Lithuania"
-msgstr ""
+msgstr "Litwa"
 
 #: src/Admin/Settings.php:267
 msgid "Luxembourg"
-msgstr ""
+msgstr "Luksemburg"
 
 #: src/Admin/Settings.php:268
 msgid "Macao"
-msgstr ""
+msgstr "Makau"
 
 #: src/Admin/Settings.php:269
 msgid "North Macedonia"
-msgstr ""
+msgstr "Macedonia Północna"
 
 #: src/Admin/Settings.php:270
 msgid "Madagascar"
-msgstr ""
+msgstr "Madagaskar"
 
 #: src/Admin/Settings.php:271
 msgid "Malawi"
-msgstr ""
+msgstr "Malawi"
 
 #: src/Admin/Settings.php:272
 msgid "Malaysia"
-msgstr ""
+msgstr "Malezja"
 
 #: src/Admin/Settings.php:273
 msgid "Maldives"
-msgstr ""
+msgstr "Malediwy"
 
 #: src/Admin/Settings.php:274
 msgid "Mali"
-msgstr ""
+msgstr "Mali"
 
 #: src/Admin/Settings.php:275
 msgid "Malta"
-msgstr ""
+msgstr "Malta"
 
 #: src/Admin/Settings.php:276
 msgid "Marshall Islands"
-msgstr ""
+msgstr "Wyspy Marshalla"
 
 #: src/Admin/Settings.php:277
 msgid "Mauritania"
-msgstr ""
+msgstr "Mauretania"
 
 #: src/Admin/Settings.php:278
 msgid "Mauritius"
-msgstr ""
+msgstr "Mauritius"
 
 #: src/Admin/Settings.php:279
 msgid "Mexico"
-msgstr ""
+msgstr "Meksyk"
 
 #: src/Admin/Settings.php:280
 msgid "Micronesia"
-msgstr ""
+msgstr "Mikronezja"
 
 #: src/Admin/Settings.php:281
 msgid "Moldova"
-msgstr ""
+msgstr "Mołdawia"
 
 #: src/Admin/Settings.php:282
 msgid "Monaco"
-msgstr ""
+msgstr "Monako"
 
 #: src/Admin/Settings.php:283
 msgid "Mongolia"
-msgstr ""
+msgstr "Mongolia"
 
 #: src/Admin/Settings.php:284
 msgid "Montenegro"
-msgstr ""
+msgstr "Czarnogóra"
 
 #: src/Admin/Settings.php:285
 msgid "Morocco"
-msgstr ""
+msgstr "Maroko"
 
 #: src/Admin/Settings.php:286
 msgid "Mozambique"
-msgstr ""
+msgstr "Mozambik"
 
 #: src/Admin/Settings.php:287
 msgid "Myanmar"
-msgstr ""
+msgstr "Mjanma"
 
 #: src/Admin/Settings.php:288
 msgid "Namibia"
-msgstr ""
+msgstr "Namibia"
 
 #: src/Admin/Settings.php:289
 msgid "Nauru"
-msgstr ""
+msgstr "Nauru"
 
 #: src/Admin/Settings.php:290
 msgid "Nepal"
-msgstr ""
+msgstr "Nepal"
 
 #: src/Admin/Settings.php:291
 msgid "Netherlands"
-msgstr ""
+msgstr "Holandia"
 
 #: src/Admin/Settings.php:292
 msgid "New Zealand"
-msgstr ""
+msgstr "Nowa Zelandia"
 
 #: src/Admin/Settings.php:293
 msgid "Nicaragua"
-msgstr ""
+msgstr "Nikaragua"
 
 #: src/Admin/Settings.php:294
 msgid "Niger"
-msgstr ""
+msgstr "Niger"
 
 #: src/Admin/Settings.php:295
 msgid "Nigeria"
-msgstr ""
+msgstr "Nigeria"
 
 #: src/Admin/Settings.php:296
 msgid "Norway"
-msgstr ""
+msgstr "Norwegia"
 
 #: src/Admin/Settings.php:297
 msgid "Oman"
-msgstr ""
+msgstr "Oman"
 
 #: src/Admin/Settings.php:298
 msgid "Pakistan"
-msgstr ""
+msgstr "Pakistan"
 
 #: src/Admin/Settings.php:299
 msgid "Palau"
-msgstr ""
+msgstr "Palau"
 
 #: src/Admin/Settings.php:300
 msgid "Palestine"
-msgstr ""
+msgstr "Palestyna"
 
 #: src/Admin/Settings.php:301
 msgid "Panama"
-msgstr ""
+msgstr "Panama"
 
 #: src/Admin/Settings.php:302
 msgid "Papua New Guinea"
-msgstr ""
+msgstr "Papua-Nowa Gwinea"
 
 #: src/Admin/Settings.php:303
 msgid "Paraguay"
-msgstr ""
+msgstr "Paragwaj"
 
 #: src/Admin/Settings.php:304
 msgid "Peru"
-msgstr ""
+msgstr "Peru"
 
 #: src/Admin/Settings.php:305
 msgid "Philippines"
-msgstr ""
+msgstr "Filipiny"
 
 #: src/Admin/Settings.php:306
 msgid "Poland"
-msgstr ""
+msgstr "Polska"
 
 #: src/Admin/Settings.php:307
 msgid "Portugal"
-msgstr ""
+msgstr "Portugalia"
 
 #: src/Admin/Settings.php:308
 msgid "Puerto Rico"
-msgstr ""
+msgstr "Portoryko"
 
 #: src/Admin/Settings.php:309
 msgid "Qatar"
-msgstr ""
+msgstr "Katar"
 
 #: src/Admin/Settings.php:310
 msgid "Romania"
-msgstr ""
+msgstr "Rumunia"
 
 #: src/Admin/Settings.php:311
 msgid "Russia"
-msgstr ""
+msgstr "Rosja"
 
 #: src/Admin/Settings.php:312
 msgid "Rwanda"
-msgstr ""
+msgstr "Rwanda"
 
 #: src/Admin/Settings.php:313
 msgid "Samoa"
-msgstr ""
+msgstr "Samoa"
 
 #: src/Admin/Settings.php:314
 msgid "San Marino"
-msgstr ""
+msgstr "San Marino"
 
 #: src/Admin/Settings.php:315
 msgid "Sao Tome and Principe"
-msgstr ""
+msgstr "Wyspy Świętego Tomasza i Książęca"
 
 #: src/Admin/Settings.php:316
 msgid "Saudi Arabia"
-msgstr ""
+msgstr "Arabia Saudyjska"
 
 #: src/Admin/Settings.php:317
 msgid "Senegal"
-msgstr ""
+msgstr "Senegal"
 
 #: src/Admin/Settings.php:318
 msgid "Serbia"
-msgstr ""
+msgstr "Serbia"
 
 #: src/Admin/Settings.php:319
 msgid "Seychelles"
-msgstr ""
+msgstr "Seszele"
 
 #: src/Admin/Settings.php:320
 msgid "Sierra Leone"
-msgstr ""
+msgstr "Sierra Leone"
 
 #: src/Admin/Settings.php:321
 msgid "Singapore"
-msgstr ""
+msgstr "Singapur"
 
 #: src/Admin/Settings.php:322
 msgid "Slovakia"
-msgstr ""
+msgstr "Słowacja"
 
 #: src/Admin/Settings.php:323
 msgid "Slovenia"
-msgstr ""
+msgstr "Słowenia"
 
 #: src/Admin/Settings.php:324
 msgid "Solomon Islands"
-msgstr ""
+msgstr "Wyspy Salomona"
 
 #: src/Admin/Settings.php:325
 msgid "Somalia"
-msgstr ""
+msgstr "Somalia"
 
 #: src/Admin/Settings.php:326
 msgid "South Africa"
-msgstr ""
+msgstr "Republika Południowej Afryki"
 
 #: src/Admin/Settings.php:327
 msgid "South Sudan"
-msgstr ""
+msgstr "Sudan Południowy"
 
 #: src/Admin/Settings.php:328
 msgid "Spain"
-msgstr ""
+msgstr "Hiszpania"
 
 #: src/Admin/Settings.php:329
 msgid "Sri Lanka"
-msgstr ""
+msgstr "Sri Lanka"
 
 #: src/Admin/Settings.php:330
 msgid "Sudan"
-msgstr ""
+msgstr "Sudan"
 
 #: src/Admin/Settings.php:331
 msgid "Suriname"
-msgstr ""
+msgstr "Surinam"
 
 #: src/Admin/Settings.php:332
 msgid "Eswatini"
-msgstr ""
+msgstr "Eswatini"
 
 #: src/Admin/Settings.php:333
 msgid "Sweden"
-msgstr ""
+msgstr "Szwecja"
 
 #: src/Admin/Settings.php:334
 msgid "Switzerland"
-msgstr ""
+msgstr "Szwajcaria"
 
 #: src/Admin/Settings.php:335
 msgid "Syria"
-msgstr ""
+msgstr "Syria"
 
 #: src/Admin/Settings.php:336
 msgid "Taiwan"
-msgstr ""
+msgstr "Tajwan"
 
 #: src/Admin/Settings.php:337
 msgid "Tajikistan"
-msgstr ""
+msgstr "Tadżykistan"
 
 #: src/Admin/Settings.php:338
 msgid "Tanzania"
-msgstr ""
+msgstr "Tanzania"
 
 #: src/Admin/Settings.php:339
 msgid "Thailand"
-msgstr ""
+msgstr "Tajlandia"
 
 #: src/Admin/Settings.php:340
 msgid "Timor-Leste"
-msgstr ""
+msgstr "Timor Wschodni"
 
 #: src/Admin/Settings.php:341
 msgid "Togo"
-msgstr ""
+msgstr "Togo"
 
 #: src/Admin/Settings.php:342
 msgid "Tonga"
-msgstr ""
+msgstr "Tonga"
 
 #: src/Admin/Settings.php:343
 msgid "Trinidad and Tobago"
-msgstr ""
+msgstr "Trynidad i Tobago"
 
 #: src/Admin/Settings.php:344
 msgid "Tunisia"
-msgstr ""
+msgstr "Tunezja"
 
 #: src/Admin/Settings.php:345
 msgid "Turkey"
-msgstr ""
+msgstr "Turcja"
 
 #: src/Admin/Settings.php:346
 msgid "Turkmenistan"
-msgstr ""
+msgstr "Turkmenistan"
 
 #: src/Admin/Settings.php:347
 msgid "Tuvalu"
-msgstr ""
+msgstr "Tuvalu"
 
 #: src/Admin/Settings.php:348
 msgid "Uganda"
-msgstr ""
+msgstr "Uganda"
 
 #: src/Admin/Settings.php:349
 msgid "Ukraine"
-msgstr ""
+msgstr "Ukraina"
 
 #: src/Admin/Settings.php:350
 msgid "United Arab Emirates"
-msgstr ""
+msgstr "Zjednoczone Emiraty Arabskie"
 
 #: src/Admin/Settings.php:351
 msgid "United Kingdom"
-msgstr ""
+msgstr "Wielka Brytania"
 
 #: src/Admin/Settings.php:352
 msgid "United States"
-msgstr ""
+msgstr "Stany Zjednoczone"
 
 #: src/Admin/Settings.php:353
 msgid "Uruguay"
-msgstr ""
+msgstr "Urugwaj"
 
 #: src/Admin/Settings.php:354
 msgid "Uzbekistan"
-msgstr ""
+msgstr "Uzbekistan"
 
 #: src/Admin/Settings.php:355
 msgid "Vanuatu"
-msgstr ""
+msgstr "Vanuatu"
 
 #: src/Admin/Settings.php:356
 msgid "Vatican City"
-msgstr ""
+msgstr "Watykan"
 
 #: src/Admin/Settings.php:357
 msgid "Venezuela"
-msgstr ""
+msgstr "Wenezuela"
 
 #: src/Admin/Settings.php:358
 msgid "Vietnam"
-msgstr ""
+msgstr "Wietnam"
 
 #: src/Admin/Settings.php:359
 msgid "Yemen"
-msgstr ""
+msgstr "Jemen"
 
 #: src/Admin/Settings.php:360
 msgid "Zambia"
-msgstr ""
+msgstr "Zambia"
 
 #: src/Admin/Settings.php:361
 msgid "Zimbabwe"
-msgstr ""
+msgstr "Zimbabwe"
 
 #: src/Checkout/ErrorMessages.php:67
 msgid "Shipping phone number must contain country prefix."
-msgstr ""
+msgstr "Numer telefonu do wysyłki musi zawierać prefiks kraju."
 
 #: src/Checkout/ErrorMessages.php:68
 msgid "Please enter a valid shipping phone number."
-msgstr ""
+msgstr "Proszę podać prawidłowy numer telefonu do wysyłki."
 
 #: src/Checkout/ErrorMessages.php:71
 msgid "Phone number must contain country prefix."
-msgstr ""
+msgstr "Numer telefonu musi zawierać prefiks kraju."
 
 #: src/Checkout/ErrorMessages.php:72
 msgid "Please enter a valid phone number."
-msgstr ""
+msgstr "Proszę podać prawidłowy numer telefonu."
 
 #: src/Checkout/ErrorMessages.php:110
 msgid "Shipping phone"
-msgstr ""
+msgstr "Telefon do wysyłki"
 
 #: src/Checkout/ErrorMessages.php:111
 msgid "Billing phone"
-msgstr ""
+msgstr "Telefon do płatności"
 
 #. translators: %s: field label (Billing phone or Shipping phone)
 #: src/Checkout/ErrorMessages.php:115
 #, php-format
 msgid "%s must contain country prefix."
-msgstr ""
+msgstr "%s musi zawierać prefiks kraju."
 
 #. translators: %s: field label (Billing phone or Shipping phone)
 #: src/Checkout/ErrorMessages.php:118
 #, php-format
 msgid "%s is not a valid phone number."
-msgstr ""
+msgstr "%s nie jest prawidłowym numerem telefonu."
 
 #: src/Validation/PhoneValidator.php:48
 msgid "Phone number cannot be empty."
-msgstr ""
+msgstr "Numer telefonu nie może być pusty."
 
 #: src/Validation/PhoneValidator.php:62
 msgid "Phone number must include international prefix (+)."
-msgstr ""
+msgstr "Numer telefonu musi zawierać międzynarodowy prefiks (+)."
 
 #: src/Validation/PhoneValidator.php:81
 msgid "The phone number is not valid."
-msgstr ""
+msgstr "Numer telefonu jest nieprawidłowy."
 
 #: src/Validation/PhoneValidator.php:113
 msgid "Invalid country code."
-msgstr ""
+msgstr "Nieprawidłowy kod kraju."
 
 #: src/Validation/PhoneValidator.php:117
 msgid "The input does not appear to be a phone number."
-msgstr ""
+msgstr "Podana wartość nie wygląda na numer telefonu."
 
 #: src/Validation/PhoneValidator.php:121
 msgid "Phone number is too short after country code."
-msgstr ""
+msgstr "Numer telefonu jest zbyt krótki po kodzie kraju."
 
 #: src/Validation/PhoneValidator.php:125
 msgid "Phone number is too short."
-msgstr ""
+msgstr "Numer telefonu jest zbyt krótki."
 
 #: src/Validation/PhoneValidator.php:129
 msgid "Phone number is too long."
-msgstr ""
+msgstr "Numer telefonu jest zbyt długi."
 
 #: src/Validation/PhoneValidator.php:133
 msgid "Unable to parse phone number."
-msgstr ""
-
-#: verify-phone-number-shift64.php:72
-msgid "Verify Phone Number Shift64 cannot run because its bundled vendor folder is missing. Reinstall the plugin from WordPress.org or from the release ZIP on GitHub."
-msgstr ""
+msgstr "Nie można przetworzyć numeru telefonu."

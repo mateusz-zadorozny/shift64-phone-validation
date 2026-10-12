@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <ruleset name="Shift64 Phone Validation">
-	<description>PHPCS ruleset for Verify Phone Number plugin.</description>
+	<description>PHPCS ruleset for SHIFT64 Phone Validation for WooCommerce.</description>
 
 	<!-- What to scan -->
 	<file>.</file>
@@ -31,7 +31,7 @@
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<property name="text_domain" type="array">
-				<element value="verify-phone-number-shift64"/>
+				<element value="shift64-phone-validation"/>
 			</property>
 		</properties>
 	</rule>
@@ -62,7 +62,7 @@
 
 	<!-- Exclude main plugin file from class-prefix requirement -->
 	<rule ref="WordPress.Files.FileName.InvalidClassFileName">
-		<exclude-pattern>/verify-phone-number-shift64.php</exclude-pattern>
+		<exclude-pattern>/shift64-phone-validation.php</exclude-pattern>
 	</rule>
 
 	<!-- Allow unused parameters required by WordPress/WooCommerce hook signatures -->

@@ -24,7 +24,7 @@ class MainFileWiringTest extends TestCase {
 
 		$this->assertSame( array( 5, 10 ), $result['plugins_loaded_priorities'] );
 		$this->assertSame(
-			array( array( 'verify-phone-number-shift64', false, basename( dirname( __DIR__, 2 ) ) . '/languages' ) ),
+			array( array( 'shift64-phone-validation', false, basename( dirname( __DIR__, 2 ) ) . '/languages' ) ),
 			$result['textdomain_after_priority']['5']
 		);
 		// Supported WordPress with WooCommerce: the plugin boots (settings tab, checkout hooks).

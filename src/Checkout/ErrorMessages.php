@@ -64,12 +64,12 @@ class ErrorMessages {
 
 		if ( self::FIELD_SHIPPING === $field ) {
 			$message = $is_missing_prefix
-				? __( 'Shipping phone number must contain country prefix.', 'verify-phone-number-shift64' )
-				: __( 'Please enter a valid shipping phone number.', 'verify-phone-number-shift64' );
+				? __( 'Shipping phone number must contain country prefix.', 'shift64-phone-validation' )
+				: __( 'Please enter a valid shipping phone number.', 'shift64-phone-validation' );
 		} else {
 			$message = $is_missing_prefix
-				? __( 'Phone number must contain country prefix.', 'verify-phone-number-shift64' )
-				: __( 'Please enter a valid phone number.', 'verify-phone-number-shift64' );
+				? __( 'Phone number must contain country prefix.', 'shift64-phone-validation' )
+				: __( 'Please enter a valid phone number.', 'shift64-phone-validation' );
 		}
 
 		return self::filter( $message, $error_code, $field, self::CONTEXT_CLASSIC );
@@ -107,15 +107,15 @@ class ErrorMessages {
 	 */
 	public static function for_block_checkout( ?string $error_code, string $field ): string {
 		$field_label = self::FIELD_SHIPPING === $field
-			? __( 'Shipping phone', 'verify-phone-number-shift64' )
-			: __( 'Billing phone', 'verify-phone-number-shift64' );
+			? __( 'Shipping phone', 'shift64-phone-validation' )
+			: __( 'Billing phone', 'shift64-phone-validation' );
 
 		if ( ValidationResult::ERROR_MISSING_INTERNATIONAL_PREFIX === $error_code ) {
 			/* translators: %s: field label (Billing phone or Shipping phone) */
-			$message = sprintf( __( '%s must contain country prefix.', 'verify-phone-number-shift64' ), $field_label );
+			$message = sprintf( __( '%s must contain country prefix.', 'shift64-phone-validation' ), $field_label );
 		} else {
 			/* translators: %s: field label (Billing phone or Shipping phone) */
-			$message = sprintf( __( '%s is not a valid phone number.', 'verify-phone-number-shift64' ), $field_label );
+			$message = sprintf( __( '%s is not a valid phone number.', 'shift64-phone-validation' ), $field_label );
 		}
 
 		return self::filter( $message, $error_code, $field, self::CONTEXT_BLOCK );

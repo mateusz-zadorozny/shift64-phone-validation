@@ -8,7 +8,7 @@ name: WordPress.org deploy (manual)
 #     trunk, so trunk and "Stable tag" would move back to the older version, and dispatching
 #     the newer tag again cannot repair that (the action bails once tags/<version> exists).
 #     That same early bail makes the SVN deploy a no-op for a version already in SVN tags/.
-#   - To attach a missing verify-phone-number-shift64.zip to the GitHub release when
+#   - To attach a missing shift64-phone-validation.zip to the GitHub release when
 #     release.yml failed after the release was published (re-running the Release job does not
 #     rebuild it). 1.4.x installs update through exactly that asset. Uncheck svn to only attach
 #     the ZIP, e.g. before the plugin is approved and the SVN secrets exist.
@@ -46,7 +46,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  PLUGIN_SLUG: verify-phone-number-shift64
+  PLUGIN_SLUG: shift64-phone-validation
 
 jobs:
   deploy:

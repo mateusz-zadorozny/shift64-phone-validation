@@ -54,7 +54,7 @@ No.
 = 1.2.1 =
 * Fix: Entry for 1.2.1.
 
-Older releases: [full changelog on GitHub](https://github.com/mateusz-zadorozny/verify-phone-number-shift64/blob/master/CHANGELOG.md).
+Older releases: [full changelog on GitHub](https://github.com/mateusz-zadorozny/shift64-phone-validation/blob/master/CHANGELOG.md).
 
 == Upgrade Notice ==
 
