@@ -10,8 +10,8 @@ const baseURL =
 
 // Admin credentials for the specs that log in (admin-*,
 // block-checkout-polish-messages and classic-checkout-classic-theme-highlight):
-// the test-env entrypoint writes
-// them to this gitignored file; CI exports TEST_ADMIN_PASSWORD directly.
+// the test-env entrypoint writes them to this gitignored file; CI exports
+// TEST_ADMIN_PASSWORD directly.
 const credentialsFile = '.ai/qa/test-env.env';
 if ( existsSync( credentialsFile ) ) {
 	for ( const line of readFileSync( credentialsFile, 'utf8' ).split( '\n' ) ) {

@@ -35,8 +35,14 @@ const test = base.extend< { classicTheme: void } >( {
 			const admin = await newAdminPage( browser );
 			try {
 				const previous = await getActiveTheme( admin );
-				await activateTheme( admin, CLASSIC_THEME );
+				// Restoring "previous" would keep the leak for every later spec.
+				if ( previous === CLASSIC_THEME ) {
+					throw new Error(
+						`The store was left on ${ CLASSIC_THEME }: run \`npm run env:seed\` to restore the default theme.`
+					);
+				}
 				try {
+					await activateTheme( admin, CLASSIC_THEME );
 					await use();
 				} finally {
 					await activateTheme( admin, previous );
