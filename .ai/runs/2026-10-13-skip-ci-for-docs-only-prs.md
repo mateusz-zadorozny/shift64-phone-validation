@@ -49,3 +49,4 @@ PR: #46
 - [x] 1.4 Wire e2e.yml — 718243e
 - [x] 1.5 Add workflow wiring assertions — c63cd8f
 - [x] 1.6 Document the docs-only skip — 9265e06
+- [x] Post-review fix: only Markdown under docs/ counts (PHPCS scans docs/), aggregate-job advice for required checks, wiring test asserts the job output — 12f3d49
