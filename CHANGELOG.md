@@ -1,3 +1,10 @@
+## [2.0.3](https://github.com/mateusz-zadorozny/shift64-phone-validation/compare/v2.0.2...v2.0.3) (2026-10-13)
+
+
+### Bug Fixes
+
+* **admin:** show dependency notices on Network Admin screens ([#49](https://github.com/mateusz-zadorozny/shift64-phone-validation/issues/49)) ([9395808](https://github.com/mateusz-zadorozny/shift64-phone-validation/commit/9395808c433aef2f048c2e8cadbe5c6daa1587cc))
+
 ## [2.0.2](https://github.com/mateusz-zadorozny/shift64-phone-validation/compare/v2.0.1...v2.0.2) (2026-10-13)
 
 
