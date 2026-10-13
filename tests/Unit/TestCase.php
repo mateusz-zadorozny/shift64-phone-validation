@@ -35,8 +35,10 @@ abstract class TestCase extends PHPUnitTestCase {
 		$GLOBALS['shift64_test_filters']          = array();
 		$GLOBALS['shift64_test_wp_version']       = '7.1.2';
 		$GLOBALS['shift64_test_bloginfo_version'] = null;
-		$GLOBALS['shift64_test_can']              = true;
+		$GLOBALS['shift64_test_can']              = array( 'activate_plugins' );
 		$GLOBALS['shift64_test_actions']          = array();
+		$GLOBALS['shift64_test_multisite']        = false;
+		$GLOBALS['shift64_test_network_admin']    = false;
 		$GLOBALS['shift64_test_locale']           = array(
 			'current'  => 'en_US',
 			'switches' => array(),

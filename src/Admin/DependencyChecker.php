@@ -54,7 +54,7 @@ class DependencyChecker {
 	 * @return void
 	 */
 	public static function display_wordpress_unsupported_notice(): void {
-		add_action( 'admin_notices', array( self::class, 'render_wordpress_notice' ) );
+		self::add_notice( array( self::class, 'render_wordpress_notice' ) );
 	}
 
 	/**
@@ -64,7 +64,7 @@ class DependencyChecker {
 	 */
 	public static function render_wordpress_notice(): void {
 		// Only people who can manage plugins can act on this notice.
-		if ( ! current_user_can( 'activate_plugins' ) ) {
+		if ( ! self::can_manage_plugins() ) {
 			return;
 		}
 
@@ -101,7 +101,7 @@ class DependencyChecker {
 	 * @return void
 	 */
 	public static function display_woocommerce_missing_notice(): void {
-		add_action( 'admin_notices', array( self::class, 'render_woocommerce_notice' ) );
+		self::add_notice( array( self::class, 'render_woocommerce_notice' ) );
 	}
 
 	/**
@@ -111,7 +111,7 @@ class DependencyChecker {
 	 */
 	public static function render_woocommerce_notice(): void {
 		// Only people who can install or activate WooCommerce can act on this notice.
-		if ( ! current_user_can( 'activate_plugins' ) ) {
+		if ( ! self::can_manage_plugins() ) {
 			return;
 		}
 
@@ -127,5 +127,35 @@ class DependencyChecker {
 			</p>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Hook a notice to the site admin screens and, on multisite, to the Network Admin ones.
+	 *
+	 * Network Admin screens fire network_admin_notices instead of admin_notices, so without
+	 * it a network-activated plugin that stops at a dependency check says nothing on
+	 * Network Admin > Plugins.
+	 *
+	 * @param callable $callback The render method.
+	 * @return void
+	 */
+	private static function add_notice( callable $callback ): void {
+		add_action( 'admin_notices', $callback );
+
+		if ( is_multisite() ) {
+			add_action( 'network_admin_notices', $callback );
+		}
+	}
+
+	/**
+	 * Whether the current user can act on a dependency notice on this screen.
+	 *
+	 * Network plugins are managed with manage_network_plugins on Network Admin screens,
+	 * site plugins with activate_plugins everywhere else.
+	 *
+	 * @return bool
+	 */
+	private static function can_manage_plugins(): bool {
+		return current_user_can( is_network_admin() ? 'manage_network_plugins' : 'activate_plugins' );
 	}
 }

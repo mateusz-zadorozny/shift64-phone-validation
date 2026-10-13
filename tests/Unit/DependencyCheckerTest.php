@@ -133,11 +133,114 @@ class DependencyCheckerTest extends TestCase {
 
 	public function test_unsupported_wordpress_notice_is_hidden_from_users_who_cannot_manage_plugins(): void {
 		$GLOBALS['shift64_test_wp_version'] = '7.0.9';
-		$GLOBALS['shift64_test_can']        = false;
+		$GLOBALS['shift64_test_can']        = array();
 
 		ob_start();
 		DependencyChecker::render_wordpress_notice();
 
 		$this->assertSame( '', ob_get_clean() );
+	}
+
+	/**
+	 * Network Admin screens fire network_admin_notices, not admin_notices (#38).
+	 *
+	 * @dataProvider notices
+	 */
+	public function test_notice_is_also_registered_for_network_admin_notices_on_multisite( string $display, string $render ): void {
+		$GLOBALS['shift64_test_multisite'] = true;
+
+		DependencyChecker::$display();
+
+		$this->assertSame(
+			array(
+				array( 'admin_notices', array( DependencyChecker::class, $render ) ),
+				array( 'network_admin_notices', array( DependencyChecker::class, $render ) ),
+			),
+			$GLOBALS['shift64_test_actions']
+		);
+	}
+
+	/**
+	 * @dataProvider notices
+	 */
+	public function test_notice_is_registered_only_for_admin_notices_on_a_single_site( string $display, string $render ): void {
+		DependencyChecker::$display();
+
+		$this->assertSame(
+			array( array( 'admin_notices', array( DependencyChecker::class, $render ) ) ),
+			$GLOBALS['shift64_test_actions']
+		);
+	}
+
+	/**
+	 * A super admin manages network plugins with manage_network_plugins.
+	 *
+	 * @dataProvider notices
+	 */
+	public function test_notice_is_shown_on_network_admin_to_users_who_can_manage_network_plugins( string $display, string $render ): void {
+		$GLOBALS['shift64_test_wp_version']    = '7.0.9';
+		$GLOBALS['shift64_test_multisite']     = true;
+		$GLOBALS['shift64_test_network_admin'] = true;
+		$GLOBALS['shift64_test_can']           = array( 'manage_network_plugins' );
+
+		ob_start();
+		DependencyChecker::$render();
+
+		$this->assertStringContainsString( 'class="notice notice-error"', (string) ob_get_clean() );
+	}
+
+	/**
+	 * @dataProvider notices
+	 */
+	public function test_notice_is_hidden_on_network_admin_from_users_who_cannot_manage_network_plugins( string $display, string $render ): void {
+		$GLOBALS['shift64_test_wp_version']    = '7.0.9';
+		$GLOBALS['shift64_test_multisite']     = true;
+		$GLOBALS['shift64_test_network_admin'] = true;
+		$GLOBALS['shift64_test_can']           = array( 'activate_plugins' );
+
+		ob_start();
+		DependencyChecker::$render();
+
+		$this->assertSame( '', ob_get_clean() );
+	}
+
+	/**
+	 * A subsite dashboard of a multisite keeps the activate_plugins check.
+	 *
+	 * @dataProvider notices
+	 */
+	public function test_notice_on_a_multisite_subsite_dashboard_checks_activate_plugins( string $display, string $render ): void {
+		$GLOBALS['shift64_test_wp_version'] = '7.0.9';
+		$GLOBALS['shift64_test_multisite']  = true;
+
+		ob_start();
+		DependencyChecker::$render();
+		$this->assertStringContainsString( 'class="notice notice-error"', (string) ob_get_clean() );
+
+		$GLOBALS['shift64_test_can'] = array( 'manage_network_plugins' );
+
+		ob_start();
+		DependencyChecker::$render();
+		$this->assertSame( '', ob_get_clean() );
+	}
+
+	/**
+	 * @dataProvider notices
+	 */
+	public function test_notice_is_hidden_from_users_who_cannot_manage_plugins( string $display, string $render ): void {
+		$GLOBALS['shift64_test_wp_version'] = '7.0.9';
+		$GLOBALS['shift64_test_can']        = array();
+
+		ob_start();
+		DependencyChecker::$render();
+
+		$this->assertSame( '', ob_get_clean() );
+	}
+
+	public function notices(): array {
+		return array(
+			'unsupported WordPress' => array( 'display_wordpress_unsupported_notice', 'render_wordpress_notice' ),
+			'WooCommerce missing'   => array( 'display_woocommerce_missing_notice', 'render_woocommerce_notice' ),
+		);
 	}
 }
