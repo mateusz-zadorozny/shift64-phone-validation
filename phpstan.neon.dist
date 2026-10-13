@@ -2,7 +2,7 @@
 # (AGENTS.md) and gates every release (release.yml, static-analysis job).
 # A local, git-ignored phpstan.neon can `includes: [phpstan.neon.dist]` and override this.
 parameters:
-	level: 5
+	level: 6
 	# The plugin's minimum, matching PHPCS testVersion 8.3-.
 	phpVersion: 80300
 	paths:

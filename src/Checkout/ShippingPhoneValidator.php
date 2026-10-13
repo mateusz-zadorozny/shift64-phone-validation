@@ -38,8 +38,8 @@ class ShippingPhoneValidator {
 	/**
 	 * Validate shipping phone number during checkout.
 	 *
-	 * @param array     $data   Checkout posted data.
-	 * @param \WP_Error $errors Validation errors.
+	 * @param array<string, mixed> $data   Checkout posted data.
+	 * @param \WP_Error            $errors Validation errors.
 	 * @return void
 	 */
 	public static function validate_shipping_phone( array $data, \WP_Error $errors ): void {
@@ -85,8 +85,8 @@ class ShippingPhoneValidator {
 	/**
 	 * Format shipping phone number before saving to order.
 	 *
-	 * @param \WC_Order $order    The order object.
-	 * @param array     $data     The checkout data.
+	 * @param \WC_Order            $order    The order object.
+	 * @param array<string, mixed> $data     The checkout data.
 	 * @return void
 	 */
 	public static function format_shipping_phone_on_order( \WC_Order $order, array $data ): void {

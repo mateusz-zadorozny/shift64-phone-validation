@@ -47,8 +47,8 @@ class Settings {
 	/**
 	 * Add settings tab to WooCommerce settings.
 	 *
-	 * @param array $tabs Existing WooCommerce settings tabs.
-	 * @return array Modified tabs array.
+	 * @param array<string, string> $tabs Existing WooCommerce settings tabs.
+	 * @return array<string, string> Modified tabs array.
 	 */
 	public static function add_settings_tab( array $tabs ): array {
 		$tabs[ self::TAB_ID ] = __( 'Phone Validation', 'shift64-phone-validation' );
@@ -76,7 +76,7 @@ class Settings {
 	/**
 	 * Get all settings fields configuration.
 	 *
-	 * @return array Settings fields array.
+	 * @return array<int, array<string, mixed>> Settings fields array.
 	 */
 	public static function get_settings(): array {
 		$settings = array(
@@ -151,7 +151,7 @@ class Settings {
 	/**
 	 * Get list of countries with ISO-2 codes.
 	 *
-	 * @return array Associative array of country codes and names.
+	 * @return array<string, string> Associative array of country codes and names.
 	 */
 	public static function get_country_options(): array {
 		$countries = array(
