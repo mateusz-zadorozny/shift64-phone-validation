@@ -164,7 +164,7 @@ Classic checkout errors are added with the field id, which WooCommerce prints on
 
 A `woocommerce/notices/error.php` override replaces these markups, so the field is highlighted only if that template keeps one of these shapes. With block notices, WooCommerce looks for the override only in the active theme's own `woocommerce/` folder (not in a parent theme or a filtered template path).
 
-Block checkout shows Store API errors in a generic banner, so the highlighting script recognises the plugin's notices by their exact text. When the script loads, `shift64_phone_validation_error_message` is applied for `missing_international_prefix` and `invalid_number` with `$context` = `block`, and those two messages per field are what the script looks for. If your filter returns a separate message for another code (for example `too_short`), the block checkout still shows it but cannot highlight the field.
+Block checkout shows Store API errors in a generic banner, so the highlighting script recognises the plugin's notices by their exact text. When the script loads, `shift64_phone_validation_error_message` is applied for every `$code` with `$context` = `block`, and the distinct messages per field are what the script looks for, so a message reworded for any code (for example `too_short`) still highlights the field. The script looks for each message anywhere in the banner text, so keep a reworded message specific enough not to appear inside an unrelated notice.
 
 **Formatting on Save is on by default.** Before going live, check every consumer of the order phone (order export, courier labels, SMS gateway): the stored value changes shape, e.g. `600 100 200` → `+48600100200`.
 
