@@ -45,6 +45,6 @@ Add PHPStan at level 6 (no baseline) to the local validation gate, PR CI (`code-
 - [x] 1.1 Add the dependencies and the script — 0bfd528
 - [x] 1.2 Add the config at level 5 — ce0e99a
 - [x] 1.3 Fix the 8 iterable docblocks and raise to level 6 — fbc34be
-- [ ] 1.4 Add the PR CI job
+- [x] 1.4 Add the PR CI job — f569324
 - [ ] 1.5 Add the release gate
 - [ ] 1.6 Update the gate documentation and packaging hygiene
