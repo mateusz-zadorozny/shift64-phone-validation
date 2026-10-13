@@ -82,6 +82,7 @@ your-plugin/
 ├── scripts/
 │   ├── update-version.sh        # Version bump script
 │   ├── sync-readme-changelog.php  # readme.txt changelog from CHANGELOG.md
+│   ├── ci-docs-only.sh          # Docs-only pull request classifier
 │   └── build-package.sh         # Builds the release package
 ├── src/                         # Plugin code (no updater)
 ├── .distignore                  # What stays out of the package
@@ -454,6 +455,36 @@ This repository's `code-quality.yml` also has three more jobs:
 - `package` builds the release package and runs Plugin Check on it; see [Step 6](#step-6-wordpressorg-deployment).
 
 `e2e.yml` runs the Playwright checkout tests in wp-env with WooCommerce on every PR, every push to `master`, weekly and on demand. It writes the WordPress and WooCommerce versions it ran against to the job summary, so a new release of either is noticed before `Tested up to` (`readme.txt`) or `WC tested up to` (plugin header) falls behind. The WooCommerce version is read from the `WC_VERSION` constant, because wp-env installs WooCommerce from `woocommerce.latest-stable.zip` into a folder of that name, where `wp plugin get woocommerce` finds nothing.
+
+#### Docs-only pull requests
+
+A pull request that changes only documentation skips the code jobs: `phpcs`, `phpunit` and `package` in `code-quality.yml`, and `playwright` in `e2e.yml` show as **Skipped**. Each workflow starts with a `changes` job ("Detect docs-only change") that lists the files the pull request changes since its merge base (`git diff --no-renames --name-only base...head`) and passes them to `scripts/ci-docs-only.sh`. The job summary shows the answer and the file list. `pr-lint.yml` always runs.
+
+The script answers `true` only when every changed path is on its allowlist:
+
+- the root files `AGENTS.md`, `CLAUDE.md`, `SDLC.md`, `CODE_REVIEW.md`, `BACKWARD_COMPATIBILITY.md` and `README.md` (exact names);
+- Markdown under `docs/` (other files there are not on the list, because `.phpcs.xml.dist` scans `docs/`);
+- anything under `.claude/`, `.wordpress-org/`, and `.ai/` except `.ai/qa/`.
+
+Everything else runs the full suite. Some files look like documentation but are not on the list on purpose:
+
+- `readme.txt` ships, and Plugin Check validates it.
+- `CHANGELOG.md` is read by `tests/Unit/ReadmeChangelogSyncTest.php`.
+- `tests/` includes Markdown fixtures that PHPUnit reads.
+- `LICENSE` is required by `build-package.sh`.
+- A new root `.md` file fails the package build unless `.distignore` excludes it.
+- `.ai/qa/test-env.env` is loaded by `playwright.config.ts`.
+- Any change under `.github/` runs everything, so a change to this mechanism is always tested.
+
+The skip applies to `pull_request` events only. Pushes to `master`, the weekly E2E run and manual runs always run every job. If the changed files cannot be listed, or the `changes` job fails, the code jobs run: they skip only on an explicit `true`. `tests/Unit/CiDocsOnlyClassifierTest.php` pins the allowlist and the `needs`/`if` lines on each gated job.
+
+To check a branch locally:
+
+```bash
+git diff --no-renames --name-only origin/master...HEAD | ./scripts/ci-docs-only.sh
+```
+
+A skipped job reports the conclusion `skipped`, which GitHub accepts for a required status check. A workflow excluded with `paths-ignore` would report nothing, and a required check would wait forever. `master` has no required checks today. If you add them, do not require the matrix job names such as `PHPUnit (PHP 8.3)`. A skipped matrix job reports only its unexpanded name, `PHPUnit (PHP ${{ matrix.php }})`, so a required expanded name would wait forever on every docs-only pull request. Add an aggregate job and require that instead: it uses `needs: phpunit` and `if: always()`, and fails unless `needs.phpunit.result` is `success` or `skipped`.
 
 ### .github/workflows/pr-lint.yml
 

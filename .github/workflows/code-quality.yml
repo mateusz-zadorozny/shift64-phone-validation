@@ -9,8 +9,52 @@ on:
       - master
 
 jobs:
+  # Pull requests that change only allowlisted documentation skip the jobs below
+  # (scripts/ci-docs-only.sh, docs/CI-CD-SETUP.md "Docs-only pull requests"). Pushes, the
+  # schedule and manual runs always run them, and so does any failure here: the jobs below
+  # skip only when this job answered "true".
+  changes:
+    name: Detect docs-only change
+    runs-on: ubuntu-latest
+    outputs:
+      docs_only: ${{ steps.classify.outputs.docs_only }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Classify changed files
+        id: classify
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          docs_only=false
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
+            # Three dots: changes since the merge base, so commits that landed on master
+            # meanwhile do not count. --no-renames lists both sides of a rename.
+            if files="$(git diff --no-renames --name-only "$BASE_SHA...$HEAD_SHA")"; then
+              docs_only="$(printf '%s\n' "$files" | ./scripts/ci-docs-only.sh)" || docs_only=false
+              {
+                echo "Docs-only change: **${docs_only}**"
+                echo
+                echo '```'
+                printf '%s\n' "$files"
+                echo '```'
+              } >> "$GITHUB_STEP_SUMMARY"
+            else
+              echo "::warning::Could not list the changed files; running every check."
+            fi
+          fi
+          echo "docs_only=${docs_only}" >> "$GITHUB_OUTPUT"
+
   phpcs:
     name: PHPCS
+    needs: changes
+    if: ${{ !cancelled() && needs.changes.outputs.docs_only != 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -80,6 +124,8 @@ jobs:
 
   phpunit:
     name: PHPUnit (PHP ${{ matrix.php }})
+    needs: changes
+    if: ${{ !cancelled() && needs.changes.outputs.docs_only != 'true' }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -111,6 +157,8 @@ jobs:
 
   package:
     name: Package + Plugin Check
+    needs: changes
+    if: ${{ !cancelled() && needs.changes.outputs.docs_only != 'true' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
