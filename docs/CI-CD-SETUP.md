@@ -458,7 +458,7 @@ This repository's `code-quality.yml` also has three more jobs:
 
 #### Docs-only pull requests
 
-A pull request that changes only documentation skips the code jobs: `phpcs`, `phpunit` and `package` in `code-quality.yml`, and `playwright` in `e2e.yml` show as **Skipped**. Each workflow starts with a `changes` job ("Detect docs-only change") that lists the files the pull request changes since its merge base (`git diff --no-renames --name-only base...head`) and passes them to `scripts/ci-docs-only.sh`. The job summary shows the answer and the file list. `pr-lint.yml` always runs.
+A pull request that changes only documentation skips the code jobs: `phpcs`, `phpstan`, `phpunit` and `package` in `code-quality.yml`, and `playwright` in `e2e.yml` show as **Skipped**. Each workflow starts with a `changes` job ("Detect docs-only change") that lists the files the pull request changes since its merge base (`git diff --no-renames --name-only base...head`) and passes them to `scripts/ci-docs-only.sh`. The job summary shows the answer and the file list. `pr-lint.yml` always runs.
 
 The script answers `true` only when every changed path is on its allowlist:
 

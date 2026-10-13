@@ -87,6 +87,7 @@ class CiDocsOnlyClassifierTest extends TestCase {
 	public static function provide_gated_jobs(): array {
 		return array(
 			'PHPCS'                  => array( 'code-quality.yml', 'phpcs' ),
+			'PHPStan'                => array( 'code-quality.yml', 'phpstan' ),
 			'PHPUnit'                => array( 'code-quality.yml', 'phpunit' ),
 			'Package + Plugin Check' => array( 'code-quality.yml', 'package' ),
 			'E2E'                    => array( 'e2e.yml', 'playwright' ),

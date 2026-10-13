@@ -90,6 +90,8 @@ jobs:
 
   phpstan:
     name: PHPStan
+    needs: changes
+    if: ${{ !cancelled() && needs.changes.outputs.docs_only != 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
