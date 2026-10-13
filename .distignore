@@ -28,6 +28,9 @@
 /phpcs.xml.dist
 /phpunit.xml
 /phpunit.xml.dist
+/phpstan.neon
+/phpstan.neon.dist
+/phpstan-baseline.neon
 /playwright.config.ts
 /playwright-report
 /test-results

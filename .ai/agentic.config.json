@@ -9,6 +9,7 @@
     "commands": [
       "composer install --prefer-dist --no-interaction",
       "composer phpcs",
+      "composer phpstan",
       "composer test"
     ]
   },
