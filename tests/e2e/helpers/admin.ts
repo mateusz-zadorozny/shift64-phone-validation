@@ -110,6 +110,41 @@ export async function setSiteLanguage(
 	await expect( page.locator( '#WPLANG' ) ).toHaveValue( language );
 }
 
+/** The stylesheet (directory name) of the active theme. */
+export async function getActiveTheme( page: Page ): Promise< string > {
+	await page.goto( '/wp-admin/themes.php' );
+	const slug = await page
+		.locator( '.theme.active' )
+		.getAttribute( 'data-slug' );
+	if ( ! slug ) {
+		throw new Error( 'No active theme on Appearance > Themes.' );
+	}
+	return slug;
+}
+
+/**
+ * Appearance > Themes > Activate. The theme must already be installed, see
+ * tests/e2e/bin/seed.sh. Follows the Activate link's (nonced) URL instead of
+ * clicking it, because the theme actions only show on hover.
+ */
+export async function activateTheme( page: Page, slug: string ): Promise< void > {
+	await page.goto( '/wp-admin/themes.php' );
+	const theme = page.locator( `.theme[data-slug="${ slug }"]` );
+	await expect( theme ).toHaveCount( 1 );
+	if ( ( await theme.getAttribute( 'class' ) )?.split( /\s+/ ).includes( 'active' ) ) {
+		return;
+	}
+	const href = await theme.locator( 'a.activate' ).getAttribute( 'href' );
+	if ( ! href ) {
+		throw new Error( `Theme ${ slug } has no Activate link.` );
+	}
+	await page.goto( href );
+	await expect( page.locator( '.theme.active' ) ).toHaveAttribute(
+		'data-slug',
+		slug
+	);
+}
+
 export async function setValidationEnabled(
 	page: Page,
 	enabled: boolean
