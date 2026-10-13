@@ -38,6 +38,8 @@ Add PHPStan at level 6 (no baseline) to the local validation gate, PR CI (`code-
 
 ## Progress
 
+PR: #44
+
 > Convention: `- [ ]` pending, `- [x]` done. Append ` — <commit sha>` when a step lands. Do not rename step titles.
 
 ### Phase 1: PHPStan level 6 in gate, PR CI and release
