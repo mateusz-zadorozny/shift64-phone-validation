@@ -1,0 +1,24 @@
+# PHPStan configuration. Run with `composer phpstan`; it is a step of the validation gate
+# (AGENTS.md) and gates every release (release.yml, static-analysis job).
+# A local, git-ignored phpstan.neon can `includes: [phpstan.neon.dist]` and override this.
+parameters:
+	level: 5
+	# The plugin's minimum, matching PHPCS testVersion 8.3-.
+	phpVersion: 80300
+	paths:
+		- src
+		- shift64-phone-validation.php
+		- uninstall.php
+	scanFiles:
+		- vendor/php-stubs/woocommerce-stubs/woocommerce-stubs.php
+		- vendor/php-stubs/woocommerce-stubs/woocommerce-packages-stubs.php
+	bootstrapFiles:
+		- tests/phpstan/bootstrap.php
+	# The stubs pin WC_VERSION to the stub version, which makes the version_compare()
+	# in BlockCheckoutValidator::init() look always-false.
+	dynamicConstantNames:
+		- WC_VERSION
+	# Hook callbacks receive whatever other plugins pass through filters; docblock types
+	# describe the expected value, not a guarantee. Keeps the defensive guards
+	# (instanceof WP_REST_Request, is_string on apply_filters) from being reported as dead code.
+	treatPhpDocTypesAsCertain: false
