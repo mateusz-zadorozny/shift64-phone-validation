@@ -12,6 +12,7 @@ Complete guide for implementing automated releases, code quality checks, and Wor
 6. [Step 3: Version Update Script](#step-3-version-update-script)
 7. [Step 4: GitHub Workflows](#step-4-github-workflows)
 8. [Step 5: PHPCS Configuration](#step-5-phpcs-configuration)
+   - [PHPStan](#phpstan)
 9. [Step 6: WordPress.org Deployment](#step-6-wordpressorg-deployment)
 10. [Usage](#usage)
 11. [Private Composer Dependencies](#private-composer-dependencies)
@@ -24,7 +25,8 @@ Complete guide for implementing automated releases, code quality checks, and Wor
 This setup provides:
 
 - **Automated Releases**: Semantic versioning based on commit messages
-- **Code Quality**: PHPCS with WordPress Coding Standards on every PR
+- **Code Quality**: PHPCS with WordPress Coding Standards and PHPStan on every PR
+- **Release gate**: PHPStan must pass before semantic-release tags anything
 - **PR Validation**: Enforces conventional commit format in PR titles
 - **One Release Package**: a single ZIP built from `.distignore`, attached to the GitHub release and deployed to WordPress.org
 - **WordPress.org Deployment**: each release goes to the plugin's WordPress.org SVN repository, which serves the updates; the plugin has no updater of its own
@@ -36,7 +38,7 @@ This setup provides:
 PR with "feat: add feature" title
         ↓
 [PR Lint] Validates title format
-[Code Quality] Runs PHPCS checks, builds the package, runs Plugin Check
+[Code Quality] Runs PHPCS and PHPStan, builds the package, runs Plugin Check
         ↓
 Merge to master
         ↓
@@ -445,8 +447,9 @@ jobs:
         run: cs2pr ./phpcs-report.xml
 ```
 
-This repository's `code-quality.yml` also has two more jobs:
+This repository's `code-quality.yml` also has three more jobs:
 
+- `phpstan` runs `composer phpstan` on PHP 8.3 with `--error-format=github`, so each finding shows as an inline annotation on the PR diff; see [PHPStan](#phpstan).
 - `phpunit` runs `composer test` on PHP 8.3, 8.4 and 8.5. The step runs in bash with `pipefail`, so a failing PHPUnit fails the step even though its output is piped through `tee`, and it also requires PHPUnit's summary line (`OK (...)`, or `OK, but ...` when tests were skipped or incomplete). A run that exits 0 without printing a result, for example when a file's `ABSPATH` guard runs before `tests/Unit/bootstrap.php` has defined `ABSPATH`, therefore fails instead of looking green.
 - `package` builds the release package and runs Plugin Check on it; see [Step 6](#step-6-wordpressorg-deployment).
 
@@ -585,6 +588,19 @@ jobs:
 - Replace `your-plugin.php` with your main plugin filename
 - Adjust exclude patterns for your project structure
 
+### PHPStan
+
+`phpstan.neon.dist` runs PHPStan at **level 6 with no baseline** on `src/`, the main plugin file and `uninstall.php`, against PHP 8.3 (`phpVersion: 80300`). The dev dependencies are `phpstan/phpstan`, `szepeviktor/phpstan-wordpress` (WordPress stubs plus hook-aware rules), `php-stubs/woocommerce-stubs` and `phpstan/extension-installer`, which loads the WordPress extension and needs `allow-plugins` in `composer.json`.
+
+- `tests/phpstan/bootstrap.php` defines the plugin constants (`SHIFT64_PHONE_VALIDATION_*`) for the analysis only; the main file defines them from WordPress functions PHPStan cannot evaluate. Keep it in sync when a constant is added.
+- `dynamicConstantNames: [WC_VERSION]`: the stubs pin `WC_VERSION`, which would make the WooCommerce version check in `BlockCheckoutValidator::init()` look always-false.
+- `treatPhpDocTypesAsCertain: false`: hook callbacks get whatever other plugins pass through filters, so the runtime guards (`instanceof WP_REST_Request`, `is_string()` on a filtered value) are deliberate, not dead code.
+- A local `phpstan.neon` (git-ignored, and excluded from the package by `.distignore`) can `includes: [phpstan.neon.dist]` and override settings.
+
+It runs in three places: the local validation gate (`composer phpstan`, after `composer phpcs`), the `phpstan` job in `code-quality.yml` on every PR, and the `static-analysis` job in `release.yml`. The `release` job `needs` that job, so a PHPStan failure on `master` stops the run before semantic-release tags anything; the next green push releases every commit since the last tag. The job installs dev dependencies on its own runner because the `release` job builds the package from a production-only `vendor/`. To release urgently despite a failure, remove the `needs: static-analysis` line.
+
+`master` has no branch protection, so the PR jobs are advisory until it is enabled with `PHPCS`, `PHPStan`, `PHPUnit (PHP 8.3)` and `Package + Plugin Check` as required checks; the release gate does not depend on it.
+
 ---
 
 ## Step 6: WordPress.org Deployment
@@ -663,7 +679,7 @@ Sites running 1.4.2 or earlier from a GitHub release ZIP still have the old buil
 1. Create feature branch
 2. Make changes
 3. Create PR with conventional title (e.g., `feat: add new feature`)
-4. PR checks run automatically (PHPCS, title validation, Plugin Check on the built package)
+4. PR checks run automatically (PHPCS, PHPStan, PHPUnit, title validation, Plugin Check on the built package)
 5. Merge to master
 6. Release workflow runs automatically
 7. The same package is deployed to WordPress.org (once the SVN secrets exist), and WordPress offers the update to sites on its next update check
@@ -676,6 +692,9 @@ composer phpcs
 
 # Auto-fix PHPCS issues
 composer phpcbf
+
+# Run PHPStan locally
+composer phpstan
 
 # Build the release package locally (see Step 6 for what it checks).
 # It needs a production vendor/, so restore the dev tools afterwards.
@@ -711,6 +730,12 @@ If your plugin depends on other private repos via Composer, CI needs a token to 
 - Run `composer update` locally to sync lock file
 - Check `platform.php` is set in composer.json config
 - Run `composer phpcs` locally first
+
+### PHPStan failing
+
+- Run `composer phpstan` locally; findings carry an identifier (`missingType.iterableValue`, ...) documented at `https://phpstan.org/error-identifiers/<identifier>`
+- Fix the code or the docblock. Use an inline `@phpstan-ignore <identifier>` with a reason only for a false positive (for example a WooCommerce stub describing a newer WooCommerce than the supported 7.2+); never add a baseline or a broad `ignoreErrors` message regex
+- A failure in the `static-analysis` job of `release.yml` means nothing was released: fix forward with a `fix:` PR
 
 ### Zip not found in release
 
@@ -758,6 +783,7 @@ Before your first release:
 - [ ] Run `npm install` and `composer install`
 - [ ] Make `scripts/update-version.sh` executable
 - [ ] Test PHPCS passes: `composer phpcs`
+- [ ] Test PHPStan passes: `composer phpstan`
 - [ ] Verify version constant exists in main plugin file
 - [ ] Verify `readme.txt` has `Stable tag:` line
 - [ ] Check that `.distignore` keeps `vendor/` and `composer.json` in the package and everything else that is not runtime code out
