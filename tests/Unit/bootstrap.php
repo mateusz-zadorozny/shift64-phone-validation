@@ -47,6 +47,12 @@ if ( ! function_exists( '__' ) ) {
 	}
 }
 
+if ( ! function_exists( 'esc_html__' ) ) {
+	function esc_html__( $text, $domain = 'default' ) {
+		return __( $text, $domain );
+	}
+}
+
 // --- Minimum WordPress version, defined by the main plugin file in WordPress ----
 // DependencyCheckerTest proves this value equals the main file's constant and both
 // "Requires at least" headers.
@@ -80,12 +86,16 @@ if ( ! class_exists( 'WP_Error' ) ) {
 // from wp-includes/version.php. get_bloginfo( 'version' ) reports the $wp_version
 // global, which other plugins can blank or fake: $GLOBALS['shift64_test_bloginfo_version']
 // when a test sets it, the core version otherwise. current_user_can() reports
-// $GLOBALS['shift64_test_can'], and add_action() records each registration in
-// $GLOBALS['shift64_test_actions'].
+// whether the capability is in $GLOBALS['shift64_test_can'], add_action() records
+// each registration in $GLOBALS['shift64_test_actions'], and is_multisite() /
+// is_network_admin() report $GLOBALS['shift64_test_multisite'] /
+// $GLOBALS['shift64_test_network_admin'].
 $GLOBALS['shift64_test_wp_version']       = '7.1.2';
 $GLOBALS['shift64_test_bloginfo_version'] = null;
-$GLOBALS['shift64_test_can']              = true;
+$GLOBALS['shift64_test_can']              = array( 'activate_plugins' );
 $GLOBALS['shift64_test_actions']          = array();
+$GLOBALS['shift64_test_multisite']        = false;
+$GLOBALS['shift64_test_network_admin']    = false;
 
 if ( ! function_exists( 'wp_get_wp_version' ) ) {
 	function wp_get_wp_version() {
@@ -125,7 +135,19 @@ if ( ! function_exists( 'get_bloginfo' ) ) {
 
 if ( ! function_exists( 'current_user_can' ) ) {
 	function current_user_can( $capability, ...$args ) {
-		return 'activate_plugins' === $capability && $GLOBALS['shift64_test_can'];
+		return in_array( $capability, $GLOBALS['shift64_test_can'], true );
+	}
+}
+
+if ( ! function_exists( 'is_multisite' ) ) {
+	function is_multisite() {
+		return $GLOBALS['shift64_test_multisite'];
+	}
+}
+
+if ( ! function_exists( 'is_network_admin' ) ) {
+	function is_network_admin() {
+		return $GLOBALS['shift64_test_network_admin'];
 	}
 }
 

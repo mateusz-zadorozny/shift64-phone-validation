@@ -57,6 +57,10 @@ function is_wp_version_compatible( $required ) {
 	return empty( $required ) || version_compare( $version, $required, '>=' );
 }
 
+function is_multisite() {
+	return false;
+}
+
 if ( '1' === ( $argv[2] ?? '0' ) ) {
 	eval( 'class WooCommerce {}' ); // phpcs:ignore Squiz.PHP.Eval.Discouraged -- test harness only.
 }
