@@ -460,7 +460,8 @@ A pull request that changes only documentation skips the code jobs: `phpcs`, `ph
 The script answers `true` only when every changed path is on its allowlist:
 
 - the root files `AGENTS.md`, `CLAUDE.md`, `SDLC.md`, `CODE_REVIEW.md`, `BACKWARD_COMPATIBILITY.md` and `README.md` (exact names);
-- anything under `docs/`, `.claude/`, `.wordpress-org/`, and `.ai/` except `.ai/qa/`.
+- Markdown under `docs/` (other files there are not on the list, because `.phpcs.xml.dist` scans `docs/`);
+- anything under `.claude/`, `.wordpress-org/`, and `.ai/` except `.ai/qa/`.
 
 Everything else runs the full suite. Some files look like documentation but are not on the list on purpose:
 
@@ -480,7 +481,7 @@ To check a branch locally:
 git diff --no-renames --name-only origin/master...HEAD | ./scripts/ci-docs-only.sh
 ```
 
-A skipped job reports the conclusion `skipped`, which GitHub accepts for a required status check. A workflow excluded with `paths-ignore` would report nothing, and a required check would wait forever. `master` has no required checks today. If you add them, note that a skipped matrix job shows under its unexpanded name, `PHPUnit (PHP ${{ matrix.php }})`, so require the expanded names, or add an aggregate job that depends on the matrix.
+A skipped job reports the conclusion `skipped`, which GitHub accepts for a required status check. A workflow excluded with `paths-ignore` would report nothing, and a required check would wait forever. `master` has no required checks today. If you add them, do not require the matrix job names such as `PHPUnit (PHP 8.3)`. A skipped matrix job reports only its unexpanded name, `PHPUnit (PHP ${{ matrix.php }})`, so a required expanded name would wait forever on every docs-only pull request. Add an aggregate job and require that instead: it uses `needs: phpunit` and `if: always()`, and fails unless `needs.phpunit.result` is `success` or `skipped`.
 
 ### .github/workflows/pr-lint.yml
 

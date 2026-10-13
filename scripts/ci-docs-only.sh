@@ -10,7 +10,7 @@
 # tests/Unit/ReadmeChangelogSyncTest.php), tests/ (Markdown fixtures included), LICENSE
 # (build-package.sh requires it), any other *.md (a new root one fails the package build),
 # languages/, .github/ (a workflow change must prove itself) and .ai/qa/ (playwright.config.ts
-# loads .ai/qa/test-env.env).
+# loads .ai/qa/test-env.env). Under docs/ only Markdown counts: .phpcs.xml.dist scans docs/.
 #
 # Usage: git diff --no-renames --name-only origin/master...HEAD | ./scripts/ci-docs-only.sh
 
@@ -22,7 +22,8 @@ while IFS= read -r path || [ -n "$path" ]; do
 	seen=1
 	case "$path" in
 		AGENTS.md | CLAUDE.md | SDLC.md | CODE_REVIEW.md | BACKWARD_COMPATIBILITY.md | README.md) ;;
-		docs/*) ;;
+		# Markdown only: PHPCS scans every PHP file outside its exclude list, docs/ included.
+		docs/*.md) ;;
 		.ai/qa/*)
 			echo false
 			exit 0

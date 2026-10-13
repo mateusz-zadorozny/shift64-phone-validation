@@ -47,7 +47,9 @@ class CiDocsOnlyClassifierTest extends TestCase {
 			'code listed after docs still counts'    => array( array( 'docs/CI-CD-SETUP.md', '.ai/specs/x.md', 'composer.json' ), 'false' ),
 			// git quotes non-ASCII paths; the quote is not on the allowlist.
 			'quoted path'                            => array( array( '"docs/\303\263.md"' ), 'false' ),
-			'path that only starts like an allowed folder' => array( array( 'docs.php' ), 'false' ),
+			'name starting like a folder'            => array( array( 'docs.php' ), 'false' ),
+			// .phpcs.xml.dist scans docs/, so only Markdown there is docs.
+			'PHP under docs'                         => array( array( 'docs/example.php' ), 'false' ),
 		);
 	}
 
@@ -62,7 +64,8 @@ class CiDocsOnlyClassifierTest extends TestCase {
 
 	/**
 	 * Each code job waits for the classifier and skips only on its explicit "true",
-	 * so a crashed classifier still runs the job. Read as text: no YAML parser ships.
+	 * so a crashed classifier still runs the job. Read as text: no YAML parser ships,
+	 * so the gate must stay the two lines right after the job's name.
 	 *
 	 * @dataProvider provide_gated_jobs
 	 */
@@ -71,6 +74,7 @@ class CiDocsOnlyClassifierTest extends TestCase {
 
 		$this->assertStringContainsString( "\n  changes:\n", $yaml );
 		$this->assertStringContainsString( './scripts/ci-docs-only.sh', $yaml );
+		$this->assertStringContainsString( 'docs_only: ${{ steps.classify.outputs.docs_only }}', $yaml );
 		$this->assertMatchesRegularExpression(
 			'/\n  ' . preg_quote( $job, '/' ) . ":\n    name: [^\n]+\n    needs: changes\n    if: \\$\\{\\{ !cancelled\\(\\) && needs\\.changes\\.outputs\\.docs_only != 'true' \\}\\}\n/",
 			$yaml
