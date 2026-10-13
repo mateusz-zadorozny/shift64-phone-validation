@@ -60,6 +60,35 @@ class CiDocsOnlyClassifierTest extends TestCase {
 		$this->assertSame( 'false', $this->classify( "AGENTS.md\nsrc/Plugin.php" ) );
 	}
 
+	/**
+	 * Each code job waits for the classifier and skips only on its explicit "true",
+	 * so a crashed classifier still runs the job. Read as text: no YAML parser ships.
+	 *
+	 * @dataProvider provide_gated_jobs
+	 */
+	public function test_code_job_is_gated_on_the_classifier( string $workflow, string $job ): void {
+		$yaml = (string) file_get_contents( dirname( __DIR__, 2 ) . '/.github/workflows/' . $workflow );
+
+		$this->assertStringContainsString( "\n  changes:\n", $yaml );
+		$this->assertStringContainsString( './scripts/ci-docs-only.sh', $yaml );
+		$this->assertMatchesRegularExpression(
+			'/\n  ' . preg_quote( $job, '/' ) . ":\n    name: [^\n]+\n    needs: changes\n    if: \\$\\{\\{ !cancelled\\(\\) && needs\\.changes\\.outputs\\.docs_only != 'true' \\}\\}\n/",
+			$yaml
+		);
+	}
+
+	/**
+	 * @return array<string, array{string, string}>
+	 */
+	public static function provide_gated_jobs(): array {
+		return array(
+			'PHPCS'                  => array( 'code-quality.yml', 'phpcs' ),
+			'PHPUnit'                => array( 'code-quality.yml', 'phpunit' ),
+			'Package + Plugin Check' => array( 'code-quality.yml', 'package' ),
+			'E2E'                    => array( 'e2e.yml', 'playwright' ),
+		);
+	}
+
 	private function classify( string $stdin ): string {
 		$script = dirname( __DIR__, 2 ) . '/scripts/ci-docs-only.sh';
 		$pipes  = array();
