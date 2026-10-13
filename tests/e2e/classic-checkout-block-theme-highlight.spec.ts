@@ -1,10 +1,4 @@
-import { expect, test as base, type Page } from '@playwright/test';
-import {
-	getCheckoutPageId,
-	getPageIdBySlug,
-	newAdminPage,
-	setCheckoutPageId,
-} from './helpers/admin';
+import { expect, test, type Page } from '@playwright/test';
 import {
 	addProductToCart,
 	customer,
@@ -27,53 +21,13 @@ import {
 // quietly testing the classic markup.
 const ERROR_BANNER = '.wc-block-components-notice-banner.is-error';
 
-// Coupled to #34: Assets::is_block_checkout() picks the script from the page
-// configured as the WooCommerce checkout page, not from the page being viewed.
-// The seed configures the block /checkout/ page, so /classic-checkout/ would
-// load block-checkout-validation.js and this spec could never see the classic
-// highlight. Each test therefore makes the classic page the configured
-// checkout page and puts the previous page back in the fixture teardown, which
-// Playwright runs whether the test passes, fails or times out (teardown gets a
-// fresh timeout of its own). A run killed outright skips the teardown; the
-// seed resets the option on the next `wp-env start` / `npm run env:seed`.
-// Drop this fixture once #34 is fixed.
-const test = base.extend< { classicPageIsWooCommerceCheckout: void } >( {
-	classicPageIsWooCommerceCheckout: [
-		async ( { browser }, use ) => {
-			const admin = await newAdminPage( browser );
-			try {
-				// Seeded by tests/e2e/bin/seed.sh.
-				const classicPageId = await getPageIdBySlug(
-					admin,
-					'classic-checkout'
-				);
-				const previousPageId = await getCheckoutPageId( admin );
-				expect(
-					previousPageId,
-					'The classic page is already the WooCommerce checkout page, probably left over from a killed run of this spec. Run `npm run env:seed` (wp-env) or set the Checkout block page back in WooCommerce > Settings > Advanced.'
-				).not.toBe( classicPageId );
-
-				// The switch is inside the try: when the PUT lands but its
-				// read-back fails or times out, the option is restored all the
-				// same (restoring an unchanged option is a no-op).
-				try {
-					await setCheckoutPageId( admin, classicPageId );
-					await use();
-				} finally {
-					await setCheckoutPageId( admin, previousPageId );
-				}
-			} finally {
-				await admin.context().close();
-			}
-		},
-		{ auto: true },
-	],
-} );
-
+// Regression for #34: the seed configures the block /checkout/ page as the
+// WooCommerce checkout page, and /classic-checkout/ must still load the classic
+// script, picked from the page being viewed.
 async function openClassicCheckout( page: Page, phone: string ): Promise< void > {
 	await addProductToCart( page );
 	await fillClassicCheckout( page, phone );
-	// The script under test, not block-checkout-validation.js (see #34 above).
+	// The script under test, not block-checkout-validation.js (#34).
 	await expect(
 		page.locator( 'script#shift64-phone-checkout-validation-js' )
 	).toHaveCount( 1 );

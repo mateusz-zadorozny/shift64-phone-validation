@@ -42,6 +42,12 @@ abstract class TestCase extends PHPUnitTestCase {
 			'switches' => array(),
 			'calls'    => array(),
 		);
+		$GLOBALS['shift64_test_pages']            = array(
+			'posts'    => array(),
+			'queried'  => 0,
+			'checkout' => 0,
+		);
+		$GLOBALS['shift64_test_scripts']          = array();
 	}
 
 	protected function set_option( string $key, string $value ): void {

@@ -51,10 +51,10 @@ seed_instance() {
 	fi
 
 	echo "seed: [$instance] WooCommerce checkout page = the Checkout block page at /checkout/"
-	# classic-checkout-block-theme-highlight.spec.ts points this option at the
-	# classic page and restores it in its teardown. A run killed before the
-	# teardown would leave the classic page configured, so reset it here.
-	# WooCommerce creates the 'checkout' page on install.
+	# classic-checkout-block-theme-highlight.spec.ts relies on this layout: the
+	# block page configured, the classic page alongside it (#34). Reset it in
+	# case it was changed by hand. WooCommerce creates the 'checkout' page on
+	# install.
 	checkout_page_id="$(wp post list --post_type=page --post_status=publish --name=checkout --format=ids)"
 	case "$checkout_page_id" in
 		'' | *[!0-9]*)

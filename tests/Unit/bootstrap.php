@@ -182,5 +182,91 @@ if ( ! function_exists( 'get_locale' ) ) {
 	}
 }
 
+// --- Stubs used by the checkout assets tests ---------------------------------
+// $GLOBALS['shift64_test_pages'] holds the posts get_post() can find (id => WP_Post),
+// 'queried' and 'checkout' are the IDs of the page being viewed and of the configured
+// WooCommerce checkout page, and wp_enqueue_script() records each handle in
+// $GLOBALS['shift64_test_scripts'].
+$GLOBALS['shift64_test_pages']   = array(
+	'posts'    => array(),
+	'queried'  => 0,
+	'checkout' => 0,
+);
+$GLOBALS['shift64_test_scripts'] = array();
+
+if ( ! defined( 'SHIFT64_PHONE_VALIDATION_URL' ) ) {
+	define( 'SHIFT64_PHONE_VALIDATION_URL', 'https://shop.test/wp-content/plugins/shift64-phone-validation/' );
+}
+if ( ! defined( 'SHIFT64_PHONE_VALIDATION_VERSION' ) ) {
+	define( 'SHIFT64_PHONE_VALIDATION_VERSION', '0.0.0-test' );
+}
+
+if ( ! class_exists( 'WP_Post' ) ) {
+	class WP_Post {
+		public $ID           = 0;
+		public $post_content = '';
+
+		public function __construct( $id, $content ) {
+			$this->ID           = $id;
+			$this->post_content = $content;
+		}
+	}
+}
+
+if ( ! function_exists( 'is_checkout' ) ) {
+	function is_checkout() {
+		return true;
+	}
+}
+
+if ( ! function_exists( 'get_queried_object' ) ) {
+	function get_queried_object() {
+		return get_post( $GLOBALS['shift64_test_pages']['queried'] );
+	}
+}
+
+if ( ! function_exists( 'wc_get_page_id' ) ) {
+	function wc_get_page_id( $page ) {
+		return 'checkout' === $page ? $GLOBALS['shift64_test_pages']['checkout'] : -1;
+	}
+}
+
+if ( ! function_exists( 'get_post' ) ) {
+	function get_post( $post = null ) {
+		$id = $post instanceof WP_Post ? $post->ID : (int) $post;
+		return $GLOBALS['shift64_test_pages']['posts'][ $id ] ?? null;
+	}
+}
+
+if ( ! function_exists( 'has_block' ) ) {
+	function has_block( $block_name, $post = null ) {
+		return 1 === preg_match( '#<!-- wp:' . preg_quote( $block_name, '#' ) . '[\s/]#', $post->post_content );
+	}
+}
+
+if ( ! function_exists( 'has_shortcode' ) ) {
+	function has_shortcode( $content, $tag ) {
+		return str_contains( $content, '[' . $tag . ']' );
+	}
+}
+
+if ( ! function_exists( 'wp_enqueue_script' ) ) {
+	function wp_enqueue_script( $handle, $src = '', $deps = array(), $ver = false, $args = array() ) {
+		$GLOBALS['shift64_test_scripts'][] = $handle;
+	}
+}
+
+if ( ! function_exists( 'wp_add_inline_script' ) ) {
+	function wp_add_inline_script( $handle, $data, $position = 'after' ) {
+		return true;
+	}
+}
+
+if ( ! function_exists( 'wp_json_encode' ) ) {
+	function wp_json_encode( $data, $options = 0, $depth = 512 ) {
+		return json_encode( $data, $options, $depth );
+	}
+}
+
 require_once __DIR__ . '/stubs-woocommerce.php';
 require_once __DIR__ . '/TestCase.php';

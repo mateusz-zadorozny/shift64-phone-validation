@@ -24,7 +24,7 @@ SHIFT64 Phone Validation for WooCommerce checks the phone numbers customers type
 * Cleans up input first: spaces (including non-breaking spaces pasted from documents), hyphens, dots, slashes and parentheses are removed, and a leading `00` becomes `+`. Typographic dashes (–) are still rejected by WooCommerce's own phone check.
 * Two validation modes: "Default country + international", or "International only" (every number must include its country prefix, typed with `+` or `00`).
 * Three output formats: E.164 (`+48600123456`), international (`+48 600 123 456`) and national (`600 123 456`). Formatting on save can be switched off.
-* Highlights the phone field that needs correcting (see Known issues).
+* Highlights the phone field that needs correcting.
 * Compatible with High-Performance Order Storage (HPOS) and the Cart and Checkout blocks.
 * English and Polish error messages.
 * Filters for developers.
@@ -38,12 +38,6 @@ Requires WordPress 7.1 or later and WooCommerce 7.2 or later.
 * It does not look numbers up with carriers or any third-party service.
 * It does not add a country flag picker or an input mask to the phone field.
 * It does not check phone numbers outside the checkout, such as orders created or edited in the admin, or My Account addresses. Paying for an existing order through the Store API counts as checkout.
-
-= Known issues =
-
-In each case the customer still gets an error and the order is not placed until the number is corrected; only the extra help is missing.
-
-* A classic checkout page next to a Checkout block page set as the WooCommerce checkout page: the classic page does not highlight the field ([#34](https://github.com/mateusz-zadorozny/shift64-phone-validation/issues/34)).
 
 = Privacy =
 
@@ -82,7 +76,7 @@ No. It only checks that the number is valid for the country and optionally refor
 
 = Does it work with block checkout? =
 
-Yes. Both the block checkout (Store API) and the classic `[woocommerce_checkout]` shortcode checkout are supported: the order is not placed until the phone number is corrected. See Known issues for setups where the field is not highlighted.
+Yes. Both the block checkout (Store API) and the classic `[woocommerce_checkout]` shortcode checkout are supported: the order is not placed until the phone number is corrected.
 
 = Where are the settings? =
 

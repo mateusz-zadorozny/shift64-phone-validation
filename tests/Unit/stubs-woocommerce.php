@@ -18,6 +18,12 @@ namespace Automattic\WooCommerce\StoreApi\Exceptions {
 	}
 }
 
+namespace Automattic\WooCommerce\Blocks {
+	// Assets loads the block checkout script only when WooCommerce Blocks is present.
+	class Package {
+	}
+}
+
 namespace {
 	class WP_REST_Request {
 		private $method;
