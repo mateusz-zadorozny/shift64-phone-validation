@@ -201,15 +201,18 @@ The unit suite covers the pure logic and the checkout integration: `Normalizer`,
 
 #### End-to-end (WooCommerce checkout in a real browser)
 
-The e2e suite drives a real WordPress + WooCommerce store with the plugin active, through both checkout flavours (block / Store API and the classic shortcode). It needs Docker.
+The e2e suite drives a real WordPress + WooCommerce store with the plugin active, through both checkout flavours (block / Store API and the classic shortcode). It needs Docker and Node 22, the version CI uses (`.nvmrc` pins it, so `nvm use` or `fnm use` picks it up).
 
 ```bash
+nvm use
 npm ci
 npx playwright install chromium
 npm run env:start    # composer install + wp-env start; seeds the store on every start
 npm run test:e2e     # Playwright against http://localhost:8888
 npm run env:stop
 ```
+
+On macOS with Node 26, `npx playwright install chromium` (Playwright 1.63) fails at once with `Request to https://cdn.playwright.dev/… timed out after 30000ms`, whatever `PLAYWRIGHT_DOWNLOAD_CONNECTION_TIMEOUT` says, although the same URL downloads fine with `curl`. Node 26 on Linux is not affected, and neither is CI. Switch to Node 22 and run the install again. If you must stay on Node 26, run `npx playwright install --dry-run chromium`, which prints the download URL and install location of each browser without downloading anything. Download the Chrome for Testing and Chrome Headless Shell zips with `curl`, unpack each into its install location (`~/Library/Caches/ms-playwright/chromium-<rev>/` and `chromium_headless_shell-<rev>/`), and create empty `INSTALLATION_COMPLETE` and `DEPENDENCIES_VALIDATED` files in each ([#30](https://github.com/mateusz-zadorozny/shift64-phone-validation/issues/30)).
 
 `.wp-env.json` describes the environment (latest WordPress, PHP 8.3, latest WooCommerce, this checkout as the plugin). `tests/e2e/bin/seed.sh` runs after every `wp-env start` and is idempotent: Polish store, guest checkout, cash on delivery, flat-rate shipping, one simple product (`/product/e2e-test-product/`), the block checkout at `/checkout/` (set as the WooCommerce checkout page on every run) and a classic one at `/classic-checkout/`, and the WordPress and WooCommerce `pl_PL` language packs, installed but not activated: the site stays English, and `block-checkout-polish-messages.spec.ts` switches it to Polish and back. Admin login is wp-env's default (`admin` / `password`).
 
