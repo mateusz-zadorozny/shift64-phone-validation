@@ -104,4 +104,55 @@ class ErrorMessagesTest extends TestCase {
 			ErrorMessages::all_for_block_checkout()
 		);
 	}
+
+	/**
+	 * A theme that rewords a code other than prefix / invalid number must keep
+	 * the block-checkout field highlight (#35).
+	 */
+	public function test_block_checkout_message_list_includes_reworded_non_default_codes(): void {
+		$this->add_filter(
+			'shift64_phone_validation_error_message',
+			function ( $message, $code ) {
+				return ValidationResult::ERROR_TOO_LONG === $code ? 'That number has too many digits.' : $message;
+			}
+		);
+
+		$messages = ErrorMessages::all_for_block_checkout();
+
+		$this->assertContains( 'That number has too many digits.', $messages['billing'] );
+		$this->assertContains( 'That number has too many digits.', $messages['shipping'] );
+		$this->assertContains( 'Billing phone is not a valid phone number.', $messages['billing'] );
+	}
+
+	/**
+	 * Every error code the validator can return reaches the block checkout list,
+	 * so a new ValidationResult::ERROR_* constant cannot be forgotten there.
+	 */
+	public function test_block_checkout_message_list_covers_every_error_code(): void {
+		$seen = array();
+		$this->add_filter(
+			'shift64_phone_validation_error_message',
+			function ( $message, $code, $field ) use ( &$seen ) {
+				$seen[ $field ][] = $code;
+				return $message;
+			}
+		);
+
+		ErrorMessages::all_for_block_checkout();
+
+		$codes = array_values(
+			array_filter(
+				( new \ReflectionClass( ValidationResult::class ) )->getConstants(),
+				fn ( $name ) => str_starts_with( $name, 'ERROR_' ),
+				ARRAY_FILTER_USE_KEY
+			)
+		);
+		sort( $codes );
+
+		foreach ( array( ErrorMessages::FIELD_BILLING, ErrorMessages::FIELD_SHIPPING ) as $field ) {
+			$field_codes = $seen[ $field ];
+			sort( $field_codes );
+			$this->assertSame( $codes, $field_codes );
+		}
+	}
 }
