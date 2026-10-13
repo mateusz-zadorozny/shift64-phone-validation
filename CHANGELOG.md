@@ -1,3 +1,10 @@
+## [2.0.2](https://github.com/mateusz-zadorozny/shift64-phone-validation/compare/v2.0.1...v2.0.2) (2026-10-13)
+
+
+### Bug Fixes
+
+* **checkout:** load the checkout script for the page being viewed ([#48](https://github.com/mateusz-zadorozny/shift64-phone-validation/issues/48)) ([3bd268f](https://github.com/mateusz-zadorozny/shift64-phone-validation/commit/3bd268fd5547a5b6e421d880c33cc5a63b8bea10))
+
 ## [2.0.1](https://github.com/mateusz-zadorozny/shift64-phone-validation/compare/v2.0.0...v2.0.1) (2026-10-12)
 
 
