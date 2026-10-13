@@ -8,9 +8,10 @@ const baseURL =
 	process.env.WP_BASE_URL ??
 	`http://localhost:${ process.env.WP_ENV_PORT ?? '8888' }`;
 
-// Admin credentials for the specs that log in (admin-* and
-// classic-checkout-block-theme-highlight): the test-env entrypoint writes
-// them to this gitignored file; CI exports TEST_ADMIN_PASSWORD directly.
+// Admin credentials for the specs that log in (admin-*,
+// block-checkout-polish-messages and classic-checkout-classic-theme-highlight):
+// the test-env entrypoint writes them to this gitignored file; CI exports
+// TEST_ADMIN_PASSWORD directly.
 const credentialsFile = '.ai/qa/test-env.env';
 if ( existsSync( credentialsFile ) ) {
 	for ( const line of readFileSync( credentialsFile, 'utf8' ).split( '\n' ) ) {
@@ -27,10 +28,10 @@ export default defineConfig( {
 	outputDir: 'test-results',
 	timeout: 60_000,
 	expect: { timeout: 10_000 },
-	// One shared store: the admin-* specs change global plugin settings and
-	// classic-checkout-block-theme-highlight.spec.ts changes the WooCommerce
-	// checkout page (woocommerce_checkout_page_id), so files must not overlap
-	// in time.
+	// One shared store: the admin-* specs change global plugin settings,
+	// block-checkout-polish-messages.spec.ts the site language and
+	// classic-checkout-classic-theme-highlight.spec.ts the active theme, so
+	// files must not overlap in time.
 	fullyParallel: false,
 	workers: 1,
 	retries: process.env.CI ? 1 : 0,

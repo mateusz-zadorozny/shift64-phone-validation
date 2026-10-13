@@ -77,6 +77,18 @@ seed_instance() {
 	# Every other spec expects English: undo a run interrupted while in Polish.
 	wp site switch-language en_US >/dev/null
 
+	echo "seed: [$instance] classic theme (installed, not activated)"
+	# classic-checkout-classic-theme-highlight.spec.ts switches to it and back:
+	# only a classic theme renders the classic `ul.woocommerce-error` notices.
+	if ! wp theme is-installed twentytwentyone; then
+		wp theme install twentytwentyone >/dev/null
+	fi
+	# Every other spec expects the default block theme: undo a run interrupted
+	# while the classic theme was active.
+	if [ "$(wp option get stylesheet)" = twentytwentyone ]; then
+		wp theme activate "$(wp eval 'echo WP_DEFAULT_THEME;')" >/dev/null
+	fi
+
 	echo "seed: [$instance] plugin defaults"
 	wp option update shift64_phone_validation_enabled yes >/dev/null
 	wp option update shift64_phone_validation_default_country PL >/dev/null
