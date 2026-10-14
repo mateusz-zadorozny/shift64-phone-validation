@@ -1,3 +1,10 @@
+## [2.0.5](https://github.com/mateusz-zadorozny/shift64-phone-validation/compare/v2.0.4...v2.0.5) (2026-10-14)
+
+
+### Bug Fixes
+
+* **checkout:** highlight the phone field the block-checkout error is about ([#52](https://github.com/mateusz-zadorozny/shift64-phone-validation/issues/52)) ([#53](https://github.com/mateusz-zadorozny/shift64-phone-validation/issues/53)) ([47c6591](https://github.com/mateusz-zadorozny/shift64-phone-validation/commit/47c6591c4cb5d3a8cd7d4cdb594963d3d26a2c58))
+
 ## [2.0.4](https://github.com/mateusz-zadorozny/shift64-phone-validation/compare/v2.0.3...v2.0.4) (2026-10-14)
 
 
