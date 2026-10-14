@@ -1,3 +1,10 @@
+## [2.0.4](https://github.com/mateusz-zadorozny/shift64-phone-validation/compare/v2.0.3...v2.0.4) (2026-10-14)
+
+
+### Bug Fixes
+
+* **checkout:** keep the block-checkout highlight for every reworded error code ([#35](https://github.com/mateusz-zadorozny/shift64-phone-validation/issues/35)) ([#51](https://github.com/mateusz-zadorozny/shift64-phone-validation/issues/51)) ([55dd01f](https://github.com/mateusz-zadorozny/shift64-phone-validation/commit/55dd01f81ea5514597aa155fc0ca49163fe3e697))
+
 ## [2.0.3](https://github.com/mateusz-zadorozny/shift64-phone-validation/compare/v2.0.2...v2.0.3) (2026-10-13)
 
 

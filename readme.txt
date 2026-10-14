@@ -4,7 +4,7 @@ Tags: phone validation, phone number, woocommerce, checkout, validation
 Requires at least: 7.1
 Tested up to: 7.1
 Requires PHP: 8.3
-Stable tag: 2.0.3
+Stable tag: 2.0.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -111,6 +111,9 @@ It was installed from a copy of the source code (such as a ZIP of the GitHub rep
 
 == Changelog ==
 
+= 2.0.4 =
+* Fix: Keep the block-checkout highlight for every reworded error code.
+
 = 2.0.3 =
 * Fix: Show dependency notices on Network Admin screens.
 
@@ -138,9 +141,6 @@ It was installed from a copy of the source code (such as a ZIP of the GitHub rep
 
 = 1.4.0 =
 * New: Require PHP 8.3 and upgrade libphonenumber to version 9.
-
-= 1.3.3 =
-* Fix: Harden the input normalizer and the update details screen; delete the settings when the plugin is deleted.
 
 Older releases: [full changelog on GitHub](https://github.com/mateusz-zadorozny/shift64-phone-validation/blob/master/CHANGELOG.md).
 
