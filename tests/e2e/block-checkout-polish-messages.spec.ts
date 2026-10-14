@@ -4,6 +4,7 @@ import {
 	addProductToCart,
 	fillBlockCheckoutByFieldId,
 	INVALID_PL_PHONE,
+	placeOrder,
 } from './helpers/checkout';
 
 // From languages/shift64-phone-validation-pl_PL.po: "%s is not a valid phone
@@ -73,9 +74,7 @@ test( 'block checkout on a Polish store shows the Polish error and highlights th
 	} );
 	expect( scriptMessages ).toContain( POLISH_INVALID_BILLING_PHONE );
 
-	await page
-		.locator( '.wc-block-components-checkout-place-order-button' )
-		.click();
+	await placeOrder( page );
 
 	await expect(
 		page

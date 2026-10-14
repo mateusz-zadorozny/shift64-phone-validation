@@ -203,6 +203,16 @@ The unit suite covers the pure logic and the checkout integration: `Normalizer`,
 
 The e2e suite drives a real WordPress + WooCommerce store with the plugin active, through both checkout flavours (block / Store API and the classic shortcode). It needs Docker and Node 22, the version CI uses (`.nvmrc` pins it, so `nvm use` or `fnm use` picks it up).
 
+Agents start the store with `sh .ai/scripts/test-env-up.sh` and stop it with `sh .ai/scripts/test-env-down.sh`. On a host where they run as root, these scripts hand themselves over to an unprivileged user, because WP-CLI inside wp-env refuses root. That user is `TEST_ENV_RUN_AS`, `wpenv` by default. Set it up once:
+
+```bash
+useradd --system --create-home --shell /bin/bash --groups docker wpenv
+setfacl -m u:wpenv:x /root                                      # every parent directory of the checkout
+setfacl -R -m u:wpenv:rwX,d:u:wpenv:rwX /path/to/the/checkouts  # d: also covers new worktrees
+```
+
+The scripts also install the devDependencies even under a host-wide `NODE_ENV=production`, and use `php8.3` (or newer) when the default `php` is older.
+
 ```bash
 nvm use
 npm ci

@@ -80,8 +80,41 @@ export async function fillClassicCheckout(
 	await billing.getByLabel( /^Email address/ ).fill( customer.email );
 }
 
+/**
+ * Click Place Order, in any store language (button found by class / id).
+ *
+ * The block checkout holds a typed address change for about 1.7 s before it
+ * pushes it to the Store API (POST /wc/store/v1/batch), or pushes it at once
+ * when the field loses focus. A Place Order click that lands while the update
+ * runs is dropped: no checkout request, no notice. Clicking straight after the
+ * last fill did exactly that now and then, because the click's own blur set
+ * off the update. So: leave the field first, which starts any held update
+ * synchronously, wait until the cart and checkout stores are no longer
+ * updating, then click.
+ */
 export async function placeOrder( page: Page ): Promise< void > {
-	await page.getByRole( 'button', { name: /place order/i } ).click();
+	const blockButton = page.locator(
+		'.wc-block-components-checkout-place-order-button'
+	);
+
+	if ( ( await blockButton.count() ) === 0 ) {
+		await page.locator( '#place_order' ).click();
+		return;
+	}
+
+	await page.evaluate( () =>
+		( document.activeElement as HTMLElement | null )?.blur()
+	);
+	await page.waitForFunction( () => {
+		type Select = ( store: string ) => Record< string, () => boolean >;
+		const select = ( window as unknown as { wp: { data: { select: Select } } } )
+			.wp.data.select;
+		return (
+			! select( 'wc/store/cart' ).isCustomerDataUpdating() &&
+			! select( 'wc/store/checkout' ).isCalculating()
+		);
+	} );
+	await blockButton.click();
 }
 
 export async function expectOrderReceived(
