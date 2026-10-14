@@ -208,13 +208,15 @@ if ( ! function_exists( 'get_locale' ) ) {
 // $GLOBALS['shift64_test_pages'] holds the posts get_post() can find (id => WP_Post),
 // 'queried' and 'checkout' are the IDs of the page being viewed and of the configured
 // WooCommerce checkout page, and wp_enqueue_script() records each handle in
-// $GLOBALS['shift64_test_scripts'].
-$GLOBALS['shift64_test_pages']   = array(
+// $GLOBALS['shift64_test_scripts'] and its dependencies in
+// $GLOBALS['shift64_test_script_deps'] (handle => deps).
+$GLOBALS['shift64_test_pages']       = array(
 	'posts'    => array(),
 	'queried'  => 0,
 	'checkout' => 0,
 );
-$GLOBALS['shift64_test_scripts'] = array();
+$GLOBALS['shift64_test_scripts']     = array();
+$GLOBALS['shift64_test_script_deps'] = array();
 
 if ( ! defined( 'SHIFT64_PHONE_VALIDATION_URL' ) ) {
 	define( 'SHIFT64_PHONE_VALIDATION_URL', 'https://shop.test/wp-content/plugins/shift64-phone-validation/' );
@@ -274,7 +276,8 @@ if ( ! function_exists( 'has_shortcode' ) ) {
 
 if ( ! function_exists( 'wp_enqueue_script' ) ) {
 	function wp_enqueue_script( $handle, $src = '', $deps = array(), $ver = false, $args = array() ) {
-		$GLOBALS['shift64_test_scripts'][] = $handle;
+		$GLOBALS['shift64_test_scripts'][]               = $handle;
+		$GLOBALS['shift64_test_script_deps'][ $handle ] = $deps;
 	}
 }
 

@@ -64,12 +64,13 @@ class Assets {
 			);
 		}
 
-		// Block checkout script (vanilla JS, no dependencies).
+		// Block checkout script (vanilla JS). wp-api-fetch lets it read which field a
+		// Store API error is about from the checkout response (#52).
 		if ( self::is_block_checkout() ) {
 			wp_enqueue_script(
 				'shift64-phone-block-checkout-validation',
 				SHIFT64_PHONE_VALIDATION_URL . 'assets/js/block-checkout-validation.js',
-				array(),
+				array( 'wp-api-fetch' ),
 				SHIFT64_PHONE_VALIDATION_VERSION,
 				true
 			);

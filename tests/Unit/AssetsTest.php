@@ -59,6 +59,17 @@ class AssetsTest extends TestCase {
 		$this->assertSame( array( self::BLOCK_SCRIPT ), $this->enqueued() );
 	}
 
+	/**
+	 * Regression for #52: the block script reads which field an error is about from
+	 * the checkout response through wp.apiFetch, so it must load after it.
+	 */
+	public function test_block_script_depends_on_api_fetch(): void {
+		$this->view_page( self::BLOCK_PAGE, self::BLOCK_PAGE );
+		$this->enqueued();
+
+		$this->assertSame( array( 'wp-api-fetch' ), $GLOBALS['shift64_test_script_deps'][ self::BLOCK_SCRIPT ] );
+	}
+
 	private function add_page( int $id, string $content ): void {
 		$GLOBALS['shift64_test_pages']['posts'][ $id ] = new \WP_Post( $id, $content );
 	}
