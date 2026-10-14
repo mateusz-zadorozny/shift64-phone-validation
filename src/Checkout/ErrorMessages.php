@@ -53,6 +53,22 @@ class ErrorMessages {
 	const CONTEXT_BLOCK = 'block';
 
 	/**
+	 * Every code a failed validation can carry, so a theme may reword any of them.
+	 *
+	 * @var string[]
+	 */
+	private const ERROR_CODES = array(
+		ValidationResult::ERROR_MISSING_INTERNATIONAL_PREFIX,
+		ValidationResult::ERROR_INVALID_NUMBER,
+		ValidationResult::ERROR_EMPTY,
+		ValidationResult::ERROR_INVALID_COUNTRY_CODE,
+		ValidationResult::ERROR_NOT_A_NUMBER,
+		ValidationResult::ERROR_TOO_SHORT,
+		ValidationResult::ERROR_TOO_LONG,
+		ValidationResult::ERROR_PARSE_ERROR,
+	);
+
+	/**
 	 * Get the message for classic checkout notices.
 	 *
 	 * @param string|null $error_code One of the ValidationResult::ERROR_* constants.
@@ -80,6 +96,8 @@ class ErrorMessages {
 	 *
 	 * Handed to the block checkout script so it can recognise our notices without
 	 * hardcoding any language: PHP stays the single source of the wording.
+	 * Every error code is included, so a theme that rewords any of them keeps
+	 * the field highlight (#35); identical messages are listed once.
 	 *
 	 * @return array<string, string[]> Messages keyed by FIELD_BILLING / FIELD_SHIPPING.
 	 */
@@ -87,10 +105,13 @@ class ErrorMessages {
 		$messages = array();
 
 		foreach ( array( self::FIELD_BILLING, self::FIELD_SHIPPING ) as $field ) {
-			$messages[ $field ] = array(
-				self::for_block_checkout( ValidationResult::ERROR_MISSING_INTERNATIONAL_PREFIX, $field ),
-				self::for_block_checkout( ValidationResult::ERROR_INVALID_NUMBER, $field ),
-			);
+			$field_messages = array();
+
+			foreach ( self::ERROR_CODES as $error_code ) {
+				$field_messages[] = self::for_block_checkout( $error_code, $field );
+			}
+
+			$messages[ $field ] = array_values( array_unique( $field_messages ) );
 		}
 
 		return $messages;

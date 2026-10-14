@@ -52,8 +52,26 @@ class HooksTest extends TestCase {
 
 		$this->assertSame(
 			array(
-				'billing'  => array( '[block/billing/missing_international_prefix]', '[block/billing/invalid_number]' ),
-				'shipping' => array( '[block/shipping/missing_international_prefix]', '[block/shipping/invalid_number]' ),
+				'billing'  => array(
+					'[block/billing/missing_international_prefix]',
+					'[block/billing/invalid_number]',
+					'[block/billing/empty]',
+					'[block/billing/invalid_country_code]',
+					'[block/billing/not_a_number]',
+					'[block/billing/too_short]',
+					'[block/billing/too_long]',
+					'[block/billing/parse_error]',
+				),
+				'shipping' => array(
+					'[block/shipping/missing_international_prefix]',
+					'[block/shipping/invalid_number]',
+					'[block/shipping/empty]',
+					'[block/shipping/invalid_country_code]',
+					'[block/shipping/not_a_number]',
+					'[block/shipping/too_short]',
+					'[block/shipping/too_long]',
+					'[block/shipping/parse_error]',
+				),
 			),
 			ErrorMessages::all_for_block_checkout()
 		);
