@@ -24,6 +24,9 @@
 	var FIELD_TYPES = ['billing', 'shipping'];
 	var NOTICE_SELECTOR = '.wc-block-components-notice-banner.is-error, .wc-block-store-notice.is-error';
 	var CHECKOUT_PATH = /\/wc\/store(\/v\d+)?\/checkout\/?(\?|$)/;
+	// WooCommerce Blocks' saved-address card and its form; .is-editing marks it open.
+	var ADDRESS_WRAPPER_SELECTOR = '.wc-block-components-address-address-wrapper';
+	var ADDRESS_EDIT_SELECTOR = '.wc-block-components-address-card__edit';
 
 	// Field type of the phone error in the last place-order response, if any.
 	var responseFieldType = null;
@@ -51,16 +54,59 @@
 		return input.closest('.wc-block-components-text-input') || input.parentElement;
 	}
 
+	function markField(input, type) {
+		// .has-error is the class WooCommerce Blocks styles itself.
+		findFieldWrapper(input).classList.add('has-error');
+		input.setAttribute('aria-invalid', 'true');
+		input.setAttribute('data-shift64-phone-error', type);
+	}
+
+	/**
+	 * Open the address form a phone field sits in when it is collapsed.
+	 *
+	 * A saved address is shown as a summary card, with the form still in the page
+	 * but hidden, so a mark on its phone field cannot be seen (#54). The card's own
+	 * Edit control opens it, as the shopper would. An open form is left alone.
+	 *
+	 * @param {Element} input Phone input.
+	 * @return {boolean} Whether the form was opened.
+	 */
+	function openCollapsedAddress(input) {
+		var wrapper = input.closest(ADDRESS_WRAPPER_SELECTOR);
+		var edit;
+
+		if (!wrapper || wrapper.classList.contains('is-editing')) {
+			return false;
+		}
+
+		edit = wrapper.querySelector(ADDRESS_EDIT_SELECTOR);
+		if (!edit) {
+			return false;
+		}
+
+		edit.click();
+
+		return true;
+	}
+
 	function highlightField(type) {
 		var input = findPhoneField(type);
 		if (!input) {
 			return;
 		}
 
-		// .has-error is the class WooCommerce Blocks styles itself.
-		findFieldWrapper(input).classList.add('has-error');
-		input.setAttribute('aria-invalid', 'true');
-		input.setAttribute('data-shift64-phone-error', type);
+		markField(input, type);
+
+		if (openCollapsedAddress(input)) {
+			// React re-renders the form it has just opened; mark it again after that.
+			window.requestAnimationFrame(function() {
+				var field = findPhoneField(type);
+
+				if (field) {
+					markField(field, type);
+				}
+			});
+		}
 	}
 
 	function clearFieldError(input) {
