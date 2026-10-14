@@ -9,7 +9,7 @@
  * License URI:     https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:     shift64-phone-validation
  * Domain Path:     /languages
- * Version:         2.0.5
+ * Version:         2.0.6
  * Requires PHP:    8.3
  * Requires at least: 7.1
  * Requires Plugins: woocommerce
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define plugin constants.
-define( 'SHIFT64_PHONE_VALIDATION_VERSION', '2.0.5' );
+define( 'SHIFT64_PHONE_VALIDATION_VERSION', '2.0.6' );
 define( 'SHIFT64_PHONE_VALIDATION_FILE', __FILE__ );
 define( 'SHIFT64_PHONE_VALIDATION_PATH', plugin_dir_path( __FILE__ ) );
 define( 'SHIFT64_PHONE_VALIDATION_URL', plugin_dir_url( __FILE__ ) );

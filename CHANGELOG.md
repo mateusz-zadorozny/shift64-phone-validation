@@ -1,3 +1,10 @@
+## [2.0.6](https://github.com/mateusz-zadorozny/shift64-phone-validation/compare/v2.0.5...v2.0.6) (2026-10-14)
+
+
+### Bug Fixes
+
+* **checkout:** open a collapsed block-checkout address so the phone error is visible ([#54](https://github.com/mateusz-zadorozny/shift64-phone-validation/issues/54)) ([#55](https://github.com/mateusz-zadorozny/shift64-phone-validation/issues/55)) ([8bb7f99](https://github.com/mateusz-zadorozny/shift64-phone-validation/commit/8bb7f994cbee4aa932fe2ef9c8b9619f8aa8b489))
+
 ## [2.0.5](https://github.com/mateusz-zadorozny/shift64-phone-validation/compare/v2.0.4...v2.0.5) (2026-10-14)
 
 
