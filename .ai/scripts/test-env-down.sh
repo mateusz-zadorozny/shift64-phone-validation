@@ -4,10 +4,22 @@
 # history:
 #   2026-09-22 generated. Stops the wp-env containers this checkout started (DB volume
 #              kept so the next boot is warm); --destroy removes containers and volumes.
+#   2026-10-14 a root caller is handed to the same unprivileged user as test-env-up.sh:
+#              wp-env keeps its state in that user's home. Keep this when regenerating.
 set -eu
 
 ROOT=$(cd "$(dirname "$0")/../.." && pwd)
 cd "$ROOT"
+
+# --- host guard: drive wp-env as the user test-env-up.sh started it as ---
+if [ "$(id -u)" = 0 ]; then
+	RUN_AS=${TEST_ENV_RUN_AS:-wpenv}
+	if ! id "$RUN_AS" >/dev/null 2>&1; then
+		echo "test-env-down: running as root, which wp-env cannot do. Create user '$RUN_AS' (README, Development > Tests), or set TEST_ENV_RUN_AS to an existing one." >&2
+		exit 1
+	fi
+	exec sudo -u "$RUN_AS" -H env PATH="$PATH" sh "$ROOT/.ai/scripts/test-env-down.sh" "$@"
+fi
 
 QA_DIR=.ai/qa
 ENV_DESCRIPTOR=$QA_DIR/test-env.json

@@ -11,10 +11,44 @@
 #              env recipe/seed (REPROVISION_INPUTS) and the lockfiles invalidate reuse.
 #              TTL defaults to 24h because a cold boot costs minutes and the deep
 #              probes (Store API + admin login) already catch a dead database.
+#   2026-10-14 host guards for agent hosts: a root caller is handed to an unprivileged
+#              user (WP-CLI in wp-env's cli container refuses root), npm ci installs
+#              devDependencies even under NODE_ENV=production, and an older default php
+#              is replaced by php8.3+ when installed. Keep these when regenerating.
 set -eu
 
 ROOT=$(cd "$(dirname "$0")/../.." && pwd)
 cd "$ROOT"
+
+# --- host guard: never run wp-env as root ---
+# wp-env runs WP-CLI in its cli container as the calling user, WP-CLI refuses root, and
+# wp-env cannot pass WP_CLI_ALLOW_ROOT through. Hand the run to TEST_ENV_RUN_AS (a user
+# in the docker group with access to this checkout; README, Development > Tests).
+if [ "$(id -u)" = 0 ]; then
+	RUN_AS=${TEST_ENV_RUN_AS:-wpenv}
+	if ! id "$RUN_AS" >/dev/null 2>&1; then
+		echo "test-env-up: running as root, which wp-env cannot do (WP-CLI refuses root). Create user '$RUN_AS' in the docker group with access to this checkout (README, Development > Tests), or set TEST_ENV_RUN_AS to an existing one." >&2
+		exit 1
+	fi
+	echo "test-env-up: running as root, handing over to user '$RUN_AS'"
+	exec sudo -u "$RUN_AS" -H env PATH="$PATH" WP_ENV_PORT="${WP_ENV_PORT:-}" \
+		TEST_ENV_CACHE_TTL_SECONDS="${TEST_ENV_CACHE_TTL_SECONDS:-}" \
+		sh "$ROOT/.ai/scripts/test-env-up.sh" "$@"
+fi
+
+# --- host guard: composer.json needs PHP 8.3+ ---
+# Put the newest installed php8.x first on PATH when the default php is older.
+if ! php -r 'exit(PHP_VERSION_ID >= 80300 ? 0 : 1);' 2>/dev/null; then
+	for v in 8.5 8.4 8.3; do
+		if PHP_BIN=$(command -v "php$v" 2>/dev/null); then
+			mkdir -p .ai/qa/bin
+			ln -sf "$PHP_BIN" .ai/qa/bin/php
+			PATH="$ROOT/.ai/qa/bin:$PATH"; export PATH
+			echo "test-env-up: default php is older than 8.3, using $PHP_BIN"
+			break
+		fi
+	done
+fi
 
 # --- project-specific variables (tweak here, not in the logic below) ---
 QA_DIR=.ai/qa
@@ -182,7 +216,9 @@ else
 	if build_needed; then
 		echo "test-env-up: preparing workspace (composer install, npm ci)"
 		composer install --prefer-dist --no-interaction --quiet
-		npm ci --no-audit --no-fund --loglevel=error
+		# --include=dev: wp-env and Playwright are devDependencies, which a host-wide
+		# NODE_ENV=production would otherwise skip.
+		npm ci --include=dev --no-audit --no-fund --loglevel=error
 		printf '{ "builtAt": "%s", "sourceFingerprint": "%s", "projectRoot": "%s", "artifactPaths": "%s" }\n' \
 			"$(date -u +%FT%TZ)" "$(fingerprint)" "$(pwd)" "$ARTIFACTS" > "$BUILD_CACHE"
 	else
