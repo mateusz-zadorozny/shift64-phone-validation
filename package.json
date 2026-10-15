@@ -9,8 +9,12 @@
     "env:stop": "wp-env stop",
     "env:destroy": "wp-env destroy",
     "env:seed": "sh tests/e2e/bin/seed.sh",
+    "demo:start": "sh tests/e2e/demo/bin/demo.sh start",
+    "demo:stop": "sh tests/e2e/demo/bin/demo.sh stop",
+    "demo:destroy": "sh tests/e2e/demo/bin/demo.sh destroy",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:demo": "WP_DEMO=1 playwright test --project=demo"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",
