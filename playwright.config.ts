@@ -8,6 +8,13 @@ const baseURL =
 	process.env.WP_BASE_URL ??
 	`http://localhost:${ process.env.WP_ENV_PORT ?? '8888' }`;
 
+// The demo network (.wp-env.demo.json, npm run demo:start) on its own port.
+// Its project exists only with WP_DEMO=1 (npm run test:e2e:demo), so a plain
+// `playwright test` runs the single-site suite alone, as before.
+const demoBaseURL =
+	process.env.WP_DEMO_BASE_URL ??
+	`http://localhost:${ process.env.WP_DEMO_PORT ?? '8890' }`;
+
 // Admin credentials for the specs that log in (admin-*,
 // block-checkout-polish-messages and classic-checkout-classic-theme-highlight):
 // the test-env entrypoint writes them to this gitignored file; CI exports
@@ -44,4 +51,19 @@ export default defineConfig( {
 		screenshot: 'only-on-failure',
 		...devices[ 'Desktop Chrome' ],
 	},
+	projects: [
+		{
+			name: 'default',
+			testIgnore: /tests\/e2e\/demo\//,
+		},
+		...( process.env.WP_DEMO === '1'
+			? [
+					{
+						name: 'demo',
+						testDir: './tests/e2e/demo',
+						use: { baseURL: demoBaseURL },
+					},
+			  ]
+			: [] ),
+	],
 } );
