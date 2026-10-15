@@ -43,6 +43,8 @@ class CiDocsOnlyClassifierTest extends TestCase {
 			'QA environment file'                    => array( array( '.ai/qa/test-env.env' ), 'false' ),
 			'translation'                            => array( array( 'languages/shift64-phone-validation-pl_PL.po' ), 'false' ),
 			'workflow'                               => array( array( '.github/workflows/e2e.yml' ), 'false' ),
+			// The demo network's wp-env config, read by the playwright-multisite job.
+			'demo wp-env config'                     => array( array( '.wp-env.demo.json' ), 'false' ),
 			'docs plus code'                         => array( array( 'README.md', 'src/Validation/Normalizer.php' ), 'false' ),
 			'code listed after docs still counts'    => array( array( 'docs/CI-CD-SETUP.md', '.ai/specs/x.md', 'composer.json' ), 'false' ),
 			// git quotes non-ASCII paths; the quote is not on the allowlist.
@@ -91,6 +93,7 @@ class CiDocsOnlyClassifierTest extends TestCase {
 			'PHPUnit'                => array( 'code-quality.yml', 'phpunit' ),
 			'Package + Plugin Check' => array( 'code-quality.yml', 'package' ),
 			'E2E'                    => array( 'e2e.yml', 'playwright' ),
+			'E2E multisite'          => array( 'e2e.yml', 'playwright-multisite' ),
 		);
 	}
 
