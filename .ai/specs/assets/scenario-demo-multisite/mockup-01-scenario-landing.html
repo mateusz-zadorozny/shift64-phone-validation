@@ -1,0 +1,25 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Mockup — scenario landing (/pl/)</title><style>*{box-sizing:border-box}body{margin:0;font:16px/1.5 -apple-system,"Segoe UI",Roboto,sans-serif;color:#1e1e1e;background:#f6f7f7}.bar{background:#1e1e1e;color:#fff;padding:8px 24px;font-size:13px}.bar b{color:#9ec2e6}main{max-width:880px;margin:0 auto;padding:40px 24px}h1{font-size:34px;margin:0 0 6px}.lead{color:#50575e;margin:0 0 18px;font-size:18px}.chips span{display:inline-block;background:#fff;border:1px solid #dcdcde;border-radius:999px;padding:3px 12px;font-size:13px;margin:0 6px 6px 0}.cta{display:block;text-align:center;background:#007cba;color:#fff;text-decoration:none;font-size:24px;font-weight:600;padding:26px;border-radius:8px;margin:26px 0;outline:3px solid transparent}.cta:focus{outline-color:#f0b849}.try{background:#fff;border:1px solid #dcdcde;border-radius:8px;padding:16px 20px}.try h2,.other h2{font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:#50575e;margin:0 0 10px}.try table{width:100%;border-collapse:collapse;font-size:15px}.try td{padding:6px 4px;border-top:1px solid #f0f0f1}code{background:#f0f0f1;padding:1px 6px;border-radius:4px}.ok{color:#008a20;font-weight:600}.bad{color:#d63638;font-weight:600}.admin{font-size:14px;margin:14px 0 0;color:#50575e}.admin a{color:#007cba}.other{margin-top:36px}.grid{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}.grid a{display:block;background:#fff;border:1px solid #dcdcde;border-radius:8px;padding:12px 14px;text-decoration:none;color:#1e1e1e}.grid a strong{display:block;color:#007cba}.grid a small{color:#50575e}.grid a[aria-current]{border:2px solid #007cba;background:#f0f6fc}.note{font-size:12px;color:#787c82;margin-top:28px}</style><body>
+<div class="bar">SHIFT64 Phone Validation · demo network · <b>localhost:8890/pl/</b> · illustrative mockup</div>
+<main>
+<h1>Polish error messages</h1>
+<p class="lead">Site language is Polish: try an invalid number and the checkout error comes back in Polish.</p>
+<div class="chips"><span>Locale: pl_PL</span><span>Checkout: block</span><span>Mode: default country + international</span><span>Format: E.164</span></div>
+<a class="cta" href="#">Add to cart &amp; go to checkout →</a>
+<section class="try"><h2>Try</h2><table>
+<tr><td><code>500 123 456</code></td><td class="ok">valid</td><td>stored as <code>+48500123456</code></td></tr>
+<tr><td><code>100 000 000</code></td><td class="bad">invalid</td><td>“Telefon do płatności nie jest prawidłowym numerem telefonu.”</td></tr>
+</table></section>
+<p class="admin"><a href="#">This site's phone settings</a> · <a href="#">Network Admin</a> — log in as <code>admin</code> first.</p>
+<nav class="other" aria-label="Scenarios"><h2>Other scenarios</h2><ul class="grid">
+<li><a href="#"><strong>/</strong><small>Network index — all scenarios</small></a></li>
+<li><a href="#"><strong>/en/</strong><small>Baseline: PL store, E.164</small></a></li>
+<li><a href="#" aria-current="page"><strong>/pl/</strong><small>Polish error messages</small></a></li>
+<li><a href="#"><strong>/international-only/</strong><small>Numbers without + are rejected</small></a></li>
+<li><a href="#"><strong>/format-international/</strong><small>Stored as +48 500 123 456</small></a></li>
+<li><a href="#"><strong>/format-national/</strong><small>Stored as 500 123 456</small></a></li>
+<li><a href="#"><strong>/no-format/</strong><small>Validated, stored as typed</small></a></li>
+<li><a href="#"><strong>/classic/</strong><small>Classic checkout + classic theme</small></a></li>
+<li><a href="#"><strong>/disabled/</strong><small>Plugin off — WooCommerce check only</small></a></li>
+</ul></nav>
+<p class="note">Settings are reset to this scenario on every <code>npm run demo:start</code>.</p>
+</main></body></html>
