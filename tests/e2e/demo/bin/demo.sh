@@ -5,7 +5,8 @@
 # default single-site env (.wp-env.json, port 8888) and never touches it.
 #
 # Usage: sh tests/e2e/demo/bin/demo.sh start|stop|destroy [wp-env flags]
-#   (npm run demo:start / demo:stop / demo:destroy; e.g. `npm run demo:destroy -- --force`)
+#   (npm run demo:start / demo:stop / demo:destroy; e.g. `npm run demo:start -- --update`,
+#   `npm run demo:destroy -- --force`)
 # Port: WP_DEMO_PORT (default 8890). WP_ENV_PORT is deliberately not read: the
 # default env, playwright.config.ts and .ai/scripts/test-env-up.sh use it.
 set -eu
@@ -63,14 +64,16 @@ wp_env() { WP_ENV_PORT=$PORT npx --no-install wp-env "$@"; }
 
 case "$COMMAND" in
 	start)
+		shift
 		composer install --prefer-dist --no-interaction
 		# The afterStart hook (tests/e2e/demo/bin/seed.sh) builds the network.
-		if ! wp_env start --config="$CONFIG"; then
+		if ! wp_env start --config="$CONFIG" "$@"; then
 			echo "demo: wp-env could not start. If port $PORT is taken, pick another one: WP_DEMO_PORT=8891 npm run demo:start" >&2
 			exit 1
 		fi
 		# The network stores its domain at install time: a port change needs a fresh network.
-		domain=$(wp_env run --config="$CONFIG" cli wp eval 'echo get_network()->domain;' 2>/dev/null | tail -n 1 | tr -d '\r')
+		domain=$(wp_env run --config="$CONFIG" cli wp eval 'echo get_network()->domain, "\n";' 2>/dev/null |
+			tr -d '\r' | grep -E '^[A-Za-z0-9.-]+(:[0-9]+)?$' | tail -n 1 || true)
 		if [ -n "$domain" ] && [ "$domain" != "localhost:$PORT" ]; then
 			echo "demo: warning: the network was installed for '$domain', not 'localhost:$PORT'. Run 'npm run demo:destroy' and start again to change the port." >&2
 		fi

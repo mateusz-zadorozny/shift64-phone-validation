@@ -14,7 +14,7 @@
     "demo:destroy": "sh tests/e2e/demo/bin/demo.sh destroy",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "test:e2e:demo": "WP_DEMO=1 playwright test --project=demo"
+    "test:e2e:demo": "WP_DEMO=1 TEST_ADMIN_PASSWORD=${TEST_ADMIN_PASSWORD:-password} playwright test --project=demo"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",

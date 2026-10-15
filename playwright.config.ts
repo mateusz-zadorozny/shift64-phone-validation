@@ -54,7 +54,7 @@ export default defineConfig( {
 	projects: [
 		{
 			name: 'default',
-			testIgnore: /tests\/e2e\/demo\//,
+			testIgnore: /tests[\\/]e2e[\\/]demo[\\/]/,
 		},
 		...( process.env.WP_DEMO === '1'
 			? [

@@ -235,7 +235,7 @@ A second, opt-in environment shows the plugin in several configurations side by 
 ```bash
 npm run demo:start      # composer install + wp-env start --config=.wp-env.demo.json; seeds every site
 open http://localhost:8890/
-npm run test:e2e:demo   # the multisite smoke spec (tests/e2e/demo/) against it
+npm run test:e2e:demo   # the multisite smoke spec (tests/e2e/demo/); logs in as admin / password unless TEST_ADMIN_PASSWORD is set
 npm run demo:stop       # npm run demo:destroy -- --force wipes it
 ```
 
