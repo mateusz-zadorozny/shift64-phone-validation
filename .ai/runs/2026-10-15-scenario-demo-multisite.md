@@ -44,17 +44,19 @@ The spec's Phasing suggests two PRs. The pipeline contract is one implementation
 
 ## Progress
 
+PR: #58
+
 > Convention: `- [ ]` pending, `- [x]` done. Append ` — <commit sha>` when a step lands. Do not rename step titles.
 
 ### Phase 1: demo network
 
-- [ ] 1.1 Demo wp-env config, demo.sh entrypoint and npm scripts
-- [ ] 1.2 Scenario file, per-site seed and network seed script
-- [ ] 1.3 Landing mu-plugin and buy endpoint
-- [ ] 1.4 README Demo network section
+- [x] 1.1 Demo wp-env config, demo.sh entrypoint and npm scripts — ac18841
+- [x] 1.2 Scenario file, per-site seed and network seed script — c07d73e
+- [x] 1.3 Landing mu-plugin and buy endpoint — b776f57
+- [x] 1.4 README Demo network section — d9f3b49
 
 ### Phase 2: multisite smoke in CI
 
-- [ ] 2.1 Playwright projects split and sitePath helper
-- [ ] 2.2 Multisite smoke spec
-- [ ] 2.3 CI job and docs
+- [x] 2.1 Playwright projects split and sitePath helper — a709dd2
+- [x] 2.2 Multisite smoke spec — a40b75e
+- [x] 2.3 CI job and docs — d407a9d
