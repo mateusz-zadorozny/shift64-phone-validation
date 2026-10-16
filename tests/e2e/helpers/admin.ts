@@ -81,6 +81,34 @@ export async function setOutputFormat(
 	await saveSettings( page );
 }
 
+export type ValidationModeLabel =
+	| 'Default country + international'
+	| 'International only';
+
+export async function setValidationMode(
+	page: Page,
+	label: ValidationModeLabel
+): Promise< void > {
+	await openPhoneValidationSettings( page );
+	// A selectWoo combobox over the native <select>, as for Output Format.
+	const row = page.getByRole( 'row', { name: /Validation Mode/ } );
+	await row.locator( 'select' ).selectOption( { label }, { force: true } );
+	await saveSettings( page );
+}
+
+export async function setFormatOnSave(
+	page: Page,
+	enabled: boolean
+): Promise< void > {
+	await openPhoneValidationSettings( page );
+	await page
+		.getByRole( 'checkbox', {
+			name: 'Automatically format phone numbers when saving',
+		} )
+		.setChecked( enabled );
+	await saveSettings( page );
+}
+
 /**
  * Site Language values as WordPress stores them: English (United States) is
  * the empty string. Other languages must already be installed, see
