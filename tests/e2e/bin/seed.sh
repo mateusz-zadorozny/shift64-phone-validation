@@ -94,6 +94,7 @@ seed_instance() {
 	wp option update shift64_phone_validation_default_country PL >/dev/null
 	wp option update shift64_phone_validation_validation_mode default_and_international >/dev/null
 	wp option update shift64_phone_validation_output_format E164 >/dev/null
+	wp option update shift64_phone_validation_format_on_save yes >/dev/null
 
 	echo "seed: [$instance] done"
 }

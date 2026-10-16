@@ -9,7 +9,8 @@ const baseURL =
 	`http://localhost:${ process.env.WP_ENV_PORT ?? '8888' }`;
 
 // Admin credentials for the specs that log in (admin-*,
-// block-checkout-polish-messages and classic-checkout-classic-theme-highlight):
+// block-checkout-polish-messages, block-checkout-saved-customer-address-highlight
+// and classic-checkout-classic-theme-highlight):
 // the test-env entrypoint writes them to this gitignored file; CI exports
 // TEST_ADMIN_PASSWORD directly.
 const credentialsFile = '.ai/qa/test-env.env';
