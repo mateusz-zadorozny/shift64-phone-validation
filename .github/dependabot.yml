@@ -1,0 +1,23 @@
+# Dependabot: keeps the bundled libphonenumber metadata current.
+#
+# Google publishes new numbering rules about every two weeks, and they only reach shops
+# through a plugin release, so each update is opened as a `fix(deps):` pull request:
+# merged, it cuts a patch release. Only this package is watched; dev tools are updated
+# by hand. `lockfile-only` keeps the `^9.0` constraint, so a new major never arrives
+# unannounced (docs/CI-CD-SETUP.md, *Dependency updates*).
+
+version: 2
+updates:
+  - package-ecosystem: "composer"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    versioning-strategy: "lockfile-only"
+    allow:
+      - dependency-name: "giggsey/libphonenumber-for-php-lite"
+    open-pull-requests-limit: 1
+    commit-message:
+      prefix: "fix"
+      include: "scope"
+    labels: []
