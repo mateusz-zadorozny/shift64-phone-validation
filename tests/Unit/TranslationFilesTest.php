@@ -78,34 +78,43 @@ class TranslationFilesTest extends TestCase {
 	public function test_german_checkout_messages(): void {
 		$this->use_locale_file( 'de_DE' );
 		$this->assertSame( 'Bitte gib eine gültige Telefonnummer ein.', ErrorMessages::for_classic_checkout( ValidationResult::ERROR_INVALID_NUMBER, ErrorMessages::FIELD_BILLING ) );
-		$this->assertSame( 'Telefon (Rechnung) ist keine gültige Telefonnummer.', ErrorMessages::for_block_checkout( ValidationResult::ERROR_INVALID_NUMBER, ErrorMessages::FIELD_BILLING ) );
-		$this->assertSame( 'Telefon (Lieferung) muss eine Ländervorwahl enthalten.', ErrorMessages::for_block_checkout( ValidationResult::ERROR_MISSING_INTERNATIONAL_PREFIX, ErrorMessages::FIELD_SHIPPING ) );
+		$this->assertSame( 'Telefon (Rechnungsadresse) ist keine gültige Telefonnummer.', ErrorMessages::for_block_checkout( ValidationResult::ERROR_INVALID_NUMBER, ErrorMessages::FIELD_BILLING ) );
+		$this->assertSame( 'Telefon (Lieferadresse) muss eine Ländervorwahl enthalten.', ErrorMessages::for_block_checkout( ValidationResult::ERROR_MISSING_INTERNATIONAL_PREFIX, ErrorMessages::FIELD_SHIPPING ) );
 
 		$this->use_locale_file( 'de_DE_formal' );
 		$this->assertSame( 'Bitte geben Sie eine gültige Telefonnummer ein.', ErrorMessages::for_classic_checkout( ValidationResult::ERROR_INVALID_NUMBER, ErrorMessages::FIELD_BILLING ) );
-		$this->assertSame( 'Bitte geben Sie eine gültige Telefonnummer für die Lieferung ein.', ErrorMessages::for_classic_checkout( ValidationResult::ERROR_INVALID_NUMBER, ErrorMessages::FIELD_SHIPPING ) );
+		$this->assertSame( 'Bitte geben Sie eine gültige Telefonnummer für die Lieferadresse ein.', ErrorMessages::for_classic_checkout( ValidationResult::ERROR_INVALID_NUMBER, ErrorMessages::FIELD_SHIPPING ) );
 	}
 
 	/**
-	 * de_DE_formal is the "Sie" variant: no "du" form anywhere.
+	 * de_DE_formal is the "Sie" variant: no "du" pronoun, no "du" imperative before a
+	 * sentence's first comma ("Wähle das Format" - "Wählen Sie" passes), and every
+	 * "Bitte ..." request says "Sie". "/u" makes \b and \w Unicode-aware in PHP.
 	 */
 	public function test_formal_german_never_uses_du(): void {
 		foreach ( self::read_po( 'de_DE_formal' ) as $msgid => $msgstr ) {
-			$this->assertDoesNotMatchRegularExpression( '/\b(du|dich|dir|dein\w*|gib|wähle|lege|installiere)\b/iu', $msgstr, "Informal address in de_DE_formal: {$msgid}" );
+			$this->assertDoesNotMatchRegularExpression( '/\b(du|dich|dir|dein\w*|euch|euer\w*)\b/iu', $msgstr, "Informal address in de_DE_formal: {$msgid}" );
+			$this->assertDoesNotMatchRegularExpression( '/(^|[.!?]\s+)(Bitte\s+)?(gib|nimm|sieh|lies|wähle|lege|gehe|prüfe|aktiviere|installiere|klicke|trage)\b/iu', $msgstr, "Informal imperative in de_DE_formal: {$msgid}" );
+			if ( preg_match( '/\bBitte\b/u', $msgstr ) ) {
+				$this->assertMatchesRegularExpression( '/\bSie\b/u', $msgstr, "A request without \"Sie\" in de_DE_formal: {$msgid}" );
+			}
 		}
 	}
 
 	/**
-	 * de_DE is the "du" variant, as WordPress's own de_DE: no "Sie" form anywhere.
+	 * de_DE is the "du" variant, as WordPress's own de_DE: no "Sie" address. Only a
+	 * capitalised "Sie/Ihr..." inside a sentence counts; at a sentence start it may be
+	 * a correct third-person "sie" (the number).
 	 */
 	public function test_informal_german_never_uses_sie(): void {
 		foreach ( self::read_po( 'de_DE' ) as $msgid => $msgstr ) {
-			$this->assertDoesNotMatchRegularExpression( '/\b(Sie|Ihnen|Ihr\w*)\b/u', $msgstr, "Formal address in de_DE: {$msgid}" );
+			$this->assertDoesNotMatchRegularExpression( '/(?<=[\p{L},;]\s)(Sie|Ihnen|Ihr\w*)\b/u', $msgstr, "Formal address in de_DE: {$msgid}" );
 		}
 	}
 
 	/**
-	 * Only the strings that address the reader differ between the two variants.
+	 * Only the strings that address the reader differ between the two variants. Lists
+	 * English msgids, so rewording one of them in the source means updating it here.
 	 */
 	public function test_german_variants_differ_only_in_the_form_of_address(): void {
 		$informal = self::read_po( 'de_DE' );
@@ -179,7 +188,8 @@ class TranslationFilesTest extends TestCase {
 	}
 
 	/**
-	 * Minimal reader for the files WP-CLI writes: no plurals, no contexts.
+	 * Minimal reader for the files WP-CLI writes: no plurals, no contexts. A fuzzy entry
+	 * is not translated (msgfmt leaves it out of the .mo), so it is read as empty.
 	 *
 	 * @return array<string, string>
 	 */
@@ -188,9 +198,12 @@ class TranslationFilesTest extends TestCase {
 		$key     = null;
 		$current = null;
 		$msgid   = '';
+		$fuzzy   = false;
 
 		foreach ( file( $file, FILE_IGNORE_NEW_LINES ) as $line ) {
-			if ( preg_match( '/^(msgid|msgstr) "(.*)"$/', $line, $m ) ) {
+			if ( preg_match( '/^#,.*\bfuzzy\b/', $line ) ) {
+				$fuzzy = true;
+			} elseif ( preg_match( '/^(msgid|msgstr) "(.*)"$/', $line, $m ) ) {
 				$key = $m[1];
 				if ( 'msgid' === $key ) {
 					$msgid = stripcslashes( $m[2] );
@@ -204,12 +217,13 @@ class TranslationFilesTest extends TestCase {
 					$current .= stripcslashes( $m[1] );
 				}
 			} elseif ( '' === trim( $line ) && null !== $current ) {
-				$entries[ $msgid ] = $current;
+				$entries[ $msgid ] = $fuzzy ? '' : $current;
 				$current           = null;
+				$fuzzy             = false;
 			}
 		}
 		if ( null !== $current ) {
-			$entries[ $msgid ] = $current;
+			$entries[ $msgid ] = $fuzzy ? '' : $current;
 		}
 
 		unset( $entries[''] );

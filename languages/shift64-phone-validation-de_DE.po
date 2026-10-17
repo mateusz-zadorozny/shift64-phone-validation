@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2026-10-12T16:19:04+00:00\n"
-"PO-Revision-Date: 2026-10-17T15:22:12+00:00\n"
+"PO-Revision-Date: 2026-10-17T15:30:21+00:00\n"
 "Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: WP-CLI 2.12.0\n"
@@ -41,17 +41,17 @@ msgstr "https://shift64.com"
 
 #: shift64-phone-validation.php:72
 msgid "SHIFT64 Phone Validation for WooCommerce cannot run because its bundled vendor folder is missing. Reinstall the plugin from WordPress.org or from the release ZIP on GitHub."
-msgstr "SHIFT64 Telefonnummernprüfung für WooCommerce kann nicht ausgeführt werden, weil der mitgelieferte Ordner vendor fehlt. Installiere das Plugin erneut von WordPress.org oder aus der Release-ZIP-Datei auf GitHub."
+msgstr "SHIFT64 Telefonnummernprüfung für WooCommerce kann nicht ausgeführt werden, weil der mitgelieferte Ordner „vendor“ fehlt. Installiere das Plugin erneut von WordPress.org oder aus der Release-ZIP-Datei auf GitHub."
 
 #. translators: 1: minimum WordPress version, e.g. 7.1, 2: WordPress version this site runs
 #: src/Admin/DependencyChecker.php:78
 #, php-format
 msgid "SHIFT64 Phone Validation for WooCommerce requires WordPress %1$s or later, and this site runs WordPress %2$s. Until WordPress is updated, phone numbers are not checked at checkout."
-msgstr "SHIFT64 Telefonnummernprüfung für WooCommerce benötigt WordPress %1$s oder neuer, diese Website verwendet WordPress %2$s. Bis WordPress aktualisiert ist, werden Telefonnummern an der Kasse nicht geprüft."
+msgstr "SHIFT64 Telefonnummernprüfung für WooCommerce benötigt WordPress %1$s oder neuer; auf dieser Website läuft WordPress %2$s. Bis WordPress aktualisiert ist, werden Telefonnummern an der Kasse nicht geprüft."
 
 #: src/Admin/DependencyChecker.php:122
 msgid "SHIFT64 Phone Validation for WooCommerce requires WooCommerce to be installed and activated."
-msgstr "SHIFT64 Telefonnummernprüfung für WooCommerce benötigt ein installiertes und aktiviertes WooCommerce."
+msgstr "SHIFT64 Telefonnummernprüfung für WooCommerce setzt voraus, dass WooCommerce installiert und aktiviert ist."
 
 #: src/Admin/Settings.php:54
 msgid "Phone Validation"
@@ -311,7 +311,7 @@ msgstr "Komoren"
 
 #: src/Admin/Settings.php:202
 msgid "Congo"
-msgstr "Kongo"
+msgstr "Republik Kongo"
 
 #: src/Admin/Settings.php:203
 msgid "Congo, Democratic Republic"
@@ -627,7 +627,7 @@ msgstr "Mikronesien"
 
 #: src/Admin/Settings.php:281
 msgid "Moldova"
-msgstr "Moldau"
+msgstr "Republik Moldau"
 
 #: src/Admin/Settings.php:282
 msgid "Monaco"
@@ -703,7 +703,7 @@ msgstr "Palau"
 
 #: src/Admin/Settings.php:300
 msgid "Palestine"
-msgstr "Palästina"
+msgstr "Palästinensische Gebiete"
 
 #: src/Admin/Settings.php:301
 msgid "Panama"
@@ -951,11 +951,11 @@ msgstr "Simbabwe"
 
 #: src/Checkout/ErrorMessages.php:67
 msgid "Shipping phone number must contain country prefix."
-msgstr "Die Telefonnummer für die Lieferung muss eine Ländervorwahl enthalten."
+msgstr "Die Telefonnummer der Lieferadresse muss eine Ländervorwahl enthalten."
 
 #: src/Checkout/ErrorMessages.php:68
 msgid "Please enter a valid shipping phone number."
-msgstr "Bitte gib eine gültige Telefonnummer für die Lieferung ein."
+msgstr "Bitte gib eine gültige Telefonnummer für die Lieferadresse ein."
 
 #: src/Checkout/ErrorMessages.php:71
 msgid "Phone number must contain country prefix."
@@ -967,11 +967,11 @@ msgstr "Bitte gib eine gültige Telefonnummer ein."
 
 #: src/Checkout/ErrorMessages.php:110
 msgid "Shipping phone"
-msgstr "Telefon (Lieferung)"
+msgstr "Telefon (Lieferadresse)"
 
 #: src/Checkout/ErrorMessages.php:111
 msgid "Billing phone"
-msgstr "Telefon (Rechnung)"
+msgstr "Telefon (Rechnungsadresse)"
 
 #. translators: %s: field label (Billing phone or Shipping phone)
 #: src/Checkout/ErrorMessages.php:115
@@ -991,7 +991,7 @@ msgstr "Die Telefonnummer darf nicht leer sein."
 
 #: src/Validation/PhoneValidator.php:62
 msgid "Phone number must include international prefix (+)."
-msgstr "Die Telefonnummer muss die internationale Vorwahl (+) enthalten."
+msgstr "Die Telefonnummer muss mit der internationalen Vorwahl (+) beginnen."
 
 #: src/Validation/PhoneValidator.php:81
 msgid "The phone number is not valid."
@@ -1019,4 +1019,4 @@ msgstr "Die Telefonnummer ist zu lang."
 
 #: src/Validation/PhoneValidator.php:133
 msgid "Unable to parse phone number."
-msgstr "Die Telefonnummer konnte nicht verarbeitet werden."
+msgstr "Die Telefonnummer konnte nicht erkannt werden."
