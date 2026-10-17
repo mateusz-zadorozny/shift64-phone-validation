@@ -43,6 +43,8 @@ Ship bundled German translations in both WordPress variants — `de_DE` (informa
 
 ## Progress
 
+PR: #60
+
 > Convention: `- [ ]` pending, `- [x]` done. Append ` — <commit sha>` when a step lands. Do not rename step titles.
 
 ### Phase 1: Translation files
