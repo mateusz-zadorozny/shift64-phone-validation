@@ -53,7 +53,7 @@ Ship bundled German translations in both WordPress variants — `de_DE` (informa
 
 ### Phase 2: Formal German on multilingual block checkout
 
-- [ ] 2.1 Resolve WPML and referer German to the configured variant
+- [x] 2.1 Resolve WPML and referer German to the configured variant — f1f78fe
 
 ### Phase 3: Docs
 
