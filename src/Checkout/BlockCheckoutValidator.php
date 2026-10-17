@@ -214,14 +214,17 @@ class BlockCheckoutValidator {
 		if ( defined( 'ICL_LANGUAGE_CODE' ) ) {
 			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WPML hook.
 			$wpml_lang = apply_filters( 'wpml_current_language', null );
-			if ( $wpml_lang && isset( self::LOCALE_MAP[ $wpml_lang ] ) ) {
-				return self::LOCALE_MAP[ $wpml_lang ];
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WPML hook.
+			$wpml_languages = apply_filters( 'wpml_active_languages', null, array( 'skip_missing' => 0 ) );
+			$wpml_locale    = self::locale_from_wpml( $wpml_lang, $wpml_languages, get_available_languages() );
+			if ( null !== $wpml_locale ) {
+				return $wpml_locale;
 			}
 		}
 
 		// Multilingual plugins may not know the language in REST requests - look at the checkout page URL.
 		$referer = isset( $_SERVER['HTTP_REFERER'] ) ? esc_url_raw( wp_unslash( $_SERVER['HTTP_REFERER'] ) ) : '';
-		$locale  = self::locale_from_referer( $referer, (string) home_url( '/' ), get_available_languages() );
+		$locale  = self::locale_from_referer( $referer, (string) home_url( '/' ), get_available_languages(), get_locale() );
 		if ( null !== $locale ) {
 			return $locale;
 		}
@@ -230,17 +233,45 @@ class BlockCheckoutValidator {
 	}
 
 	/**
+	 * Locale of WPML's current language.
+	 *
+	 * WPML language codes say nothing about the variant, so the locale set for the
+	 * language in WPML (e.g. de_DE_formal for "de") wins over LOCALE_MAP - when it is
+	 * installed, since switch_to_locale() cannot switch to anything else.
+	 *
+	 * @param mixed    $code      Current language code from the wpml_current_language filter.
+	 * @param mixed    $languages Active languages from the wpml_active_languages filter, keyed by code.
+	 * @param string[] $installed Installed locales, e.g. array( 'pl_PL', 'de_DE_formal' ).
+	 * @return string|null Locale or null when WPML gives no usable language.
+	 */
+	public static function locale_from_wpml( $code, $languages, array $installed ): ?string {
+		if ( ! is_string( $code ) || '' === $code ) {
+			return null;
+		}
+
+		$configured = is_array( $languages ) && isset( $languages[ $code ]['default_locale'] ) ? $languages[ $code ]['default_locale'] : '';
+		if ( is_string( $configured ) && ( 'en_US' === $configured || in_array( $configured, $installed, true ) ) ) {
+			return $configured;
+		}
+
+		return self::LOCALE_MAP[ $code ] ?? null;
+	}
+
+	/**
 	 * Read the language directory (/pl/, /de/...) from the referring page URL.
 	 *
 	 * Only the first path segment after the site's home path counts, and only when that
 	 * language is installed - so "/shop/it/" or a product slug never flips the language.
+	 * A language with variants ("/de/": de_DE, de_DE_formal) resolves to the site's own
+	 * locale when it is one of them, otherwise to the first one installed.
 	 *
-	 * @param string   $referer   Referring URL.
-	 * @param string   $home_url  Site home URL.
-	 * @param string[] $installed Installed locales, e.g. array( 'pl_PL', 'de_DE' ).
+	 * @param string   $referer     Referring URL.
+	 * @param string   $home_url    Site home URL.
+	 * @param string[] $installed   Installed locales, e.g. array( 'pl_PL', 'de_DE' ).
+	 * @param string   $site_locale The site's locale, e.g. de_DE_formal.
 	 * @return string|null Locale or null when the URL carries no usable language.
 	 */
-	public static function locale_from_referer( string $referer, string $home_url, array $installed ): ?string {
+	public static function locale_from_referer( string $referer, string $home_url, array $installed, string $site_locale = '' ): ?string {
 		$path      = (string) wp_parse_url( $referer, PHP_URL_PATH );
 		$home_path = rtrim( (string) wp_parse_url( $home_url, PHP_URL_PATH ), '/' );
 
@@ -257,7 +288,20 @@ class BlockCheckoutValidator {
 
 		$locale = self::LOCALE_MAP[ $code ];
 
+		// Variants are named after the base locale: de_DE_formal, nl_NL_formal...
+		$is_variant = static fn ( string $candidate ): bool => $candidate === $locale || 0 === strpos( $candidate, $locale . '_' );
+
+		if ( '' !== $site_locale && $is_variant( $site_locale ) ) {
+			return $site_locale;
+		}
+
 		// en_US ships with WordPress and is never listed as installed.
-		return 'en_US' === $locale || in_array( $locale, $installed, true ) ? $locale : null;
+		if ( 'en_US' === $locale || in_array( $locale, $installed, true ) ) {
+			return $locale;
+		}
+
+		$variants = array_values( array_filter( $installed, $is_variant ) );
+
+		return $variants[0] ?? null;
 	}
 }

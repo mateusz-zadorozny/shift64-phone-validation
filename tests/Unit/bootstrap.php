@@ -159,6 +159,10 @@ if ( ! function_exists( 'add_action' ) ) {
 }
 
 // --- Stubs used by the block checkout tests ----------------------------------
+// WPML is "active" for every test; its filters answer null (no language) until a
+// test sets them with add_filter(), so the WPML branch falls through by default.
+define( 'ICL_LANGUAGE_CODE', 'en' );
+$GLOBALS['shift64_test_available_languages'] = array( 'pl_PL', 'de_DE' );
 // 'calls' logs the locale switches in order.
 $GLOBALS['shift64_test_locale'] = array(
 	'current'  => 'en_US',
@@ -185,7 +189,7 @@ if ( ! function_exists( 'get_locale' ) ) {
 		return $GLOBALS['shift64_test_locale']['current'];
 	}
 	function get_available_languages() {
-		return array( 'pl_PL', 'de_DE' );
+		return $GLOBALS['shift64_test_available_languages'];
 	}
 	function home_url( $path = '' ) {
 		return 'https://shop.test' . $path;

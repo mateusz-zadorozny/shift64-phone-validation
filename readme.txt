@@ -26,7 +26,7 @@ SHIFT64 Phone Validation for WooCommerce checks the phone numbers customers type
 * Three output formats: E.164 (`+48600123456`), international (`+48 600 123 456`) and national (`600 123 456`). Formatting on save can be switched off.
 * Highlights the phone field that needs correcting.
 * Compatible with High-Performance Order Storage (HPOS) and the Cart and Checkout blocks.
-* English and Polish error messages.
+* English, Polish, German and formal German (Sie) translations.
 * Filters for developers.
 
 Requires WordPress 7.1 or later and WooCommerce 7.2 or later.
