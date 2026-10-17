@@ -47,9 +47,9 @@ Ship bundled German translations in both WordPress variants — `de_DE` (informa
 
 ### Phase 1: Translation files
 
-- [ ] 1.1 Add de_DE informal translation
-- [ ] 1.2 Add de_DE_formal translation
-- [ ] 1.3 Unit test the shipped translation files
+- [x] 1.1 Add de_DE informal translation — 61a8c9c
+- [x] 1.2 Add de_DE_formal translation — 0ad5684
+- [x] 1.3 Unit test the shipped translation files — 16603c1
 
 ### Phase 2: Formal German on multilingual block checkout
 
