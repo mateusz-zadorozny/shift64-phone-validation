@@ -228,6 +228,34 @@ On macOS with Node 26, `npx playwright install chromium` (Playwright 1.63) fails
 
 Each git worktree gets its own containers; set `WP_ENV_PORT` to run several side by side (Playwright reads the same variable, `WP_BASE_URL` overrides it entirely). Tests live in `tests/e2e/*.spec.ts` with shared helpers in `tests/e2e/helpers/`; `.wp-env.json` mounts `tests/e2e/mu-plugins/` as the site's must-use plugins, for fixtures a spec switches on per request with a cookie (`block-checkout-reworded-message-highlight.spec.ts` rewords two error codes that way, the way a theme would, and `checkout-assets-opt-out.spec.ts` switches the highlighting scripts off through `shift64_phone_validation_enqueue_assets`); timeouts and retries belong in `playwright.config.ts`, never in a test. Some specs log in to change global settings and restore them afterwards: the `admin-*` specs change plugin settings, `block-checkout-polish-messages.spec.ts` switches the site language, and `classic-checkout-classic-theme-highlight.spec.ts` switches the theme. `block-checkout-saved-customer-address-highlight.spec.ts` logs in to create a customer account through the WooCommerce REST API and deletes it afterwards. That is why the suite runs with one worker. These specs read `TEST_ADMIN_USER` / `TEST_ADMIN_PASSWORD` from the environment or from `.ai/qa/test-env.env`, which `sh .ai/scripts/test-env-up.sh` writes (the agent-pipeline entrypoint that wraps `wp-env start` and records the running instance in `.ai/qa/test-env.json`). If a run is killed before it can restore its settings, `npm run env:seed` (or the next `wp-env start`) sets the plugin settings back to their defaults, the site language back to English and the default theme back.
 
+#### Demo network (multisite, one subsite per scenario)
+
+A second, opt-in environment shows the plugin in several configurations side by side, for demos, screenshots and manual QA. It is a subdirectory multisite on port 8890 with WooCommerce and the plugin **network-activated**, and it runs next to the default environment on 8888 without touching it.
+
+```bash
+npm run demo:start      # composer install + wp-env start --config=.wp-env.demo.json; seeds every site
+open http://localhost:8890/
+npm run test:e2e:demo   # the multisite smoke spec (tests/e2e/demo/); logs in as admin / password unless TEST_ADMIN_PASSWORD is set
+npm run demo:stop       # npm run demo:destroy -- --force wipes it
+```
+
+The network root lists every scenario. Each subsite opens on a page that names its scenario, shows what it is configured to do, gives a valid and an invalid number to try, and has an **Add to cart & go to checkout** button (it empties the cart and adds the demo product once, so the cart never grows). Links below it lead to every other scenario.
+
+| Site | Shows |
+|---|---|
+| `/en/` | Baseline: Polish store, default country + international, E.164 |
+| `/pl/` | Polish site language: the checkout errors come back in Polish |
+| `/international-only/` | Numbers without a country prefix are rejected |
+| `/format-international/` | Valid numbers stored as `+48 500 123 456` |
+| `/format-national/` | Valid numbers stored as `500 123 456` |
+| `/no-format/` | Validated, stored as typed |
+| `/classic/` | Classic (shortcode) checkout in the classic Twenty Twenty-One theme |
+| `/disabled/` | Plugin switched off: only WooCommerce's own loose check runs |
+
+The scenarios are defined once, in `tests/e2e/demo/mu-plugins/shift64-demo/scenarios.php`: `tests/e2e/demo/bin/seed.sh` creates a subsite per entry, `seed-site.php` configures it, and the demo mu-plugin renders its landing page, so adding a scenario is one entry there. **Every `npm run demo:start` re-seeds and resets each site to its scenario**, so settings changed by hand do not survive a restart.
+
+Admin login is the same (`admin` / `password`, on `http://localhost:8890/wp-login.php`; it covers every subsite and Network Admin). Set `WP_DEMO_PORT` to use another port (Playwright reads it too, `WP_DEMO_BASE_URL` overrides it). The network keeps the domain it was installed with, so changing the port of an existing demo needs `npm run demo:destroy` first. As root, `demo.sh` hands over to `TEST_ENV_RUN_AS` (default `wpenv`), like `.ai/scripts/test-env-up.sh`. The first boot logs a few transient WooCommerce database errors while it installs its tables on each new subsite; they are harmless.
+
 ### Continuous integration
 
 On every pull request:
