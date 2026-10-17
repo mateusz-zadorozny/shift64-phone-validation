@@ -4,7 +4,7 @@ Tags: phone validation, phone number, woocommerce, checkout, validation
 Requires at least: 7.1
 Tested up to: 7.1
 Requires PHP: 8.3
-Stable tag: 2.0.6
+Stable tag: 2.0.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -111,6 +111,9 @@ It was installed from a copy of the source code (such as a ZIP of the GitHub rep
 
 == Changelog ==
 
+= 2.0.7 =
+* Fix: Update libphonenumber metadata to 9.0.41.
+
 = 2.0.6 =
 * Fix: Open a collapsed block-checkout address so the phone error is visible.
 
@@ -138,9 +141,6 @@ It was installed from a copy of the source code (such as a ZIP of the GitHub rep
 
 = 1.5.0 =
 * New: Remove the GitHub updater and prepare for WordPress.org.
-
-= 1.4.2 =
-* Fix: Phone numbers containing non-breaking or other Unicode spaces (pasted from Word, Outlook or a PDF) are no longer rejected by WooCommerce's own check before the plugin validates them.
 
 Older releases: [full changelog on GitHub](https://github.com/mateusz-zadorozny/shift64-phone-validation/blob/master/CHANGELOG.md).
 

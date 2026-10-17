@@ -1,3 +1,10 @@
+## [2.0.7](https://github.com/mateusz-zadorozny/shift64-phone-validation/compare/v2.0.6...v2.0.7) (2026-10-17)
+
+
+### Bug Fixes
+
+* **deps:** update libphonenumber metadata to 9.0.41 ([#61](https://github.com/mateusz-zadorozny/shift64-phone-validation/issues/61)) ([d1c19b7](https://github.com/mateusz-zadorozny/shift64-phone-validation/commit/d1c19b7b2705054ab86ba2aaa53ec78639f3ab73))
+
 ## [2.0.6](https://github.com/mateusz-zadorozny/shift64-phone-validation/compare/v2.0.5...v2.0.6) (2026-10-14)
 
 
