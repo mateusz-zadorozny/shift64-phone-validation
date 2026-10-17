@@ -15,7 +15,7 @@ This README is the developer documentation. The WordPress.org listing text lives
 - Two validation modes: *default country + international* or *international only* (every number must carry its country prefix, typed with `+` or `00`)
 - Output formats: E.164 (`+48600123456`), international (`+48 600 123 456`), national (`600 123 456`)
 - Highlights the offending phone field on checkout (small JS helpers, no build step; can be switched off for themes with their own error UX)
-- Translations: English and Polish; on multilingual stores (Polylang, WPML) block-checkout messages follow the shopper's language
+- Translations: English, Polish, German (`de_DE`, informal "du") and formal German (`de_DE_formal`, "Sie"); on multilingual stores (Polylang, WPML) block-checkout messages follow the shopper's language, including the formal German variant when the store's German is set up as `de_DE_formal`
 - No external requests: validation runs on the server with the rules bundled in `vendor/`
 
 ## Requirements
@@ -118,7 +118,7 @@ src/Validation/                   Normalizer, PhoneValidator, ValidationResult
 src/Formatter/PhoneFormatter.php  E.164 / international / national output
 src/Checkout/                     classic + block checkout integration, whitespace pre-clean, error messages, asset loading
 assets/js/                        field highlighting for both checkout types
-languages/                        .pot, en_US, pl_PL
+languages/                        .pot, en_US, pl_PL, de_DE, de_DE_formal
 scripts/                          release tooling (version bump, readme changelog sync, package build) – not shipped
 .wordpress-org/                   WordPress.org directory icons, banners and screenshots – not shipped
 ```
@@ -157,7 +157,7 @@ if ( function_exists( 'Shift64\\SmartPhoneValidation\\format_phone' ) ) {
 }
 ```
 
-Classic checkout errors are added with the field id, which WooCommerce prints on the notice as `data-id="billing_phone"` / `data-id="shipping_phone"`, and every default message contains the word "phone" (pl_PL: "telefon"), so both id-based and keyword-based theme mappers can attach them to the field. Where the attribute sits depends on the notice templates WooCommerce uses, and the highlighting script (`assets/js/checkout-validation.js`) handles both:
+Classic checkout errors are added with the field id, which WooCommerce prints on the notice as `data-id="billing_phone"` / `data-id="shipping_phone"`, and every default message contains the word "phone" (pl_PL: "telefon", de_DE / de_DE_formal: "Telefon"), so both id-based and keyword-based theme mappers can attach them to the field. Where the attribute sits depends on the notice templates WooCommerce uses, and the highlighting script (`assets/js/checkout-validation.js`) handles both:
 
 - classic themes: on each `<li>` of `ul.woocommerce-error`, one per error;
 - block themes, and classic themes that opt in with the `woocommerce_use_block_notices_in_classic_theme` filter (WooCommerce 8.8+): a single error puts it on the `div.wc-block-components-notice-banner.is-error` itself; several errors put it on the `<li>` items inside that banner, which then has no `data-id` of its own.
@@ -184,8 +184,8 @@ Every user-facing string uses the `shift64-phone-validation` text domain. After 
 
 ```bash
 composer makepot      # regenerate languages/shift64-phone-validation.pot (slug pinned, so the folder name does not matter)
-composer makepo       # merge the new .pot into the en_US and pl_PL .po files (wp i18n update-po)
-# translate the new entries in languages/*.po, then:
+composer makepo       # merge the new .pot into every .po file in languages/ (wp i18n update-po)
+# translate the new entries in languages/*.po (in de_DE with "du", in de_DE_formal with "Sie"), then:
 composer makemo       # compile the .mo files (wp i18n make-mo)
 ```
 
@@ -197,7 +197,7 @@ The bundled files are loaded just in time from the folder named by the `Domain P
 composer test         # PHPUnit unit suite (tests/Unit), no WordPress required
 ```
 
-The unit suite covers the pure logic and the checkout integration: `Normalizer`, `PhoneValidator` (including error codes), `PhoneFormatter`, `ValidationResult`, the error-message mapping in English and Polish, the classic and block checkout validators, the filters and the whitespace pre-clean. WordPress is not loaded: WordPress functions are stubbed in `tests/Unit/bootstrap.php`, WooCommerce classes in `tests/Unit/stubs-woocommerce.php`.
+The unit suite covers the pure logic and the checkout integration: `Normalizer`, `PhoneValidator` (including error codes), `PhoneFormatter`, `ValidationResult`, the error-message mapping in English and Polish, the shipped translation files (every string translated, placeholders kept, `.mo` compiled from the current `.po`, the German files each in its own form of address), the classic and block checkout validators, the filters and the whitespace pre-clean. WordPress is not loaded: WordPress functions are stubbed in `tests/Unit/bootstrap.php`, WooCommerce classes in `tests/Unit/stubs-woocommerce.php`.
 
 #### End-to-end (WooCommerce checkout in a real browser)
 
