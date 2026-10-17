@@ -71,6 +71,7 @@ WordPress sites are offered the update by WordPress.org
 ```
 your-plugin/
 ├── .github/
+│   ├── dependabot.yml           # Weekly libphonenumber update PRs
 │   └── workflows/
 │       ├── release.yml          # Automated releases + WordPress.org deploy
 │       ├── wporg-deploy.yml     # Manual rebuild of a tag: SVN deploy, release ZIP
@@ -532,6 +533,14 @@ jobs:
           # Set to true to require scope: "feat(api): add endpoint"
           requireScope: false
 ```
+
+### Dependency updates
+
+`.github/dependabot.yml` checks `giggsey/libphonenumber-for-php-lite` every Monday. The library carries Google's numbering metadata, which is bundled in the package, so shops only get new rules when the plugin is released. Dependabot titles its pull request `fix(deps): bump giggsey/libphonenumber-for-php-lite from X to Y`. The title passes `pr-lint.yml`, and once the PR is squash-merged it cuts a patch release.
+
+- Only `composer.lock` changes (`versioning-strategy: lockfile-only`), so the `^9.0` constraint stays as it is. A new major version needs a deliberate PR that edits `composer.json`.
+- No other package is watched. Dev tools are updated by hand.
+- At most one Dependabot PR is open at a time. When a newer version comes out first, Dependabot closes that PR as superseded and opens one for the newer version.
 
 ---
 
