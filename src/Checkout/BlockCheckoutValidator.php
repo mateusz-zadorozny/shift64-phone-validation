@@ -215,7 +215,8 @@ class BlockCheckoutValidator {
 			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WPML hook.
 			$wpml_lang = apply_filters( 'wpml_current_language', null );
 			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WPML hook.
-			$wpml_locale = self::locale_from_wpml( $wpml_lang, apply_filters( 'wpml_active_languages', null ) );
+			$wpml_languages = apply_filters( 'wpml_active_languages', null, array( 'skip_missing' => 0 ) );
+			$wpml_locale    = self::locale_from_wpml( $wpml_lang, $wpml_languages, get_available_languages() );
 			if ( null !== $wpml_locale ) {
 				return $wpml_locale;
 			}
@@ -235,19 +236,22 @@ class BlockCheckoutValidator {
 	 * Locale of WPML's current language.
 	 *
 	 * WPML language codes say nothing about the variant, so the locale set for the
-	 * language in WPML (e.g. de_DE_formal for "de") wins over LOCALE_MAP.
+	 * language in WPML (e.g. de_DE_formal for "de") wins over LOCALE_MAP - when it is
+	 * installed, since switch_to_locale() cannot switch to anything else.
 	 *
-	 * @param mixed $code      Current language code from the wpml_current_language filter.
-	 * @param mixed $languages Active languages from the wpml_active_languages filter, keyed by code.
+	 * @param mixed    $code      Current language code from the wpml_current_language filter.
+	 * @param mixed    $languages Active languages from the wpml_active_languages filter, keyed by code.
+	 * @param string[] $installed Installed locales, e.g. array( 'pl_PL', 'de_DE_formal' ).
 	 * @return string|null Locale or null when WPML gives no usable language.
 	 */
-	public static function locale_from_wpml( $code, $languages ): ?string {
+	public static function locale_from_wpml( $code, $languages, array $installed ): ?string {
 		if ( ! is_string( $code ) || '' === $code ) {
 			return null;
 		}
 
-		if ( is_array( $languages ) && isset( $languages[ $code ]['default_locale'] ) && is_string( $languages[ $code ]['default_locale'] ) && '' !== $languages[ $code ]['default_locale'] ) {
-			return $languages[ $code ]['default_locale'];
+		$configured = is_array( $languages ) && isset( $languages[ $code ]['default_locale'] ) ? $languages[ $code ]['default_locale'] : '';
+		if ( is_string( $configured ) && ( 'en_US' === $configured || in_array( $configured, $installed, true ) ) ) {
+			return $configured;
 		}
 
 		return self::LOCALE_MAP[ $code ] ?? null;
