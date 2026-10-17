@@ -57,4 +57,4 @@ Ship bundled German translations in both WordPress variants — `de_DE` (informa
 
 ### Phase 3: Docs
 
-- [ ] 3.1 Document German and formal German
+- [x] 3.1 Document German and formal German — 7a006ed
