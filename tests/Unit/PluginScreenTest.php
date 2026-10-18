@@ -15,10 +15,13 @@ class PluginScreenTest extends TestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		$GLOBALS['shift64_test_can'] = array( 'activate_plugins', 'manage_woocommerce' );
+		// The page WordPress shows after a single activation: plugins.php?activate=true.
+		$GLOBALS['pagenow'] = 'plugins.php';
+		$_GET['activate']   = 'true';
 	}
 
 	protected function tearDown(): void {
-		unset( $_GET['activate-multi'] );
+		unset( $_GET['activate'], $_GET['activate-multi'], $GLOBALS['pagenow'] );
 		parent::tearDown();
 	}
 
@@ -86,12 +89,42 @@ class PluginScreenTest extends TestCase {
 
 	public function test_bulk_activation_stays_on_the_plugins_screen(): void {
 		PluginScreen::on_activation( false );
+		// WordPress's redirect after a bulk activation: plugins.php?activate-multi=true.
+		unset( $_GET['activate'] );
 		$_GET['activate-multi'] = 'true';
 
 		$this->assertFalse( PluginScreen::should_redirect_after_activation() );
-		// Consumed: no redirect on a later page load either.
-		unset( $_GET['activate-multi'] );
+	}
+
+	public function test_other_admin_pages_are_never_redirected(): void {
+		PluginScreen::on_activation( false );
+		$GLOBALS['pagenow'] = 'admin-post.php';
+
 		$this->assertFalse( PluginScreen::should_redirect_after_activation() );
+		// Left for the Plugins screen, which still redirects.
+		$GLOBALS['pagenow'] = 'plugins.php';
+		$this->assertTrue( PluginScreen::should_redirect_after_activation() );
+	}
+
+	public function test_plugins_screen_without_the_activation_flag_is_not_redirected(): void {
+		PluginScreen::on_activation( false );
+		unset( $_GET['activate'] );
+
+		$this->assertFalse( PluginScreen::should_redirect_after_activation() );
+	}
+
+	public function test_ajax_activation_does_not_ask_for_a_redirect(): void {
+		$GLOBALS['shift64_test_doing_ajax'] = true;
+		PluginScreen::on_activation( false );
+
+		$this->assertSame( array(), $GLOBALS['shift64_test_transients'] );
+	}
+
+	public function test_rest_activation_does_not_ask_for_a_redirect(): void {
+		$GLOBALS['shift64_test_rest_request'] = true;
+		PluginScreen::on_activation( false );
+
+		$this->assertSame( array(), $GLOBALS['shift64_test_transients'] );
 	}
 
 	public function test_no_redirect_on_ajax_requests(): void {
@@ -99,7 +132,6 @@ class PluginScreenTest extends TestCase {
 		$GLOBALS['shift64_test_doing_ajax'] = true;
 
 		$this->assertFalse( PluginScreen::should_redirect_after_activation() );
-		$this->assertSame( array(), $GLOBALS['shift64_test_transients'] );
 	}
 
 	public function test_no_redirect_in_the_network_admin(): void {

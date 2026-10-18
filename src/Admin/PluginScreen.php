@@ -20,8 +20,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  * row on the Plugins screen, and one redirect to the tab right after activation.
  *
  * The redirect follows WordPress.org guideline 11 (no hijacking of the admin):
- * it happens once, only for the user who activated the plugin, and never on bulk
- * or network activation, WP-CLI or AJAX.
+ * it happens once, only for the user who activated the plugin, and only from the
+ * Plugins screen WordPress shows after a single activation. Bulk and network
+ * activation, WP-CLI, AJAX (the Add Plugins cards) and REST activations never
+ * redirect, and no other admin page is ever taken over.
  */
 class PluginScreen {
 
@@ -50,8 +52,10 @@ class PluginScreen {
 	 * @return void
 	 */
 	public static function on_activation( $network_wide = false ): void {
-		// Network activation covers many sites, and WP-CLI has no browser to redirect.
-		if ( $network_wide || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
+		// Network activation covers many sites, WP-CLI has no browser to redirect, and an
+		// AJAX or REST activation (the Add Plugins cards, installers) keeps the user where
+		// they are.
+		if ( $network_wide || ( defined( 'WP_CLI' ) && WP_CLI ) || wp_doing_ajax() || wp_is_serving_rest_request() ) {
 			return;
 		}
 
@@ -96,6 +100,21 @@ class PluginScreen {
 	 * @return bool
 	 */
 	public static function should_redirect_after_activation(): bool {
+		global $pagenow;
+
+		// Only the page WordPress redirects to after a single activation
+		// (plugins.php?activate=true); bulk activation adds activate-multi instead.
+		// Any other admin page, form post or AJAX call is left alone.
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- read-only flags WordPress sets on its own redirect.
+		if ( 'plugins.php' !== $pagenow || ! isset( $_GET['activate'] ) || isset( $_GET['activate-multi'] ) ) {
+			return false;
+		}
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
+
+		if ( wp_doing_ajax() || is_network_admin() ) {
+			return false;
+		}
+
 		$activated_by = get_transient( self::REDIRECT_TRANSIENT );
 
 		if ( false === $activated_by ) {
@@ -103,16 +122,6 @@ class PluginScreen {
 		}
 
 		delete_transient( self::REDIRECT_TRANSIENT );
-
-		// Bulk activation from the Plugins screen: stay on the list of activated plugins.
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only flag WordPress sets on its own redirect.
-		if ( isset( $_GET['activate-multi'] ) ) {
-			return false;
-		}
-
-		if ( wp_doing_ajax() || is_network_admin() ) {
-			return false;
-		}
 
 		return get_current_user_id() === (int) $activated_by && current_user_can( 'manage_woocommerce' );
 	}

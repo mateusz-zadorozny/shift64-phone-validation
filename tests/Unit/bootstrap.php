@@ -296,11 +296,13 @@ if ( ! function_exists( 'wp_json_encode' ) ) {
 // --- Stubs used by the Plugins screen tests -----------------------------------
 // add_filter() records each registration in $GLOBALS['shift64_test_actions'] like
 // add_action(), transients live in $GLOBALS['shift64_test_transients'] (name => value),
-// get_current_user_id() reports $GLOBALS['shift64_test_user_id'] and wp_doing_ajax()
-// reports $GLOBALS['shift64_test_doing_ajax'].
-$GLOBALS['shift64_test_transients'] = array();
-$GLOBALS['shift64_test_user_id']    = 1;
-$GLOBALS['shift64_test_doing_ajax'] = false;
+// get_current_user_id() reports $GLOBALS['shift64_test_user_id'], wp_doing_ajax()
+// reports $GLOBALS['shift64_test_doing_ajax'] and wp_is_serving_rest_request()
+// reports $GLOBALS['shift64_test_rest_request'].
+$GLOBALS['shift64_test_transients']   = array();
+$GLOBALS['shift64_test_rest_request'] = false;
+$GLOBALS['shift64_test_user_id']      = 1;
+$GLOBALS['shift64_test_doing_ajax']   = false;
 
 if ( ! defined( 'SHIFT64_PHONE_VALIDATION_FILE' ) ) {
 	define( 'SHIFT64_PHONE_VALIDATION_FILE', dirname( __DIR__, 2 ) . '/shift64-phone-validation.php' );
@@ -332,7 +334,8 @@ if ( ! function_exists( 'esc_url' ) ) {
 
 if ( ! function_exists( 'set_transient' ) ) {
 	function set_transient( $transient, $value, $expiration = 0 ) {
-		$GLOBALS['shift64_test_transients'][ $transient ] = $value;
+		// Without an object cache WordPress stores transients as option rows and reads them back as strings.
+		$GLOBALS['shift64_test_transients'][ $transient ] = (string) $value;
 		return true;
 	}
 }
@@ -353,6 +356,12 @@ if ( ! function_exists( 'delete_transient' ) ) {
 if ( ! function_exists( 'get_current_user_id' ) ) {
 	function get_current_user_id() {
 		return $GLOBALS['shift64_test_user_id'];
+	}
+}
+
+if ( ! function_exists( 'wp_is_serving_rest_request' ) ) {
+	function wp_is_serving_rest_request() {
+		return $GLOBALS['shift64_test_rest_request'];
 	}
 }
 

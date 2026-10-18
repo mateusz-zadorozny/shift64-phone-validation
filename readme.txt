@@ -65,7 +65,7 @@ Sponsored by [SHIFT64](https://shift64.com/services/custom-woocommerce-coding).
 
 1. Install and activate WooCommerce 7.2 or later.
 2. In your WordPress admin go to Plugins > Add New Plugin, search for "SHIFT64 Phone Validation for WooCommerce", then click Install Now and Activate. Or download the ZIP file from this page and upload it under Plugins > Add New Plugin > Upload Plugin.
-3. After activation the plugin opens WooCommerce > Settings > Phone Validation for you (the Settings link under the plugin on the Plugins screen leads there too). Validation and Formatting on Save are on by default, the fallback Default Country is Poland and the Output Format is E.164; adjust them to your store.
+3. Go to WooCommerce > Settings > Phone Validation, or click Settings under the plugin on the Plugins screen (activating the plugin there opens the tab for you). Validation and Formatting on Save are on by default, the fallback Default Country is Poland and the Output Format is E.164; adjust them to your store.
 4. Try to place a test order with an invalid phone number to see the error.
 
 == Frequently Asked Questions ==
