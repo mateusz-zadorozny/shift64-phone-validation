@@ -64,7 +64,9 @@ Do **not** remove the old copy with *Delete* on the WP Admin *Plugins* screen: t
 ## Settings
 
 **WooCommerce → Settings → Phone Validation** tab
-(`wp-admin/admin.php?page=wc-settings&tab=phone_validation`)
+(`wp-admin/admin.php?page=wc-settings&tab=phone_validation`), also reached through the **Settings** link under the plugin on the *Plugins* screen.
+
+After a single activation on the *Plugins* screen (or from the link shown after uploading a ZIP), the plugin opens this tab once for the user who activated it: the redirect replaces only the `plugins.php?activate=true` page WordPress would show next. Nothing redirects after a bulk or network activation, WP-CLI, the *Activate* button on the *Add Plugins* cards (AJAX), a REST activation, or for a user without the `manage_woocommerce` capability, and no other admin page is ever taken over, as WordPress.org guideline 11 (no hijacking of the admin) expects.
 
 | Setting | Option name | Default | Description |
 | --- | --- | --- | --- |
@@ -113,6 +115,7 @@ shift64-phone-validation.php   bootstrap, constants, hook registration
 uninstall.php                     deletes the plugin's options when it is deleted from WP Admin
 src/functions.php                 public helpers (format_phone())
 src/Admin/Settings.php            WooCommerce settings tab + option getters
+src/Admin/PluginScreen.php        Settings link on the Plugins screen + redirect after activation
 src/Admin/DependencyChecker.php   WordPress version and WooCommerce checks, with their admin notices
 src/Validation/                   Normalizer, PhoneValidator, ValidationResult
 src/Formatter/PhoneFormatter.php  E.164 / international / national output

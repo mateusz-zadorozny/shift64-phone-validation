@@ -3,6 +3,7 @@
 namespace Shift64\SmartPhoneValidation\Tests\Unit;
 
 use Shift64\SmartPhoneValidation\Admin\DependencyChecker;
+use Shift64\SmartPhoneValidation\Admin\PluginScreen;
 
 /**
  * The plugins_loaded wiring of the main plugin file: the translation folder is
@@ -30,6 +31,17 @@ class MainFileWiringTest extends TestCase {
 		// Supported WordPress with WooCommerce: the plugin boots (settings tab, checkout hooks).
 		$this->assertSame( array(), $result['admin_notices'] );
 		$this->assertContains( 'woocommerce_settings_tabs_array', $result['booted_hooks'] );
+		$this->assertContains( 'plugin_action_links_' . basename( dirname( __DIR__, 2 ) ) . '/shift64-phone-validation.php', $result['booted_hooks'] );
+		$this->assertContains( 'admin_init', $result['booted_hooks'] );
+	}
+
+	public function test_activation_hook_asks_for_the_settings_redirect(): void {
+		$result = $this->run_main_file( '7.1.2', true );
+
+		$this->assertSame(
+			array( array( 'shift64-phone-validation.php', PluginScreen::class . '::on_activation' ) ),
+			$result['activation_hooks']
+		);
 	}
 
 	public function test_unsupported_wordpress_boots_nothing_and_shows_only_the_version_notice(): void {
@@ -56,7 +68,7 @@ class MainFileWiringTest extends TestCase {
 	}
 
 	/**
-	 * @return array{plugins_loaded_priorities: list<int>, textdomain_after_priority: array<string, list<array>>, admin_notices: list<string>, booted_hooks: list<string>}
+	 * @return array{plugins_loaded_priorities: list<int>, textdomain_after_priority: array<string, list<array>>, admin_notices: list<string>, booted_hooks: list<string>, activation_hooks: list<array{string, string}>}
 	 */
 	private function run_main_file( string $core_version, bool $woocommerce_active ): array {
 		$command = array( PHP_BINARY, __DIR__ . '/fixtures/main-file/harness.php', $core_version, $woocommerce_active ? '1' : '0' );

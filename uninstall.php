@@ -24,5 +24,8 @@ foreach ( $shift64_phone_validation_options as $shift64_phone_validation_option 
 	delete_option( $shift64_phone_validation_option );
 }
 
+// Set on activation and normally consumed within seconds.
+delete_transient( 'shift64_phone_validation_activation_redirect' );
+
 // Cleans up after the GitHub updater removed in 1.5.0.
 delete_transient( 'shift64_phone_validation_github_release' );

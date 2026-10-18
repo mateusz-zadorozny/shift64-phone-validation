@@ -18,6 +18,7 @@ $shift64_harness = array(
 	'core_version' => (string) ( $argv[1] ?? '' ),
 	'actions'      => array(),
 	'textdomain'   => array(),
+	'activation'   => array(),
 );
 
 function plugin_dir_path( $file ) {
@@ -39,6 +40,10 @@ function add_action( $hook, $callback, $priority = 10, $accepted_args = 1 ) {
 
 function add_filter( $hook, $callback, $priority = 10, $accepted_args = 1 ) {
 	return add_action( $hook, $callback, $priority, $accepted_args );
+}
+
+function register_activation_hook( $file, $callback ) {
+	$GLOBALS['shift64_harness']['activation'][] = array( basename( $file ), is_array( $callback ) ? implode( '::', $callback ) : 'closure' );
 }
 
 function load_plugin_textdomain( $domain, $deprecated = false, $plugin_rel_path = false ) {
@@ -80,6 +85,7 @@ $shift64_result = array(
 	'textdomain_after_priority' => array(),
 	'admin_notices'             => array(),
 	'booted_hooks'              => array(),
+	'activation_hooks'          => $shift64_harness['activation'],
 );
 
 // Everything registered from here on comes from the plugins_loaded callbacks.
