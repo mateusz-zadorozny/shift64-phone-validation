@@ -243,8 +243,8 @@ The network root lists every scenario. Each subsite opens on a page that names i
 
 | Site | Shows |
 |---|---|
-| `/en/` | Baseline: Polish store, default country + international, E.164 |
-| `/pl/` | Polish site language: the checkout errors come back in Polish |
+| `/en/` | Baseline: English site language, Polish store (PL default country + international), E.164 |
+| `/pl/` | The same store with Polish site language: the whole checkout, its errors included, is in Polish |
 | `/international-only/` | Numbers without a country prefix are rejected |
 | `/format-international/` | Valid numbers stored as `+48 500 123 456` |
 | `/format-national/` | Valid numbers stored as `500 123 456` |

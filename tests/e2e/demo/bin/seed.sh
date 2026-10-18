@@ -27,10 +27,6 @@ wp_lines() { pattern="$1"; shift; wp "$@" | tr -d '\r' | grep -E "$pattern" || t
 echo "demo seed: language packs"
 # The pl scenario would lie without the core pack: a failure stops the seed.
 wp language core install pl_PL >/dev/null
-# wp-env unpacks WooCommerce into woocommerce.latest-stable/, so WP-CLI cannot
-# read its version and may get an older pack; nothing depends on it.
-wp language plugin install woocommerce pl_PL >/dev/null ||
-	echo "demo seed: warning: WooCommerce pl_PL language pack not installed" >&2
 
 echo "demo seed: classic theme, enabled for the network"
 if ! wp theme is-installed twentytwentyone; then
@@ -44,6 +40,12 @@ echo "demo seed: network-activate WooCommerce and the plugin"
 # plugin after the checkout folder, which is not always shift64-phone-validation.
 PLUGIN_DIR="$(basename "$ROOT")"
 wp plugin activate woocommerce.latest-stable "$PLUGIN_DIR" --network >/dev/null
+
+echo "demo seed: WooCommerce pl_PL language pack"
+# Needs WooCommerce active to read its version (install-wc-language.php says why
+# `wp language plugin install` is not used). Without it the /pl/ block checkout
+# is half English: a failure stops the seed.
+wp eval-file "$MU_DIR/install-wc-language.php" pl_PL
 
 DOMAIN="$(wp_lines '^[A-Za-z0-9.-]+(:[0-9]+)?$' eval 'echo get_network()->domain, "\n";' | tail -n 1)"
 if [ -z "$DOMAIN" ]; then

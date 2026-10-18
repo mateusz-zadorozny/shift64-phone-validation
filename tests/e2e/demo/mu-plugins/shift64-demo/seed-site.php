@@ -71,22 +71,33 @@ update_option( 'woocommerce_enable_checkout_login_reminder', 'no' );
 update_option( 'woocommerce_enable_signup_and_login_from_checkout', 'no' );
 
 $shift64_demo_log( 'payment (cash on delivery) and shipping (flat rate, rest of world)' );
+// Their titles are stored, not translated on display: save them in the site's
+// language, as a store set up in it would have them (/pl/ would show "Flat rate").
+switch_to_locale( $shift64_demo_scenario['locale'] );
 $shift64_demo_gateways = WC()->payment_gateways()->payment_gateways();
 if ( isset( $shift64_demo_gateways['cod'] ) ) {
 	$shift64_demo_gateways['cod']->update_option( 'enabled', 'yes' );
+	$shift64_demo_gateways['cod']->update_option( 'title', __( 'Cash on delivery', 'woocommerce' ) );
+	$shift64_demo_gateways['cod']->update_option( 'description', __( 'Pay with cash upon delivery.', 'woocommerce' ) );
+	$shift64_demo_gateways['cod']->update_option( 'instructions', __( 'Pay with cash upon delivery.', 'woocommerce' ) );
 }
 $shift64_demo_zone = new WC_Shipping_Zone( 0 );
 if ( ! $shift64_demo_zone->get_shipping_methods() ) {
-	$shift64_demo_instance = $shift64_demo_zone->add_shipping_method( 'flat_rate' );
-	update_option(
-		"woocommerce_flat_rate_{$shift64_demo_instance}_settings",
-		array(
-			'title'      => 'Flat rate',
-			'tax_status' => 'taxable',
-			'cost'       => '10',
-		)
-	);
+	$shift64_demo_zone->add_shipping_method( 'flat_rate' );
 }
+foreach ( $shift64_demo_zone->get_shipping_methods() as $shift64_demo_method ) {
+	if ( 'flat_rate' === $shift64_demo_method->id ) {
+		update_option(
+			"woocommerce_flat_rate_{$shift64_demo_method->instance_id}_settings",
+			array(
+				'title'      => __( 'Flat rate', 'woocommerce' ),
+				'tax_status' => 'taxable',
+				'cost'       => '10',
+			)
+		);
+	}
+}
+restore_previous_locale();
 
 $shift64_demo_log( 'product' );
 if ( ! get_page_by_path( 'e2e-test-product', OBJECT, 'product' ) ) {

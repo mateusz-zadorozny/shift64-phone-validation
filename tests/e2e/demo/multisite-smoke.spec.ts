@@ -41,6 +41,13 @@ test( '/pl/: an invalid phone is rejected with the Polish message', async ( {
 			.first()
 	).toBeVisible();
 	await expect( page ).not.toHaveURL( /order-received/ );
+
+	// The block checkout's own labels come from WooCommerce's script
+	// translations: a pack older than the installed WooCommerce left them in
+	// English next to the Polish field labels (QA of #58).
+	for ( const english of [ 'Contact information', 'Shipping options', 'Flat rate' ] ) {
+		await expect( page.getByText( english, { exact: true } ) ).toHaveCount( 0 );
+	}
 } );
 
 test( '/en/: a valid phone places the order, stored in E.164', async ( {
@@ -73,8 +80,10 @@ test( 'Network Admin: the plugin is network-active and shows no notice', async (
 	await expect( row.getByRole( 'link', { name: /Network Deactivate/ } ) ).toHaveCount( 1 );
 
 	// DependencyChecker prints its notices here when something is missing (#38).
+	// WordPress's "new version available" row is a .notice too: a branch behind
+	// the WordPress.org release gets one, and it is not a boot problem.
 	await expect(
-		page.locator( '.notice' ).filter( { hasText: /SHIFT64/ } )
+		page.locator( '.notice:not(.update-message)' ).filter( { hasText: /SHIFT64/ } )
 	).toHaveCount( 0 );
 } );
 

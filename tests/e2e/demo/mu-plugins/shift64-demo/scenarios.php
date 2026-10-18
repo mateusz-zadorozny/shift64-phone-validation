@@ -35,8 +35,8 @@ $shift64_demo_invalid_en = array(
 return array(
 	array(
 		'slug'        => 'en',
-		'title'       => 'Baseline: PL store, E.164',
-		'description' => 'The plugin defaults: a Polish store, numbers checked against the address country and stored in E.164.',
+		'title'       => 'Baseline: English site, Polish store, E.164',
+		'description' => 'The plugin defaults on an English-language site for a Polish store: numbers are checked against the address country (Poland by default) and stored in E.164.',
 		'locale'      => 'en_US',
 		'theme'       => null,
 		'checkout'    => 'block',
