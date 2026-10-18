@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: SHIFT64 Phone Validation for WooCommerce 2.0.0\n"
+"Project-Id-Version: SHIFT64 Phone Validation for WooCommerce 2.0.7\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/shift64-phone-validation\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-12T16:19:04+00:00\n"
+"POT-Creation-Date: 2026-10-18T07:13:43+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: shift64-phone-validation\n"
@@ -51,6 +51,10 @@ msgstr ""
 
 #: src/Admin/DependencyChecker.php:122
 msgid "SHIFT64 Phone Validation for WooCommerce requires WooCommerce to be installed and activated."
+msgstr ""
+
+#: src/Admin/PluginScreen.php:86
+msgid "Settings"
 msgstr ""
 
 #: src/Admin/Settings.php:54
@@ -949,38 +953,38 @@ msgstr ""
 msgid "Zimbabwe"
 msgstr ""
 
-#: src/Checkout/ErrorMessages.php:67
+#: src/Checkout/ErrorMessages.php:83
 msgid "Shipping phone number must contain country prefix."
 msgstr ""
 
-#: src/Checkout/ErrorMessages.php:68
+#: src/Checkout/ErrorMessages.php:84
 msgid "Please enter a valid shipping phone number."
 msgstr ""
 
-#: src/Checkout/ErrorMessages.php:71
+#: src/Checkout/ErrorMessages.php:87
 msgid "Phone number must contain country prefix."
 msgstr ""
 
-#: src/Checkout/ErrorMessages.php:72
+#: src/Checkout/ErrorMessages.php:88
 msgid "Please enter a valid phone number."
 msgstr ""
 
-#: src/Checkout/ErrorMessages.php:110
+#: src/Checkout/ErrorMessages.php:131
 msgid "Shipping phone"
 msgstr ""
 
-#: src/Checkout/ErrorMessages.php:111
+#: src/Checkout/ErrorMessages.php:132
 msgid "Billing phone"
 msgstr ""
 
 #. translators: %s: field label (Billing phone or Shipping phone)
-#: src/Checkout/ErrorMessages.php:115
+#: src/Checkout/ErrorMessages.php:136
 #, php-format
 msgid "%s must contain country prefix."
 msgstr ""
 
 #. translators: %s: field label (Billing phone or Shipping phone)
-#: src/Checkout/ErrorMessages.php:118
+#: src/Checkout/ErrorMessages.php:139
 #, php-format
 msgid "%s is not a valid phone number."
 msgstr ""
