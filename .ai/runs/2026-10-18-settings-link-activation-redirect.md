@@ -46,8 +46,8 @@ Guideline 11 ("Plugins should not hijack the admin dashboard") limits prompts an
 
 ### Phase 1: Plugins screen
 
-- [ ] 1.1 Settings action link
-- [ ] 1.2 One-time activation redirect
+- [x] 1.1 Settings action link — 633d859
+- [x] 1.2 One-time activation redirect — 633d859
 
 ### Phase 2: Translations and docs
 
