@@ -51,5 +51,5 @@ Guideline 11 ("Plugins should not hijack the admin dashboard") limits prompts an
 
 ### Phase 2: Translations and docs
 
-- [ ] 2.1 Regenerate the pot, update and compile the pl_PL translation
-- [ ] 2.2 Document the link and the redirect
+- [x] 2.1 Regenerate the pot, update and compile the pl_PL translation — 8ef1780
+- [x] 2.2 Document the link and the redirect — 707e613
