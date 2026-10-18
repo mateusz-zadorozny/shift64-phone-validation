@@ -79,6 +79,9 @@ if ( file_exists( $shift64_autoloader ) ) {
 	return;
 }
 
+// Open the settings tab once after activation (see Admin\PluginScreen for when it does not).
+register_activation_hook( __FILE__, array( Admin\PluginScreen::class, 'on_activation' ) );
+
 // Register the bundled languages/ folder. Since WordPress 6.7 this loads no file; translations
 // are still loaded just in time, and a language pack from translate.wordpress.org in
 // wp-content/languages/plugins still takes precedence. WordPress 7.1 registers the Domain
@@ -115,6 +118,9 @@ add_action(
 
 		// Initialize plugin settings.
 		Admin\Settings::init();
+
+		// Settings link on the Plugins screen and the redirect after activation.
+		Admin\PluginScreen::init();
 
 		// Collapse Unicode whitespace in posted phone numbers before WooCommerce's own
 		// phone check rejects them (classic checkout and Store API).

@@ -47,6 +47,15 @@
 		</properties>
 	</rule>
 
+	<!-- WooCommerce's shop manager capability, registered by WooCommerce itself -->
+	<rule ref="WordPress.WP.Capabilities">
+		<properties>
+			<property name="custom_capabilities" type="array">
+				<element value="manage_woocommerce"/>
+			</property>
+		</properties>
+	</rule>
+
 	<!-- PHP Compatibility -->
 	<rule ref="PHPCompatibilityWP"/>
 	<config name="testVersion" value="8.3-"/>

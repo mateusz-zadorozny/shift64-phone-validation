@@ -293,5 +293,74 @@ if ( ! function_exists( 'wp_json_encode' ) ) {
 	}
 }
 
+// --- Stubs used by the Plugins screen tests -----------------------------------
+// add_filter() records each registration in $GLOBALS['shift64_test_actions'] like
+// add_action(), transients live in $GLOBALS['shift64_test_transients'] (name => value),
+// get_current_user_id() reports $GLOBALS['shift64_test_user_id'] and wp_doing_ajax()
+// reports $GLOBALS['shift64_test_doing_ajax'].
+$GLOBALS['shift64_test_transients'] = array();
+$GLOBALS['shift64_test_user_id']    = 1;
+$GLOBALS['shift64_test_doing_ajax'] = false;
+
+if ( ! defined( 'SHIFT64_PHONE_VALIDATION_FILE' ) ) {
+	define( 'SHIFT64_PHONE_VALIDATION_FILE', dirname( __DIR__, 2 ) . '/shift64-phone-validation.php' );
+}
+
+if ( ! function_exists( 'add_filter' ) ) {
+	function add_filter( $hook, $callback, $priority = 10, $accepted_args = 1 ) {
+		return add_action( $hook, $callback, $priority, $accepted_args );
+	}
+}
+
+if ( ! function_exists( 'plugin_basename' ) ) {
+	function plugin_basename( $file ) {
+		return basename( dirname( $file ) ) . '/' . basename( $file );
+	}
+}
+
+if ( ! function_exists( 'admin_url' ) ) {
+	function admin_url( $path = '' ) {
+		return 'https://shop.test/wp-admin/' . $path;
+	}
+}
+
+if ( ! function_exists( 'esc_url' ) ) {
+	function esc_url( $url ) {
+		return str_replace( '&', '&#038;', $url );
+	}
+}
+
+if ( ! function_exists( 'set_transient' ) ) {
+	function set_transient( $transient, $value, $expiration = 0 ) {
+		$GLOBALS['shift64_test_transients'][ $transient ] = $value;
+		return true;
+	}
+}
+
+if ( ! function_exists( 'get_transient' ) ) {
+	function get_transient( $transient ) {
+		return $GLOBALS['shift64_test_transients'][ $transient ] ?? false;
+	}
+}
+
+if ( ! function_exists( 'delete_transient' ) ) {
+	function delete_transient( $transient ) {
+		unset( $GLOBALS['shift64_test_transients'][ $transient ] );
+		return true;
+	}
+}
+
+if ( ! function_exists( 'get_current_user_id' ) ) {
+	function get_current_user_id() {
+		return $GLOBALS['shift64_test_user_id'];
+	}
+}
+
+if ( ! function_exists( 'wp_doing_ajax' ) ) {
+	function wp_doing_ajax() {
+		return $GLOBALS['shift64_test_doing_ajax'];
+	}
+}
+
 require_once __DIR__ . '/stubs-woocommerce.php';
 require_once __DIR__ . '/TestCase.php';

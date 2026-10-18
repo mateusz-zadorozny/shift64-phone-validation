@@ -50,6 +50,9 @@ abstract class TestCase extends PHPUnitTestCase {
 			'checkout' => 0,
 		);
 		$GLOBALS['shift64_test_scripts']          = array();
+		$GLOBALS['shift64_test_transients']       = array();
+		$GLOBALS['shift64_test_user_id']          = 1;
+		$GLOBALS['shift64_test_doing_ajax']       = false;
 	}
 
 	protected function set_option( string $key, string $value ): void {
