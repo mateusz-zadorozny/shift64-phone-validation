@@ -40,6 +40,10 @@ Guideline 11 ("Plugins should not hijack the admin dashboard") limits prompts an
 - WordPress.org review could still object to the redirect; it is isolated in one method and can be dropped without touching the link.
 - Open PR #60 (German translations) edits the same `.po` files; whichever merges second regenerates them.
 
+## Review fixes
+
+- `om-auto-review-pr` (Major): the redirect fired on whatever admin page loaded next, so an AJAX (Add Plugins card) or REST activation could take over an unrelated page or a form post. Now only `plugins.php?activate=true` redirects, and AJAX/REST activations ask for none — c2234fb.
+
 ## Progress
 
 > Convention: `- [ ]` pending, `- [x]` done. Append ` — <commit sha>` when a step lands. Do not rename step titles.
