@@ -46,6 +46,8 @@ Guideline 11 ("Plugins should not hijack the admin dashboard") limits prompts an
 
 ## Progress
 
+PR: #63
+
 > Convention: `- [ ]` pending, `- [x]` done. Append ` — <commit sha>` when a step lands. Do not rename step titles.
 
 ### Phase 1: Plugins screen
