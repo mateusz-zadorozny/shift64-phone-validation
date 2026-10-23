@@ -96,7 +96,7 @@ The data model is the scenario file only: no options, tables or order meta of th
 
 | Slug | Shows | Locale | Theme / checkout | Options |
 |---|---|---|---|---|
-| `en` | Baseline: PL store, E.164 | en_US | block / block | defaults (`enabled` yes, `default_country` PL, `default_and_international`, `E164`, `format_on_save` yes) |
+| `en` | Baseline: English site, Polish store, E.164 | en_US | block / block | defaults (`enabled` yes, `default_country` PL, `default_and_international`, `E164`, `format_on_save` yes) |
 | `pl` | Polish error messages | pl_PL | block / block | defaults |
 | `international-only` | Numbers without `+` are rejected | en_US | block / block | `validation_mode` = `international_only` |
 | `format-international` | Stored as `+48 500 123 456` | en_US | block / block | `output_format` = `INTERNATIONAL` |
