@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/mateusz-zadorozny/shift64-phone-validation/compare/v2.0.7...v2.1.0) (2026-10-23)
+
+
+### Features
+
+* **i18n:** add German and formal German translations ([#60](https://github.com/mateusz-zadorozny/shift64-phone-validation/issues/60)) ([a228810](https://github.com/mateusz-zadorozny/shift64-phone-validation/commit/a22881028b5a726cb5dcc27d6421c411c7169327))
+
 ## [2.0.7](https://github.com/mateusz-zadorozny/shift64-phone-validation/compare/v2.0.6...v2.0.7) (2026-10-17)
 
 
