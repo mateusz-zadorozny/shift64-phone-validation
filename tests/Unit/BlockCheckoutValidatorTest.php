@@ -182,4 +182,97 @@ class BlockCheckoutValidatorTest extends TestCase {
 			'empty referer'                  => array( '', 'https://shop.test/', null ),
 		);
 	}
+
+	/**
+	 * A store whose German is the formal variant gets formal messages on its /de/ pages.
+	 *
+	 * @dataProvider german_variant_referers
+	 */
+	public function test_locale_from_referer_picks_the_german_variant( array $installed, string $site_locale, ?string $expected ): void {
+		$this->assertSame( $expected, BlockCheckoutValidator::locale_from_referer( 'https://shop.test/de/kasse/', 'https://shop.test/', $installed, $site_locale ) );
+	}
+
+	public function german_variant_referers(): array {
+		return array(
+			'only formal installed'                 => array( array( 'pl_PL', 'de_DE_formal' ), 'pl_PL', 'de_DE_formal' ),
+			'both installed, base locale wins'      => array( array( 'de_DE', 'de_DE_formal' ), 'en_US', 'de_DE' ),
+			'both installed in any order'           => array( array( 'de_DE_formal', 'de_DE' ), 'en_US', 'de_DE' ),
+			'both installed, site is formal'        => array( array( 'de_DE', 'de_DE_formal' ), 'de_DE_formal', 'de_DE_formal' ),
+			'site is formal, nothing else'          => array( array(), 'de_DE_formal', 'de_DE_formal' ),
+			'no german installed'                   => array( array( 'pl_PL' ), 'pl_PL', null ),
+			'a lookalike locale is not a variant'   => array( array( 'de_DEX' ), 'en_US', null ),
+		);
+	}
+
+	/**
+	 * Through the referer the site locale is passed in: the formal store keeps "Sie".
+	 */
+	public function test_formal_site_keeps_formal_german_on_a_de_page(): void {
+		$GLOBALS['shift64_test_locale']['current'] = 'de_DE_formal';
+		$_SERVER['HTTP_REFERER']                   = 'https://shop.test/de/kasse/';
+		$built_in                                  = $this->record_locale_of_messages();
+
+		$this->rejection_message();
+
+		$this->assertSame( array( 'de_DE_formal' ), $built_in->getArrayCopy() );
+		$this->assertSame( array(), $GLOBALS['shift64_test_locale']['calls'] );
+	}
+
+	/**
+	 * @dataProvider wpml_languages
+	 */
+	public function test_locale_from_wpml( $code, $languages, ?string $expected ): void {
+		$this->assertSame( $expected, BlockCheckoutValidator::locale_from_wpml( $code, $languages, array( 'pl_PL', 'de_DE', 'de_DE_formal' ) ) );
+	}
+
+	/**
+	 * WordPress cannot switch to a locale that is not installed: WPML's setting then
+	 * gives way to the plain language, which is.
+	 */
+	public function test_wpml_locale_that_is_not_installed_falls_back_to_the_language(): void {
+		$languages = array( 'de' => array( 'default_locale' => 'de_DE_formal' ) );
+
+		$this->assertSame( 'de_DE', BlockCheckoutValidator::locale_from_wpml( 'de', $languages, array( 'de_DE' ) ) );
+	}
+
+	/**
+	 * End to end through get_current_locale(): the WPML language list is asked for
+	 * every language (no queried object in a Store API request) and its locale is used.
+	 */
+	public function test_wpml_formal_german_reaches_the_message(): void {
+		$asked = new \ArrayObject();
+		$this->add_filter( 'wpml_current_language', static fn () => 'de' );
+		$this->add_filter(
+			'wpml_active_languages',
+			static function ( $value, $args ) use ( $asked ) {
+				$asked[] = $args;
+				return array( 'de' => array( 'default_locale' => 'de_DE_formal' ) );
+			}
+		);
+		$GLOBALS['shift64_test_available_languages'] = array( 'de_DE', 'de_DE_formal' );
+		$built_in                                    = $this->record_locale_of_messages();
+
+		$this->rejection_message();
+
+		$this->assertSame( array( 'de_DE_formal' ), $built_in->getArrayCopy() );
+		$this->assertSame( array( array( 'skip_missing' => 0 ) ), $asked->getArrayCopy() );
+	}
+
+	public function wpml_languages(): array {
+		$formal = array(
+			'de' => array( 'code' => 'de', 'default_locale' => 'de_DE_formal' ),
+			'pl' => array( 'code' => 'pl', 'default_locale' => 'pl_PL' ),
+		);
+
+		return array(
+			'locale configured in wpml'   => array( 'de', $formal, 'de_DE_formal' ),
+			'english needs no pack'       => array( 'en', array( 'en' => array( 'default_locale' => 'en_US' ) ), 'en_US' ),
+			'other configured language'   => array( 'pl', $formal, 'pl_PL' ),
+			'no active language list'     => array( 'de', null, 'de_DE' ),
+			'language missing from list'  => array( 'fr', $formal, 'fr_FR' ),
+			'empty locale falls back'     => array( 'de', array( 'de' => array( 'default_locale' => '' ) ), 'de_DE' ),
+			'unknown code'                => array( 'xx', array(), null ),
+			'no current language'         => array( null, $formal, null ),
+		);
+	}
 }
