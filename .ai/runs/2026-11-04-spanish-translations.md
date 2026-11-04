@@ -41,18 +41,20 @@ Ship bundled Spanish translations for Spain and the main Latin American WordPres
 
 ## Progress
 
+PR: #65
+
 > Convention: `- [ ]` pending, `- [x]` done. Append ` — <commit sha>` when a step lands. Do not rename step titles.
 
 ### Phase 1: Translation files
 
-- [ ] 1.1 Add es_ES translation
-- [ ] 1.2 Add Latin American Spanish translations
-- [ ] 1.3 Unit test the Spanish translation files
+- [x] 1.1 Add es_ES translation — edc217f
+- [x] 1.2 Add Latin American Spanish translations — ea338ab
+- [x] 1.3 Unit test the Spanish translation files — 58b55db
 
 ### Phase 2: Spanish variants on multilingual block checkout
 
-- [ ] 2.1 Resolve the es referer to the site's or an installed Spanish locale
+- [x] 2.1 Resolve the es referer to the site's or an installed Spanish locale — 2e69296
 
 ### Phase 3: Docs
 
-- [ ] 3.1 Document Spanish translations
+- [x] 3.1 Document Spanish translations — fd21c4a
