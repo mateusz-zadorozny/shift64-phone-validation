@@ -1,8 +1,9 @@
 <?php
 /**
  * Checks the translation files shipped in languages/: complete against the .pot,
- * placeholders kept, .mo compiled from the current .po, and the German variants
- * in their own register (de_DE says "du", de_DE_formal says "Sie").
+ * placeholders kept, .mo compiled from the current .po, and the German and Spanish
+ * variants in their own register (de_DE says "du", de_DE_formal says "Sie"; es_ES
+ * says "tú", the Latin American locales say "usted").
  *
  * @package Shift64\SmartPhoneValidation\Tests
  */
@@ -20,7 +21,13 @@ class TranslationFilesTest extends TestCase {
 	 * Locales whose .po must translate every string. en_US is left out: an empty
 	 * msgstr there falls back to the English msgid, which is the right text.
 	 */
-	const COMPLETE_LOCALES = array( 'pl_PL', 'de_DE', 'de_DE_formal' );
+	const COMPLETE_LOCALES = array( 'pl_PL', 'de_DE', 'de_DE_formal', 'es_ES', 'es_MX', 'es_AR', 'es_CO', 'es_CL', 'es_PE', 'es_VE' );
+
+	/**
+	 * Latin American locales: one translation, shipped once per locale because
+	 * WordPress never falls back from es_MX & co. to es_ES or to each other.
+	 */
+	const LATAM_LOCALES = array( 'es_MX', 'es_AR', 'es_CO', 'es_CL', 'es_PE', 'es_VE' );
 
 	/**
 	 * @dataProvider complete_locales
@@ -136,6 +143,66 @@ class TranslationFilesTest extends TestCase {
 		);
 	}
 
+	/**
+	 * Themes map a notice to the phone field by keyword (issue #5): every Spanish
+	 * message, with the real translation files, names the phone.
+	 *
+	 * @dataProvider spanish_locales
+	 */
+	public function test_every_spanish_message_mentions_the_phone( string $locale ): void {
+		$this->use_locale_file( $locale );
+
+		foreach ( array( ErrorMessages::FIELD_BILLING, ErrorMessages::FIELD_SHIPPING ) as $field ) {
+			foreach ( array( ValidationResult::ERROR_MISSING_INTERNATIONAL_PREFIX, ValidationResult::ERROR_INVALID_NUMBER, null ) as $code ) {
+				$this->assertStringContainsStringIgnoringCase( 'teléfono', ErrorMessages::for_classic_checkout( $code, $field ) );
+				$this->assertStringContainsStringIgnoringCase( 'teléfono', ErrorMessages::for_block_checkout( $code, $field ) );
+			}
+		}
+	}
+
+	public function test_spanish_checkout_messages(): void {
+		$this->use_locale_file( 'es_ES' );
+		$this->assertSame( 'Introduce un número de teléfono válido.', ErrorMessages::for_classic_checkout( ValidationResult::ERROR_INVALID_NUMBER, ErrorMessages::FIELD_BILLING ) );
+		$this->assertSame( 'Teléfono de facturación no es un número de teléfono válido.', ErrorMessages::for_block_checkout( ValidationResult::ERROR_INVALID_NUMBER, ErrorMessages::FIELD_BILLING ) );
+		$this->assertSame( 'Teléfono de envío debe incluir el prefijo del país.', ErrorMessages::for_block_checkout( ValidationResult::ERROR_MISSING_INTERNATIONAL_PREFIX, ErrorMessages::FIELD_SHIPPING ) );
+
+		$this->use_locale_file( 'es_MX' );
+		$this->assertSame( 'Ingrese un número de teléfono válido.', ErrorMessages::for_classic_checkout( ValidationResult::ERROR_INVALID_NUMBER, ErrorMessages::FIELD_BILLING ) );
+		$this->assertSame( 'Ingrese un número de teléfono de envío válido.', ErrorMessages::for_classic_checkout( ValidationResult::ERROR_INVALID_NUMBER, ErrorMessages::FIELD_SHIPPING ) );
+	}
+
+	/**
+	 * es_ES addresses the reader with "tú", as WordPress's own es_ES: no "usted" and no
+	 * "usted" imperative ("Introduzca", "Elija" - "Introduce", "Elige" pass).
+	 */
+	public function test_spain_spanish_never_uses_usted(): void {
+		foreach ( self::read_po( 'es_ES' ) as $msgid => $msgstr ) {
+			$this->assertDoesNotMatchRegularExpression( '/\b(usted\w*|introduzca|ingrese|elija|seleccione|configure|vuelva)\b/iu', $msgstr, "Formal address in es_ES: {$msgid}" );
+		}
+	}
+
+	/**
+	 * The Latin American files say "usted" - neutral across the region, where "tú" and
+	 * the Argentine "vos" are not: no "tú"/"vos" pronoun and no "tú" imperative.
+	 *
+	 * @dataProvider latam_locales
+	 */
+	public function test_latin_american_spanish_never_uses_tu( string $locale ): void {
+		foreach ( self::read_po( $locale ) as $msgid => $msgstr ) {
+			$this->assertDoesNotMatchRegularExpression( '/\b(tú|tu|tus|te|ti|vos|introduce|ingresa|ingresá|elige|elegí|selecciona|seleccioná|configura|configurá|vuelve|volvé)\b/iu', $msgstr, "Informal address in {$locale}: {$msgid}" );
+		}
+	}
+
+	/**
+	 * The Latin American files are copies of one translation; a fix to one of them
+	 * belongs in all of them.
+	 *
+	 * @dataProvider latam_locales
+	 */
+	public function test_latin_american_files_share_one_translation( string $locale ): void {
+		$this->assertSame( self::read_po( 'es_MX' ), self::read_po( $locale ), "{$locale} differs from es_MX; keep the Latin American files identical." );
+	}
+
 	public function complete_locales(): array {
 		return self::cases( self::COMPLETE_LOCALES );
 	}
@@ -150,6 +217,14 @@ class TranslationFilesTest extends TestCase {
 
 	public function german_locales(): array {
 		return self::cases( array( 'de_DE', 'de_DE_formal' ) );
+	}
+
+	public function spanish_locales(): array {
+		return self::cases( array_merge( array( 'es_ES' ), self::LATAM_LOCALES ) );
+	}
+
+	public function latam_locales(): array {
+		return self::cases( self::LATAM_LOCALES );
 	}
 
 	private static function cases( array $locales ): array {
