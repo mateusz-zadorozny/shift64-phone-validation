@@ -201,8 +201,8 @@ class BlockCheckoutValidatorTest extends TestCase {
 			'site is formal, nothing else'          => array( array(), 'de_DE_formal', 'de_DE_formal' ),
 			'no german installed'                   => array( array( 'pl_PL' ), 'pl_PL', null ),
 			'a lookalike locale is not a variant'   => array( array( 'de_DEX' ), 'en_US', null ),
-			'site is austrian german'               => array( array( 'de_DE' ), 'de_AT', 'de_AT' ),
-			'only swiss german installed'           => array( array( 'pl_PL', 'de_CH' ), 'pl_PL', 'de_CH' ),
+			'untranslated regional site locale'     => array( array( 'de_DE' ), 'de_CH', 'de_DE' ),
+			'only untranslated regional installed'  => array( array( 'pl_PL', 'de_AT' ), 'pl_PL', null ),
 		);
 	}
 
@@ -223,6 +223,8 @@ class BlockCheckoutValidatorTest extends TestCase {
 			'only colombian installed'              => array( array( 'pl_PL', 'es_CO' ), 'pl_PL', 'es_CO' ),
 			'no spanish installed'                  => array( array( 'pl_PL' ), 'pl_PL', null ),
 			'another language starting with es'     => array( array( 'est_EE' ), 'en_US', null ),
+			'untranslated spanish site locale'      => array( array( 'es_ES' ), 'es_UY', 'es_ES' ),
+			'only untranslated spanish installed'   => array( array( 'pl_PL', 'es_UY' ), 'pl_PL', null ),
 		);
 	}
 
