@@ -123,7 +123,7 @@ msgstr "Nacional (p. ej., 123 456 789)"
 
 #: src/Admin/Settings.php:135
 msgid "Enable Formatting on Save"
-msgstr "Activar el formato al guardar"
+msgstr "Aplicar formato al guardar"
 
 #: src/Admin/Settings.php:136
 msgid "Automatically format phone numbers when saving"
@@ -977,13 +977,13 @@ msgstr "Teléfono de facturación"
 #: src/Checkout/ErrorMessages.php:115
 #, php-format
 msgid "%s must contain country prefix."
-msgstr "%s debe incluir el prefijo del país."
+msgstr "El campo «%s» debe incluir el prefijo del país."
 
 #. translators: %s: field label (Billing phone or Shipping phone)
 #: src/Checkout/ErrorMessages.php:118
 #, php-format
 msgid "%s is not a valid phone number."
-msgstr "%s no es un número de teléfono válido."
+msgstr "El campo «%s» no es un número de teléfono válido."
 
 #: src/Validation/PhoneValidator.php:48
 msgid "Phone number cannot be empty."

@@ -163,8 +163,8 @@ class TranslationFilesTest extends TestCase {
 	public function test_spanish_checkout_messages(): void {
 		$this->use_locale_file( 'es_ES' );
 		$this->assertSame( 'Introduce un número de teléfono válido.', ErrorMessages::for_classic_checkout( ValidationResult::ERROR_INVALID_NUMBER, ErrorMessages::FIELD_BILLING ) );
-		$this->assertSame( 'Teléfono de facturación no es un número de teléfono válido.', ErrorMessages::for_block_checkout( ValidationResult::ERROR_INVALID_NUMBER, ErrorMessages::FIELD_BILLING ) );
-		$this->assertSame( 'Teléfono de envío debe incluir el prefijo del país.', ErrorMessages::for_block_checkout( ValidationResult::ERROR_MISSING_INTERNATIONAL_PREFIX, ErrorMessages::FIELD_SHIPPING ) );
+		$this->assertSame( 'El campo «Teléfono de facturación» no es un número de teléfono válido.', ErrorMessages::for_block_checkout( ValidationResult::ERROR_INVALID_NUMBER, ErrorMessages::FIELD_BILLING ) );
+		$this->assertSame( 'El campo «Teléfono de envío» debe incluir el prefijo del país.', ErrorMessages::for_block_checkout( ValidationResult::ERROR_MISSING_INTERNATIONAL_PREFIX, ErrorMessages::FIELD_SHIPPING ) );
 
 		$this->use_locale_file( 'es_MX' );
 		$this->assertSame( 'Ingrese un número de teléfono válido.', ErrorMessages::for_classic_checkout( ValidationResult::ERROR_INVALID_NUMBER, ErrorMessages::FIELD_BILLING ) );
