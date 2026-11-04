@@ -201,7 +201,43 @@ class BlockCheckoutValidatorTest extends TestCase {
 			'site is formal, nothing else'          => array( array(), 'de_DE_formal', 'de_DE_formal' ),
 			'no german installed'                   => array( array( 'pl_PL' ), 'pl_PL', null ),
 			'a lookalike locale is not a variant'   => array( array( 'de_DEX' ), 'en_US', null ),
+			'site is austrian german'               => array( array( 'de_DE' ), 'de_AT', 'de_AT' ),
+			'only swiss german installed'           => array( array( 'pl_PL', 'de_CH' ), 'pl_PL', 'de_CH' ),
 		);
+	}
+
+	/**
+	 * A Latin American store gets its own Spanish on its /es/ pages, not es_ES.
+	 *
+	 * @dataProvider spanish_variant_referers
+	 */
+	public function test_locale_from_referer_picks_the_spanish_locale( array $installed, string $site_locale, ?string $expected ): void {
+		$this->assertSame( $expected, BlockCheckoutValidator::locale_from_referer( 'https://shop.test/es/finalizar-compra/', 'https://shop.test/', $installed, $site_locale ) );
+	}
+
+	public function spanish_variant_referers(): array {
+		return array(
+			'site is mexican spanish'               => array( array( 'es_MX', 'es_ES' ), 'es_MX', 'es_MX' ),
+			'site is argentine, nothing installed'  => array( array(), 'es_AR', 'es_AR' ),
+			'spain installed, site elsewhere'       => array( array( 'es_MX', 'es_ES' ), 'en_US', 'es_ES' ),
+			'only colombian installed'              => array( array( 'pl_PL', 'es_CO' ), 'pl_PL', 'es_CO' ),
+			'no spanish installed'                  => array( array( 'pl_PL' ), 'pl_PL', null ),
+			'another language starting with es'     => array( array( 'est_EE' ), 'en_US', null ),
+		);
+	}
+
+	/**
+	 * Through the referer the site locale is passed in: a Mexican store stays es_MX.
+	 */
+	public function test_mexican_site_keeps_its_spanish_on_an_es_page(): void {
+		$GLOBALS['shift64_test_locale']['current'] = 'es_MX';
+		$_SERVER['HTTP_REFERER']                   = 'https://shop.test/es/finalizar-compra/';
+		$built_in                                  = $this->record_locale_of_messages();
+
+		$this->rejection_message();
+
+		$this->assertSame( array( 'es_MX' ), $built_in->getArrayCopy() );
+		$this->assertSame( array(), $GLOBALS['shift64_test_locale']['calls'] );
 	}
 
 	/**

@@ -262,8 +262,9 @@ class BlockCheckoutValidator {
 	 *
 	 * Only the first path segment after the site's home path counts, and only when that
 	 * language is installed - so "/shop/it/" or a product slug never flips the language.
-	 * A language with variants ("/de/": de_DE, de_DE_formal) resolves to the site's own
-	 * locale when it is one of them, otherwise to the first one installed.
+	 * A language with several locales ("/de/": de_DE, de_DE_formal, de_AT; "/es/": es_ES,
+	 * es_MX, es_AR...) resolves to the site's own locale when it is one of them, then to
+	 * the mapped locale, then to the first one of them installed.
 	 *
 	 * @param string   $referer     Referring URL.
 	 * @param string   $home_url    Site home URL.
@@ -288,8 +289,8 @@ class BlockCheckoutValidator {
 
 		$locale = self::LOCALE_MAP[ $code ];
 
-		// Variants are named after the base locale: de_DE_formal, nl_NL_formal...
-		$is_variant = static fn ( string $candidate ): bool => $candidate === $locale || 0 === strpos( $candidate, $locale . '_' );
+		// Locales of the same language: de_DE_formal, de_AT, es_MX, es_AR...
+		$is_variant = static fn ( string $candidate ): bool => $candidate === $locale || 1 === preg_match( '/^' . $code . '_[A-Z]{2}(_[a-z]+)?$/', $candidate );
 
 		if ( '' !== $site_locale && $is_variant( $site_locale ) ) {
 			return $site_locale;
