@@ -1,3 +1,10 @@
+# [2.2.0](https://github.com/mateusz-zadorozny/shift64-phone-validation/compare/v2.1.0...v2.2.0) (2026-11-17)
+
+
+### Features
+
+* **i18n:** add Spanish translations for Spain and Latin America ([#65](https://github.com/mateusz-zadorozny/shift64-phone-validation/issues/65)) ([db9d677](https://github.com/mateusz-zadorozny/shift64-phone-validation/commit/db9d67794494eb66195276f7c482450add5042ac))
+
 # [2.1.0](https://github.com/mateusz-zadorozny/shift64-phone-validation/compare/v2.0.7...v2.1.0) (2026-10-23)
 
 
