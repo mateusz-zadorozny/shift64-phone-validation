@@ -119,3 +119,62 @@ jobs:
       - name: Show WordPress debug log on failure
         if: failure()
         run: npx wp-env run cli cat /var/www/html/wp-content/debug.log || true
+
+  # The demo network (.wp-env.demo.json): a subdirectory multisite with WooCommerce and
+  # the plugin network-activated, where #38 and the textdomain registration in the main
+  # plugin file came from. A separate job, so a failure here never hides the single-site
+  # suite above, which stays the main gate.
+  playwright-multisite:
+    name: Playwright (multisite demo)
+    needs: changes
+    if: ${{ !cancelled() && needs.changes.outputs.docs_only != 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          tools: composer:v2
+          coverage: none
+
+      - name: Install Composer dependencies (plugin runtime)
+        run: composer install --prefer-dist --no-dev --no-interaction
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Start the demo network (wp-env multisite) and seed every scenario site
+        run: npx wp-env start --config=.wp-env.demo.json
+
+      - name: Run the multisite smoke spec
+        env:
+          WP_DEMO: "1"
+          # wp-env's built-in demo admin account (disposable, local to the job).
+          TEST_ADMIN_USER: admin
+          TEST_ADMIN_PASSWORD: password
+        run: npx playwright test --project=demo
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-multisite
+          path: playwright-report/
+          retention-days: 7
+
+      - name: Show WordPress debug log on failure
+        if: failure()
+        run: npx wp-env run --config=.wp-env.demo.json cli cat /var/www/html/wp-content/debug.log || true

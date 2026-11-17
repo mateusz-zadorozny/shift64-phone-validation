@@ -3,6 +3,9 @@
 # needed to place an order at checkout. Idempotent: safe to run on every
 # `wp-env start` (wired through lifecycleScripts.afterStart in .wp-env.json).
 #
+# The demo network repeats this store baseline in PHP, in
+# tests/e2e/demo/mu-plugins/shift64-demo/seed-site.php: change both together.
+#
 # Usage: sh tests/e2e/bin/seed.sh [cli ...]
 #   No arguments seeds the default `cli` instance.
 set -eu

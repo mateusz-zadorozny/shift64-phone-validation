@@ -1,0 +1,23 @@
+{
+	"core": null,
+	"phpVersion": "8.3",
+	"plugins": [
+		"https://downloads.wordpress.org/plugin/woocommerce.latest-stable.zip",
+		"."
+	],
+	"multisite": true,
+	"port": 8890,
+	"mappings": {
+		"wp-content/mu-plugins": "./tests/e2e/demo/mu-plugins"
+	},
+	"testsEnvironment": false,
+	"config": {
+		"WP_DEBUG": true,
+		"WP_DEBUG_LOG": true,
+		"WP_DEBUG_DISPLAY": false,
+		"SCRIPT_DEBUG": false
+	},
+	"lifecycleScripts": {
+		"afterStart": "sh tests/e2e/demo/bin/seed.sh"
+	}
+}
